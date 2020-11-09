@@ -13,5 +13,5 @@ export default () => {
     timeZone: "America/Sao_Paulo"
   }
 
-  return gray(`[${new Intl.DateTimeFormat('pt-BR', options).format(nowDate)}]`) + ' - '
+  return gray(`[${new Intl.DateTimeFormat('pt-BR', options).format(nowDate)}]`) + ' -'
 }

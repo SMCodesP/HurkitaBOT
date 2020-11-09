@@ -1,3 +1,4 @@
+import { resolve } from "path";
 import { AkairoClient, CommandHandler, CommandHandlerOptions } from "discord-akairo";
 
 class Client extends AkairoClient {
@@ -11,13 +12,14 @@ class Client extends AkairoClient {
 
     this.registerCommandHandler({
       prefix: process.env.PREFIX,
-      directory: "./commands/",
+      directory: resolve(__dirname, "commands"),
       defaultCooldown: 50000
     })
   }
 
   registerCommandHandler(options: CommandHandlerOptions) {
     this.commandHandler = new CommandHandler(this, options)
+    this.commandHandler.loadAll()
   }
 }
 
