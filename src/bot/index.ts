@@ -5,6 +5,8 @@ class Client extends AkairoClient {
   constructor() {
     super({
       ownerID: process.env.OWNER_ID
+    }, {
+      disableMentions: "everyone"
     })
 
     this.registerCommandHandler({
