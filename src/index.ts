@@ -1,6 +1,8 @@
 import "./utils/customConsolePrefixes";
 
 import { config } from "dotenv";
+import { green, red } from "colors/safe";
+
 import Bot from "./bot";
 
 config()
@@ -8,8 +10,8 @@ config()
 const bot: Bot = new Bot()
 bot.login(process.env.TOKEN)
   .then(() => {
-    console.log("O bot foi iniciado com sucesso!")
+    console.log(`${green("[Sucesso]")} O bot foi iniciado!`)
   }).catch((err) => {
-    console.log("Houve um erro ao iniciar o bot.")
+    console.log(`${red("[Error]")} Houve um erro ao iniciar o bot.`)
     console.log(err)
   })
