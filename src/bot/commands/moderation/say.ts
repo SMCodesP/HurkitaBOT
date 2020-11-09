@@ -5,6 +5,7 @@ class SayCommand extends Command {
   constructor() {
     super("say", {
       aliases: ["say", "falar"],
+      category: "Moderação",
       args: [
         {
           id: "text",

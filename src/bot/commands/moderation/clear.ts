@@ -1,10 +1,11 @@
-import { Argument, Command } from "discord-akairo";
+import { Command } from "discord-akairo";
 import { Message } from "discord.js";
 
 class ClearCommand extends Command {
   constructor() {
     super("clear", {
       aliases: ["clear", "limpar"],
+      category: "Moderação",
       args: [
         {
           id: "messagesOfDelete",
