@@ -4,6 +4,7 @@ module.exports = {
         "node": true
     },
     "extends": [
+        "airbnb-base",
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended"
     ],
@@ -13,8 +14,14 @@ module.exports = {
         "sourceType": "module"
     },
     "plugins": [
+        "prettier",
         "@typescript-eslint"
     ],
     "rules": {
+        "prettier/prettier": "error",
+        "class-methods-use-this":"off",
+        "no-param-reassign": "off",
+        "camelcase": "on",
+        "no-unused-vars": ["error",{ "argsIgnorePattern": "next" }]    
     }
 };
