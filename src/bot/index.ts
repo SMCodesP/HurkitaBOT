@@ -1,9 +1,19 @@
-import { resolve } from "path";
-import { AkairoClient, CommandHandler, CommandHandlerOptions } from "discord-akairo";
-import { Message } from "discord.js";
+import { resolve } from "path"
+import { green, red } from "colors/safe";
+import * as db from 'quick.db'
+import { AkairoClient, CommandHandler, CommandHandlerOptions, SQLiteProvider } from "discord-akairo"
+import { Message } from "discord.js"
 
-class Client extends AkairoClient {
+interface BotClientTypes extends AkairoClient {
   commandHandler: CommandHandler;
+  registerCommandHandler(options: CommandHandlerOptions): void;
+  init(token: string): Promise<void>
+}
+
+class BotClient extends AkairoClient implements BotClientTypes {
+  commandHandler: CommandHandler;
+  settings: SQLiteProvider;
+
   constructor() {
     super({
       ownerID: process.env.OWNER_ID,
@@ -12,7 +22,12 @@ class Client extends AkairoClient {
     })
 
     this.registerCommandHandler({
-      prefix: process.env.PREFIX,
+      prefix: (message) => {
+        if (message.guild)
+          return db.get(`${message.guild.id}.prefix`) || process.env.PREFIX
+
+        return process.env.PREFIX
+      },
       directory: resolve(__dirname, "commands"),
       defaultCooldown: 6e5,
       argumentDefaults: {
@@ -35,6 +50,17 @@ class Client extends AkairoClient {
     this.commandHandler = new CommandHandler(this, options)
     this.commandHandler.loadAll()
   }
+
+  async init(token: string) {
+    return super.login(token)
+      .then(() => {
+        console.log(`${green("[Sucesso]")} O bot foi iniciado!`)
+      }).catch((err) => {
+        console.log(`${red("[Error]")} Houve um erro ao iniciar o bot.`)
+        console.log(err)
+      })
+  }
 }
 
-export default Client
+export default BotClient
+export type { BotClientTypes }

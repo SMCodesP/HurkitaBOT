@@ -1,5 +1,6 @@
-import { Command } from "discord-akairo";
-import { Message, MessageEmbed } from "discord.js";
+import { Command } from "discord-akairo"
+import { Message, MessageEmbed } from "discord.js"
+import * as db from 'quick.db'
 
 class HelpCommand extends Command {
 
@@ -9,7 +10,7 @@ class HelpCommand extends Command {
             category: '🛠️ Utilitários | utils',
             description: {
                 content: "Ajudar a achar comandos util para você!",
-                usage: "[command] [categoria/comando]"
+                usage: "[command] {categoria/comando}"
             },
             args: [
                 {
@@ -54,7 +55,7 @@ class HelpCommand extends Command {
             )
             .addField(
                 "Exemplo »",
-                `\`\`\`yaml\n${this.handler.prefix}${commandSelected.description.usage.replace('[command]', commandSelected.id)}\`\`\`\n \u200B`,
+                `\`\`\`yaml\n${db.get(`${message.guild.id}.prefix`) || process.env.PREFIX}${commandSelected.description.usage.replace('[command]', commandSelected.id)}\`\`\`\n \u200B`,
                 false
             )
             .setTimestamp()
@@ -68,7 +69,7 @@ class HelpCommand extends Command {
             const strignsOfKey = key.id.split('|')
             const nameCategory = strignsOfKey[1].trim()
 
-            return (nameCategory === name);
+            return (nameCategory === name)
         }))
 
         if (!categorySelected)
@@ -77,7 +78,7 @@ class HelpCommand extends Command {
         const embedHelpOfCategory = new MessageEmbed()
             .setColor("RANDOM")
             .setTitle(`Lista de comandos da categoria: __${categorySelected.id.split('|')[0].trim()}__`)
-            .setDescription(`❗ Prefix » **\`${this.handler.prefix}\`\n**📄 Comandos disponíveis nessa categoria » **\`${categorySelected.size}\`\n**📅 Versão » **\`${process.env.VERSION || "1.0"}\`**`)
+            .setDescription(`❗ Prefix » **\`${db.get(`${message.guild.id}.prefix`) || process.env.PREFIX}\`\n**📄 Comandos disponíveis nessa categoria » **\`${categorySelected.size}\`\n**📅 Versão » **\`${process.env.VERSION || "1.0"}\`**`)
             .setTimestamp()
             .setFooter(`Copyright © 2020 - ${this.client.user.username}`, this.client.user.displayAvatarURL())
 
@@ -85,7 +86,7 @@ class HelpCommand extends Command {
             embedHelpOfCategory
                 .addField(
                     `\u200B`,
-                    `**\`${this.handler.prefix}${command.description.usage.replace('[command]', command.aliases[0])}\`** - ${command.description.content}`
+                    `**\`${db.get(`${message.guild.id}.prefix`) || process.env.PREFIX}${command.description.usage.replace('[command]', command.aliases[0])}\`** - ${command.description.content}`
                 )
         })
 
@@ -98,7 +99,7 @@ class HelpCommand extends Command {
                 .catch(() => {
                     this.helpCommand(message, select)
                         .catch(() => {
-                            message.reply(`Não foi possível localizar um comando nem uma categoria com esse nome, utilize \`${this.handler.prefix}pesquisar [Alguma palavra chave para encontrar o nome do comando]\``)
+                            message.reply(`Não foi possível localizar um comando nem uma categoria com esse nome, utilize \`${db.get(`${message.guild.id}.prefix`) || process.env.PREFIX}pesquisar [Alguma palavra chave para encontrar o nome do comando]\``)
                         })
                 })
 
@@ -110,7 +111,7 @@ class HelpCommand extends Command {
         const embed = new MessageEmbed()
             .setTitle("Ajuda da Hurkita")
             .setColor("RANDOM")
-            .setDescription(`❗ Prefix » **\`${this.handler.prefix}\`\n**📄 Comandos disponíveis » **\`${countAllCommands}\`\n**📅 Versão » **\`${process.env.VERSION || "1.0"}\`\n** \u200B`)
+            .setDescription(`❗ Prefix » **\`${db.get(`${message.guild.id}.prefix`) || process.env.PREFIX}\`\n**📄 Comandos disponíveis » **\`${countAllCommands}\`\n**📅 Versão » **\`${process.env.VERSION || "1.0"}\`\n** \u200B`)
             .setTimestamp()
             .setFooter(`Copyright © 2020 - ${this.client.user.username}`, this.client.user.displayAvatarURL())
 
@@ -122,7 +123,7 @@ class HelpCommand extends Command {
 
             embed.addField(
                 `${name} \`[${countCommandsInCategory.size} comandos]\``,
-                `\`${this.handler.prefix}${this.id} ${nameFormatted}\`\n \u200B`
+                `\`${db.get(`${message.guild.id}.prefix`) || process.env.PREFIX}${this.id} ${nameFormatted}\`\n \u200B`
             )
         })
 
