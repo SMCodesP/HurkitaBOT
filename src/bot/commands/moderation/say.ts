@@ -5,7 +5,12 @@ class SayCommand extends Command {
   constructor() {
     super("say", {
       aliases: ["say", "falar"],
-      category: "Moderação",
+      category: "👮‍♂️ Moderação | mod",
+      description: {
+        content: "Com esse comando você pode por palavras na minha boca.",
+        usage: "[command] [texto]"
+      },
+      channel: "guild",
       args: [
         {
           id: "text",

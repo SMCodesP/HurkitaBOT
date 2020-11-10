@@ -5,7 +5,11 @@ class ClearCommand extends Command {
   constructor() {
     super("clear", {
       aliases: ["clear", "limpar"],
-      category: "Moderação",
+      category: "👮‍♂️ Moderação | mod",
+      description: {
+        content: "Você pode apagar várias mensagens por vez.",
+        usage: "[command] [1-100]"
+      },
       args: [
         {
           id: "messagesOfDelete",
