@@ -8,6 +8,7 @@ class SayCommand extends Command {
       category: "👮‍♂️ Moderação | mod",
       description: {
         content: "Com esse comando você pode por palavras na minha boca.",
+        metadata: "Comando para falar; dizer; chat; mandar mensagens;",
         usage: "[command] [texto]",
         examples: [
           "[command] Olá, tudo bem?",

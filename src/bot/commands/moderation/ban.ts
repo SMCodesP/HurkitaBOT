@@ -1,4 +1,4 @@
-import { Message, GuildMember } from 'discord.js'
+import { Message, GuildMember } from "discord.js"
 import { Argument, Command } from "discord-akairo"
 
 class BanCommand extends Command {
@@ -9,6 +9,7 @@ class BanCommand extends Command {
             category: "👮‍♂️ Moderação | mod",
             description: {
                 content: "Com esse comando um admnistrador pode banir um membro do servidor.",
+                metadata: "Comando para banir usuários; banir membros; banir; ban;",
                 usage: "[command] [@member/memberID] {razão}",
                 examples: [
                     "[command] 360247173356584960 Spam no chat",
@@ -41,9 +42,9 @@ class BanCommand extends Command {
 
         if (!memberBanned)
             return message.reply("Por favor mencione um membro válido para ser banido.")
-        if (!meMember.hasPermission('BAN_MEMBERS'))
+        if (!meMember.hasPermission("BAN_MEMBERS"))
             return message.reply("Eu não tenho permissão para banir membros.")
-        if (!authorMember.hasPermission('BAN_MEMBERS') && owner.id !== authorMember.id)
+        if (!authorMember.hasPermission("BAN_MEMBERS") && owner.id !== authorMember.id)
             return message.reply("Você não tem permissão de banir membros.")
         if (authorMember.id === memberBanned.id)
             return message.reply("Você não pode banir a si mesmo.")

@@ -10,6 +10,7 @@ class HelpCommand extends Command {
             category: '🛠️ Utilitários | utils',
             description: {
                 content: "Ajudar a achar comandos util para você!",
+                metadata: "Comando de ajudar; ajuda; help; ?; outros comandos; me ajuda; help-me; ajude-me;",
                 usage: "[command] {categoria/comando}",
                 examples: [
                     "[command]",

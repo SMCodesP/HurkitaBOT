@@ -12,6 +12,7 @@ class PrefixCommand extends Command {
             category: "🔧 Configurações | config",
             description: {
                 content: "Com esse comando você pode trocar o prefixo em um servidor específico.",
+                metadata: "Comando para setar prefixo; prefix; tag; trocar de prefixo; trocar prefix; change prefix;",
                 usage: "[command] {Novo prefixo}",
                 examples: [
                     "[command] %",
