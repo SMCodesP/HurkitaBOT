@@ -1,18 +1,23 @@
 import { resolve } from "path"
-import { green, red } from "colors/safe";
+import { gray, green, red } from "colors/safe";
 import * as db from 'quick.db'
 import { AkairoClient, CommandHandler, CommandHandlerOptions, SQLiteProvider } from "discord-akairo"
 import { Message } from "discord.js"
+import { Ingest as SonicChannelIngest, Search as SonicChannelSearch } from "sonic-channel";
 
 interface BotClientTypes extends AkairoClient {
   commandHandler: CommandHandler;
   registerCommandHandler(options: CommandHandlerOptions): void;
-  init(token: string): Promise<void>
+  init(token: string): Promise<void>;
+  sonicChannelSearch: SonicChannelSearch;
+  sonicChannelIngest: SonicChannelIngest;
 }
 
 class BotClient extends AkairoClient implements BotClientTypes {
   commandHandler: CommandHandler;
   settings: SQLiteProvider;
+  sonicChannelSearch: SonicChannelSearch;
+  sonicChannelIngest: SonicChannelIngest;
 
   constructor() {
     super({
@@ -43,6 +48,40 @@ class BotClient extends AkairoClient implements BotClientTypes {
       },
       ignorePermissions: process.env.OWNER_ID,
       ignoreCooldown: process.env.OWNER_ID,
+    })
+
+    this.startIngestSonic()
+    this.startSearchSonic()
+  }
+
+  startSearchSonic() {
+    this.sonicChannelSearch = new SonicChannelSearch({
+      host: process.env.SONIC_HOST,
+      port: Number(process.env.SONIC_PORT),
+      auth: process.env.SONIC_PASSWORD
+    })
+      .connect({
+        connected: () => {
+          console.info(`${green('[Sucesso]')} O bot se conectou com o sonic search!`);
+        },
+        disconnected: () => {
+          console.info(`${gray('[Info]')} O bot se desconectou do sonic search!`);
+        },
+      })
+  }
+
+  startIngestSonic() {
+    this.sonicChannelIngest = new SonicChannelIngest({
+      host: process.env.SONIC_HOST,
+      port: Number(process.env.SONIC_PORT),
+      auth: process.env.SONIC_PASSWORD
+    }).connect({
+      connected: () => {
+        console.info(`${green('[Sucesso]')} O bot se conectou com o sonic ingest!`);
+      },
+      disconnected: () => {
+        console.info(`${gray('[Info]')} O bot se desconectou do sonic ingest!`);
+      },
     })
   }
 
