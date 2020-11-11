@@ -10,7 +10,12 @@ class HelpCommand extends Command {
             category: '🛠️ Utilitários | utils',
             description: {
                 content: "Ajudar a achar comandos util para você!",
-                usage: "[command] {categoria/comando}"
+                usage: "[command] {categoria/comando}",
+                examples: [
+                    "[command]",
+                    "[command] mod",
+                    "[command] clear"
+                ]
             },
             args: [
                 {
@@ -51,12 +56,16 @@ class HelpCommand extends Command {
             .addField(
                 "Alternativas »",
                 `\`\`\`yaml\n[${commandSelected.aliases.join(', ')}]\`\`\``,
-                false
+                true
             )
             .addField(
-                "Exemplo »",
-                `\`\`\`yaml\n${db.get(`${message.guild.id}.prefix`) || process.env.PREFIX}${commandSelected.description.usage.replace('[command]', commandSelected.id)}\`\`\`\n \u200B`,
-                false
+                "Modo de usar »",
+                `\`\`\`yaml\n${db.get(`${message.guild.id}.prefix`) || process.env.PREFIX}${commandSelected.description.usage.replace('[command]', commandSelected.id)}\`\`\``,
+                true
+            )
+            .addField(
+                "Exemplos »",
+                `\`\`\`yaml\n${commandSelected.description.examples.join("\n").replace(/\[command\]/g, `${db.get(`${message.guild.id}.prefix`) || process.env.PREFIX}` + commandSelected.id)}\`\`\`\n \u200B`
             )
             .setTimestamp()
             .setFooter(`Copyright © 2020 - ${this.client.user.username}`, this.client.user.displayAvatarURL())
@@ -67,6 +76,8 @@ class HelpCommand extends Command {
     async helpCategory(message: Message, name: string) {
         const categorySelected = this.handler.categories.get(this.handler.categories.findKey((key) => {
             const strignsOfKey = key.id.split('|')
+            if (!strignsOfKey[1])
+                return false;
             const nameCategory = strignsOfKey[1].trim()
 
             return (nameCategory === name)
@@ -96,9 +107,9 @@ class HelpCommand extends Command {
     async exec(message: Message, { select }: { select: string; }) {
         if (select) {
             this.helpCategory(message, select)
-                .catch(() => {
+                .catch((errorOfCategory) => {
                     this.helpCommand(message, select)
-                        .catch(() => {
+                        .catch((errorOfCommand) => {
                             message.reply(`Não foi possível localizar um comando nem uma categoria com esse nome, utilize \`${db.get(`${message.guild.id}.prefix`) || process.env.PREFIX}pesquisar [Alguma palavra chave para encontrar o nome do comando]\``)
                         })
                 })

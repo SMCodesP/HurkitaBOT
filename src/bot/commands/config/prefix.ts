@@ -13,6 +13,10 @@ class PrefixCommand extends Command {
             description: {
                 content: "Com esse comando você pode trocar o prefixo em um servidor específico.",
                 usage: "[command] {Novo prefixo}",
+                examples: [
+                    "[command] %",
+                    "[command] &",
+                ],
             },
             args: [
                 {

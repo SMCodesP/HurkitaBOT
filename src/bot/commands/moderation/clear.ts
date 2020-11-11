@@ -8,7 +8,11 @@ class ClearCommand extends Command {
       category: "👮‍♂️ Moderação | mod",
       description: {
         content: "Você pode apagar várias mensagens por vez.",
-        usage: "[command] [1-100]"
+        usage: "[command] [1-100]",
+        examples: [
+          "[command] 50",
+          "[command] 1",
+        ],
       },
       args: [
         {

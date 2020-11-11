@@ -6,6 +6,7 @@ class BanCommand extends Command {
     constructor() {
         super("ban", {
             aliases: ["ban", "banir"],
+            category: "👮‍♂️ Moderação | mod",
             description: {
                 content: "Com esse comando um admnistrador pode banir um membro do servidor.",
                 usage: "[command] [@member/memberID] {razão}",

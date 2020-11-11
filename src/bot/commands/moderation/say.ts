@@ -8,7 +8,11 @@ class SayCommand extends Command {
       category: "👮‍♂️ Moderação | mod",
       description: {
         content: "Com esse comando você pode por palavras na minha boca.",
-        usage: "[command] [texto]"
+        usage: "[command] [texto]",
+        examples: [
+          "[command] Olá, tudo bem?",
+          "[command] Sim, e com você?",
+        ],
       },
       channel: "guild",
       args: [
