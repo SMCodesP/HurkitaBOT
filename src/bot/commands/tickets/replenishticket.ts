@@ -1,8 +1,7 @@
-import { Message, MessageEmbed } from "discord.js"
+import { Message, MessageEmbed, TextChannel, OverwriteResolvable } from "discord.js"
 import { Command } from "discord-akairo"
 import * as db from "quick.db"
 import { Ticket } from "../../structures/entities/Ticket"
-import { TextChannel } from "discord.js"
 
 class ReplenishTicket extends Command {
 
@@ -82,10 +81,29 @@ class ReplenishTicket extends Command {
             let categoryChannel = message.guild.channels.cache.find((channelCache) => (channelCache.name === "Reconstituições" && channelCache.type === "category"))
             let reconstitutedChannel: TextChannel;
 
+            const positions = await message.guild.members.fetch()
+            const positionsFormatted: Array<OverwriteResolvable> = positions.filter((member) => member.hasPermission("MANAGE_MESSAGES")).map((member) => {
+                return {
+                    id: member.user.id,
+                    allow: ["VIEW_CHANNEL"],
+                }
+            })
+
             if (categoryChannel) {
                 reconstitutedChannel = await message.guild.channels.create(`ticket-${ticket.id}`, {
                     type: "text",
                     parent: categoryChannel,
+                    permissionOverwrites: [
+                        ...positionsFormatted,
+                        {
+                            id: message.guild.id,
+                            deny: ["VIEW_CHANNEL"]
+                        },
+                        {
+                            id: message.author.id,
+                            allow: ["VIEW_CHANNEL"]
+                        }
+                    ]
                 })
             } else {
                 categoryChannel = await message.guild.channels.create(`Reconstituições`, {
@@ -94,6 +112,17 @@ class ReplenishTicket extends Command {
                 reconstitutedChannel = await message.guild.channels.create(`ticket-${ticket.id}`, {
                     type: "text",
                     parent: categoryChannel,
+                    permissionOverwrites: [
+                        ...positionsFormatted,
+                        {
+                            id: message.guild.id,
+                            deny: ["VIEW_CHANNEL"]
+                        },
+                        {
+                            id: ticket.creator,
+                            allow: ["VIEW_CHANNEL"]
+                        }
+                    ]
                 })
             }
 
