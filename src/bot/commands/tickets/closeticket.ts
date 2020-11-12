@@ -30,7 +30,6 @@ class CloseTicket extends Command {
         }
 
         const ticket = userTickets.find((ticket) => !ticket.closed)
-        console.log(ticket)
 
         const ticketsClose = userTickets.map((ticket) => {
             return {
