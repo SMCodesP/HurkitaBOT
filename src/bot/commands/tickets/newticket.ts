@@ -61,6 +61,7 @@ class NewTicketCommand extends Command {
         const ticket: Ticket = {
             id: ticket_id,
             channel_id: channelOfTicket.id,
+            guild_id: message.guild.id,
             creator: message.author.id,
             closer: null,
             closed: false,

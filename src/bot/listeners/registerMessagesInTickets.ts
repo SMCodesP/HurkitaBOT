@@ -14,26 +14,28 @@ class RegisterMessageInTicketsListener extends Listener {
 
     exec(message: Message) {
         const guildTickets: Object = db.get(`tickets.${message.guild.id}`)
-        const usersTicketsParsed: Array<Array<Ticket>> = Object.values(guildTickets)
-
+        
         if (guildTickets) {
+            const usersTicketsParsed: Array<Array<Ticket>> = Object.values(guildTickets)
+
             let concatAllTickets: Array<Ticket> = []
 
             usersTicketsParsed.forEach(userTickets => {
-                concatAllTickets = [...concatAllTickets, ...userTickets]
+                concatAllTickets.push(...userTickets)
             })
-
             const ticket: Ticket = concatAllTickets.find((ticket: Ticket) => ticket.channel_id === message.channel.id)
             if (ticket) {
-                ticket.content.push(message.toJSON())
-            }
-            let ticketsUserOfAddMessage: Array<Ticket>;
-            
-            ticketsUserOfAddMessage = concatAllTickets
-                .filter((ticketReplacedPreview: Ticket) => ticket.creator === ticketReplacedPreview.creator)
-                .map((ticketReplaced: Ticket) => (ticketReplaced.id === ticket.id) ? ticket : ticketReplaced)
+                // @ts-ignore
+                ticket.content.push(message)
 
-            db.set(`tickets.${message.guild.id}.${message.author.id}`, ticketsUserOfAddMessage)
+                let ticketsUserOfAddMessage: Array<Ticket>;
+                
+                ticketsUserOfAddMessage = concatAllTickets
+                    .filter((ticketReplacedPreview: Ticket) => ticket.creator === ticketReplacedPreview.creator)
+                    .map((ticketReplaced: Ticket) => (ticketReplaced.id === ticket.id) ? ticket : ticketReplaced)
+    
+                db.set(`tickets.${message.guild.id}.${ticket.creator}`, ticketsUserOfAddMessage)
+            }
         }
     }
 
