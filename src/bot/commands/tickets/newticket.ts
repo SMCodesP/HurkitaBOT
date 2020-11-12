@@ -25,6 +25,7 @@ class NewTicketCommand extends Command {
 
     async exec(message: Message) {
         const ticketsAll: Array<Array<Ticket>> = Object.values(db.get(`tickets.${message.guild.id}`) || {})
+        console.log(ticketsAll)
 
         const userTickets: Array<Ticket> = db.get(`tickets.${message.guild.id}.${message.author.id}`)
 
@@ -43,7 +44,7 @@ class NewTicketCommand extends Command {
             }
         })
 
-        const ticket_id: number = ticketsAll.reduce((accumulator, currentValue) => accumulator + currentValue.length, 5)
+        const ticket_id: number = ticketsAll.reduce((accumulator, currentValue) => accumulator + currentValue.length, 0)+1
 
         const channelOfTicket = await message.guild.channels.create(`ticket-${ticket_id}`, {
             permissionOverwrites: [
