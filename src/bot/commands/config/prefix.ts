@@ -35,7 +35,7 @@ class PrefixCommand extends Command {
             return message.reply("O prefixo especificado é o mesmo do atual.")
 
         db.set(`${message.guild.id}.prefix`, prefix)
-        return message.reply(`Prefixo trocado de \`${oldPrefix}\` para \`${prefix}\``);
+        return message.reply(`Prefixo trocado de \`${oldPrefix || process.env.PREFIX}\` para \`${prefix}\``);
     }
 
 }
