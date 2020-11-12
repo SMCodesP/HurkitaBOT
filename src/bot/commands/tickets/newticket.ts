@@ -24,16 +24,12 @@ class NewTicketCommand extends Command {
     }
 
     async exec(message: Message) {
-        const ticketsAll: Array<Array<string>> = Object.values(db.get('tickets') || {})
+        const ticketsAll: Array<Array<Ticket>> = Object.values(db.get(`tickets.${message.guild.id}`) || {})
 
-        const userTickets: Array<string> = db.get(`tickets.${message.author.id}`)
+        const userTickets: Array<Ticket> = db.get(`tickets.${message.guild.id}.${message.author.id}`)
 
         if (userTickets) {
-            const userTicketsParsedOfItems: Array<Ticket> = userTickets.map((ticket: string) => {
-                return JSON.parse(ticket)
-            })
-
-            if (userTicketsParsedOfItems.filter((ticket) => {
+            if (userTickets.filter((ticket) => {
                 return !ticket.closed
             }).length > 0)
                 return message.reply("você não pode criar um ticket com outro aberto.")
@@ -72,7 +68,7 @@ class NewTicketCommand extends Command {
             content: [],
         }
 
-        db.push(`tickets.${message.author.id}`, JSON.stringify(ticket))
+        db.push(`tickets.${message.guild.id}.${message.author.id}`, ticket)
 
         message
             .reply(`Seu ticket foi criado com sucesso.\nClique aqui para acessar ${channelOfTicket}`)
