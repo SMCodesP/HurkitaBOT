@@ -2,7 +2,7 @@ import { resolve } from "path"
 import { gray, green, red } from "colors/safe";
 import * as db from 'quick.db'
 import { AkairoClient, CommandHandler, CommandHandlerOptions, ListenerHandler, SQLiteProvider } from "discord-akairo"
-import { Message } from "discord.js"
+import { Message, Intents } from "discord.js"
 import { Ingest as SonicChannelIngest, Search as SonicChannelSearch } from "sonic-channel";
 
 interface BotClientTypes extends AkairoClient {
@@ -12,6 +12,7 @@ interface BotClientTypes extends AkairoClient {
 	sonicChannelSearch: SonicChannelSearch;
 	sonicChannelIngest: SonicChannelIngest;
 	listenerHandler: ListenerHandler;
+	intents: Intents;
 }
 
 class BotClient extends AkairoClient implements BotClientTypes {
@@ -20,13 +21,24 @@ class BotClient extends AkairoClient implements BotClientTypes {
 	sonicChannelSearch: SonicChannelSearch;
 	sonicChannelIngest: SonicChannelIngest;
 	listenerHandler: ListenerHandler;
+	intents: Intents;
 	
 	constructor() {
+		let intentsLocal: Intents = new Intents([
+			Intents.NON_PRIVILEGED,
+			"GUILD_MEMBERS"
+		])
+
 		super({
 			ownerID: process.env.OWNER_ID,
 		}, {
 			disableMentions: "everyone",
-		})
+			ws: {
+				intents: intentsLocal
+			}
+		});
+
+		this.intents = intentsLocal
 		
 		this.startIngestSonic()
 		this.startSearchSonic()

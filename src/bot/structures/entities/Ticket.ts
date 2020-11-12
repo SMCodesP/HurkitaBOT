@@ -1,8 +1,10 @@
 import { Message } from "discord.js"
 
 export interface Ticket {
-    creator: string,
-    closer: string | null,
-    closed: boolean,
-    content: Array<Message>,
+    id: number;
+    channel_id: string;
+    creator: string;
+    closer: string | null;
+    closed: boolean;
+    content: Array<Message>;
 }

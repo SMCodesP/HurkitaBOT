@@ -24,6 +24,8 @@ class NewTicketCommand extends Command {
     }
 
     async exec(message: Message) {
+        const ticketsAll: Array<Array<string>> = Object.values(db.get('tickets') || {})
+
         const userTickets: Array<string> = db.get(`tickets.${message.author.id}`)
 
         if (userTickets) {
@@ -37,18 +39,19 @@ class NewTicketCommand extends Command {
                 return message.reply("você não pode criar um ticket com outro aberto.")
         }
 
-        const positions: Array<OverwriteResolvable> = message.guild.members.cache.map((user) => {
-            if (!user.hasPermission("MANAGE_MESSAGES"))
-                return null;
+        const positions = await message.guild.members.fetch()
+        const positionsFormatted: Array<OverwriteResolvable> = positions.filter((member) => member.hasPermission("MANAGE_MESSAGES")).map((member) => {
             return {
-                id: user.user.id,
+                id: member.user.id,
                 allow: ["VIEW_CHANNEL"],
             }
         })
 
-        const channelOfTicket = await message.guild.channels.create("ticket-360247173356584960", {
+        const ticket_id: number = ticketsAll.reduce((accumulator, currentValue) => accumulator + currentValue.length, 5)
+
+        const channelOfTicket = await message.guild.channels.create(`ticket-${ticket_id}`, {
             permissionOverwrites: [
-                ...positions,
+                ...positionsFormatted,
                 {
                     id: message.guild.id,
                     deny: ["VIEW_CHANNEL"]
@@ -61,6 +64,8 @@ class NewTicketCommand extends Command {
         })
 
         const ticket: Ticket = {
+            id: ticket_id,
+            channel_id: channelOfTicket.id,
             creator: message.author.id,
             closer: null,
             closed: false,
@@ -71,9 +76,6 @@ class NewTicketCommand extends Command {
 
         message
             .reply(`Seu ticket foi criado com sucesso.\nClique aqui para acessar ${channelOfTicket}`)
-            .then((messageOfAlertSuccess: Message) => {
-                messageOfAlertSuccess.delete({ timeout: 2500 })
-            })
 
     }
 
