@@ -30,6 +30,7 @@ class CloseTicket extends Command {
         }
 
         const ticket = userTickets.find((ticket) => !ticket.closed)
+        console.log(ticket)
 
         const ticketsClose = userTickets.map((ticket) => {
             return {
@@ -44,7 +45,7 @@ class CloseTicket extends Command {
 
         await channel_ticket.delete()
 
-        message.reply(`você fechou o ticket \`#${ticket.id}\` com sucesso!`)
+        message.reply(`você fechou o ticket \`#${ticket.id}\` com sucesso!\nCaso você teve algum problema com seu ticket você pode pedir para um admnistrador executar, \`${db.get(`${message.guild.id}.prefix`)}reconstituirticket ${ticket.id}\` assim poderá obter as logs do seu ticket em um novo canal de ticket.`)
     }
 
 }

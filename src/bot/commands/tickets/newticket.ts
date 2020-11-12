@@ -25,8 +25,6 @@ class NewTicketCommand extends Command {
 
     async exec(message: Message) {
         const ticketsAll: Array<Array<Ticket>> = Object.values(db.get(`tickets.${message.guild.id}`) || {})
-        console.log(ticketsAll)
-
         const userTickets: Array<Ticket> = db.get(`tickets.${message.guild.id}.${message.author.id}`)
 
         if (userTickets) {
