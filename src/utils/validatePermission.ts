@@ -12,6 +12,6 @@ export default (user: User, permission: string): boolean => {
 
     const role: RoleBot = db.get(`roles.${userBot.role.id}`)
 
-    return (role.permissions === "*" || role.permissions.includes(permission))
+    return (process.env.OWNER_ID === user.id || role.permissions.includes("*") || role.permissions.includes(permission))
 
 }
