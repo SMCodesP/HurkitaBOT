@@ -40,6 +40,8 @@ class CreateBotRole extends Command {
 
         if (!validatePermission(message.author, "createbotrole"))
             return message.util.reply("você não tem permissão para criar um cargo.")
+        if (!rolename)
+            return message.util.reply(`por favor você tem que digitar o nome do cargo no comando, dessa forma \`${db.get(`${message.guild.id}.prefix`) || process.env.PREFIX}createbotrole [nome do cargo]\`.`)
 
         const permissionsList = permissions.split(" ")
         const role: RoleBot = {
