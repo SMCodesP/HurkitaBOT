@@ -24,20 +24,11 @@ class ReplenishTicket extends Command {
                     id: "ticket_id",
                     type: "number"
                 },
-                {
-                    id: "mentionMember",
-                    default: (message: Message) => message.member,
-                    type: async (message: Message, member: GuildMember | string): Promise<GuildMember> => {
-                        if (message.mentions.members.first())
-                            return message.mentions.members.first()
-                        return await message.guild.members.fetch(member)
-                    }
-                }
             ]
         })
     }
 
-    async exec(message: Message, { ticket_id, mentionMember }: { ticket_id: Number, mentionMember: GuildMember }) {
+    async exec(message: Message, { ticket_id }: { ticket_id: Number }) {
 
         if (!ticket_id)
             return message.reply("Por favor execute o comando novamente com o id do ticket, ele é obrigatório.")

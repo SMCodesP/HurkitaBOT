@@ -33,7 +33,7 @@ class CloseTicket extends Command {
         })
     }
 
-    async exec(message: Message, member: GuildMember) {
+    async exec(message: Message, { member }: { member: GuildMember }) {
         const userTickets: Array<Ticket> = db.get(`tickets.${message.guild.id}.${member.user.id}`)
 
         if (userTickets) {
@@ -59,7 +59,7 @@ class CloseTicket extends Command {
 
         await channel_ticket.delete()
 
-        message.reply(`você fechou o ticket \`#${ticket.id}\` com sucesso!\nCaso você teve algum problema com seu ticket reconstruir, \`${db.get(`${message.guild.id}.prefix`)}reconstituirticket ${ticket.id}\` assim poderá obter as logs do seu ticket em um novo canal de ticket.`)
+        message.reply(`você fechou o ticket \`#${ticket.id}\` com sucesso!\nCaso teve algum problema com o ticket ele pode ser reconstruido usando, \`${db.get(`${message.guild.id}.prefix`)}reconstituirticket ${ticket.id}\` assim poderá obter as logs do ticket em um novo canal de ticket.`)
     }
 
 }
