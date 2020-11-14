@@ -1,4 +1,5 @@
 import { Command } from "discord-akairo"
+import { GuildMember } from "discord.js"
 import { GuildChannel, Message } from "discord.js"
 import * as db from "quick.db"
 import { Ticket } from "../../structures/entities/Ticket"
@@ -13,21 +14,35 @@ class CloseTicket extends Command {
             description: {
                 content: "Feche um ticket caso seu problema já foi resolvido!",
                 metadata: "Comando para deletar tickets; delete; fechar; close; fechar ticket; close ticket; delete ticket;",
-                usage: "[command]",
+                usage: "[command] {@user/userID}",
                 examples: [
-                    "[command]",
+                    "[command] @SMCodes#4207",
                 ]
-            }
+            },
+            args: [
+                {
+                    id: "member",
+                    default: (message: Message) => message.member,
+                    type: async (message: Message, member: GuildMember | string): Promise<GuildMember> => {
+                        if (message.mentions.members.first())
+                            return message.mentions.members.first()
+                        return await message.guild.members.fetch(member)
+                    }
+                }
+            ]
         })
     }
 
-    async exec(message: Message) {
-        const userTickets: Array<Ticket> = db.get(`tickets.${message.guild.id}.${message.author.id}`)
+    async exec(message: Message, member: GuildMember) {
+        const userTickets: Array<Ticket> = db.get(`tickets.${message.guild.id}.${member.user.id}`)
 
         if (userTickets) {
             if (userTickets.filter((ticket) => !ticket.closed).length <= 0)
-                return message.reply("você não pode deletar um ticket caso você não tenha um aberto.")
+                return message.reply("você não pode deletar um ticket caso não tenha um aberto.")
         }
+
+        if (!message.member.hasPermission("MANAGE_MESSAGES") && member.user.id !== message.author.id)
+            return message.reply("você não tem permissão para deletar um ticket de outro membro.")
 
         const ticket = userTickets.find((ticket) => !ticket.closed)
 
@@ -38,13 +53,13 @@ class CloseTicket extends Command {
             }
         })
 
-        db.set(`tickets.${message.guild.id}.${message.author.id}`, ticketsClose)
+        db.set(`tickets.${message.guild.id}.${member.user.id}`, ticketsClose)
 
         const channel_ticket = message.guild.channels.cache.get(ticket.channel_id)
 
         await channel_ticket.delete()
 
-        message.reply(`você fechou o ticket \`#${ticket.id}\` com sucesso!\nCaso você teve algum problema com seu ticket você pode pedir para um admnistrador executar, \`${db.get(`${message.guild.id}.prefix`)}reconstituirticket ${ticket.id}\` assim poderá obter as logs do seu ticket em um novo canal de ticket.`)
+        message.reply(`você fechou o ticket \`#${ticket.id}\` com sucesso!\nCaso você teve algum problema com seu ticket reconstruir, \`${db.get(`${message.guild.id}.prefix`)}reconstituirticket ${ticket.id}\` assim poderá obter as logs do seu ticket em um novo canal de ticket.`)
     }
 
 }
