@@ -2,6 +2,7 @@ import { Message, MessageEmbed, TextChannel, OverwriteResolvable } from "discord
 import { Command } from "discord-akairo"
 import * as db from "quick.db"
 import { Ticket } from "../../structures/entities/Ticket"
+import { GuildMember } from "discord.js"
 
 class ReplenishTicket extends Command {
 
@@ -22,17 +23,24 @@ class ReplenishTicket extends Command {
                 {
                     id: "ticket_id",
                     type: "number"
+                },
+                {
+                    id: "mentionMember",
+                    default: (message: Message) => message.member,
+                    type: async (message: Message, member: GuildMember | string): Promise<GuildMember> => {
+                        if (message.mentions.members.first())
+                            return message.mentions.members.first()
+                        return await message.guild.members.fetch(member)
+                    }
                 }
             ]
         })
     }
 
-    async exec(message: Message, { ticket_id }: { ticket_id: Number }) {
+    async exec(message: Message, { ticket_id, mentionMember }: { ticket_id: Number, mentionMember: GuildMember }) {
 
         if (!ticket_id)
             return message.reply("Por favor execute o comando novamente com o id do ticket, ele é obrigatório.")
-        if (!message.member.hasPermission("MANAGE_MESSAGES"))
-            return message.reply("você não tem permissão para reconstituir um ticket.")
 
         const guildTickets: Object = db.get(`tickets.${message.guild.id}`)
         
@@ -51,7 +59,10 @@ class ReplenishTicket extends Command {
                 return message.channel.send("Não existe ou o ticket com esse id não está fechado.")
 
             const creator = await message.guild.members.fetch(ticket.creator)
-            
+
+            if (!message.member.hasPermission("MANAGE_MESSAGES") && creator.user.id !== message.author.id)
+                return message.reply("você não tem permissão para reconstituir um ticket de outro membro.")
+
             if (!creator)
                 return message.channel.send("O criador do ticket não existe nesse servidor.")
 
