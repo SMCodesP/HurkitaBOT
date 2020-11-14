@@ -22,11 +22,11 @@ class CloseTicket extends Command {
             args: [
                 {
                     id: "member",
-                    default: (message: Message) => message.member,
+                    default: (message: Message): GuildMember => message.guild.members.cache.get(message.author.id),
                     type: async (message: Message, member: GuildMember | string): Promise<GuildMember> => {
                         if (message.mentions.members.first())
                             return message.mentions.members.first()
-                        return await message.guild.members.fetch(member)
+                        return (typeof member == "string") ? message.guild.members.cache.get(member) : null
                     }
                 }
             ]
@@ -38,11 +38,11 @@ class CloseTicket extends Command {
 
         if (userTickets) {
             if (userTickets.filter((ticket) => !ticket.closed).length <= 0)
-                return message.reply("você não pode deletar um ticket caso não tenha um aberto.")
+                return message.util.reply("você não pode deletar um ticket caso não tenha um aberto.")
         }
 
         if (!message.member.hasPermission("MANAGE_MESSAGES") && member.user.id !== message.author.id)
-            return message.reply("você não tem permissão para deletar um ticket de outro membro.")
+            return message.util.reply("você não tem permissão para deletar um ticket de outro membro.")
 
         const ticket = userTickets.find((ticket) => !ticket.closed)
 
@@ -59,7 +59,7 @@ class CloseTicket extends Command {
 
         await channel_ticket.delete()
 
-        message.reply(`você fechou o ticket \`#${ticket.id}\` com sucesso!\nCaso teve algum problema com o ticket ele pode ser reconstruido usando, \`${db.get(`${message.guild.id}.prefix`)}reconstituirticket ${ticket.id}\` assim poderá obter as logs do ticket em um novo canal de ticket.`)
+        message.util.reply(`você fechou o ticket \`#${ticket.id}\` com sucesso!\nCaso teve algum problema com o ticket ele pode ser reconstruido usando, \`${db.get(`${message.guild.id}.prefix`)}reconstituirticket ${ticket.id}\` assim poderá obter as logs do ticket em um novo canal de ticket.`)
     }
 
 }

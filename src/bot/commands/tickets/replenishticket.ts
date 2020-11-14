@@ -31,7 +31,7 @@ class ReplenishTicket extends Command {
     async exec(message: Message, { ticket_id }: { ticket_id: Number }) {
 
         if (!ticket_id)
-            return message.reply("Por favor execute o comando novamente com o id do ticket, ele é obrigatório.")
+            return message.util.reply("Por favor execute o comando novamente com o id do ticket, ele é obrigatório.")
 
         const guildTickets: Object = db.get(`tickets.${message.guild.id}`)
         
@@ -47,15 +47,15 @@ class ReplenishTicket extends Command {
             const ticket = concatAllTickets.find((ticket: Ticket) => (ticket.id === ticket_id && ticket.closed))
 
             if (!ticket)
-                return message.channel.send("Não existe ou o ticket com esse id não está fechado.")
+                return message.util.reply("Não existe ou o ticket com esse id não está fechado.")
 
             const creator = await message.guild.members.fetch(ticket.creator)
 
             if (!message.member.hasPermission("MANAGE_MESSAGES") && creator.user.id !== message.author.id)
-                return message.reply("você não tem permissão para reconstituir um ticket de outro membro.")
+                return message.util.reply("você não tem permissão para reconstituir um ticket de outro membro.")
 
             if (!creator)
-                return message.channel.send("O criador do ticket não existe nesse servidor.")
+                return message.util.reply("O criador do ticket não existe nesse servidor.")
 
             const embedReconstitutingTicket = new MessageEmbed()
                 .setColor("RANDOM")
@@ -78,7 +78,7 @@ class ReplenishTicket extends Command {
                 .setTimestamp()
                 .setFooter(`Copyright © 2020 - ${this.client.user.username}`, this.client.user.displayAvatarURL())
 
-            const messageReconstituing = await message.reply(embedReconstitutingTicket)
+            const messageReconstituing = await message.util.reply(embedReconstitutingTicket)
 
             let categoryChannel = message.guild.channels.cache.find((channelCache) => (channelCache.name === "Reconstituições" && channelCache.type === "category"))
             let reconstitutedChannel: TextChannel;
@@ -170,7 +170,7 @@ class ReplenishTicket extends Command {
 
             await messageReconstituing.edit(embedReconstitutedTicket)
         } else {
-            message.reply("não tem houve nenhum ticket criado nesse servidor.")
+            message.util.reply("não tem houve nenhum ticket criado nesse servidor.")
         }
     }
 

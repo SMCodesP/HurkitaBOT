@@ -51,7 +51,7 @@ class BotClient extends AkairoClient implements BotClientTypes {
 				return process.env.PREFIX
 			},
 			directory: resolve(__dirname, "commands"),
-			defaultCooldown: 6e5,
+			defaultCooldown: 15000,
 			argumentDefaults: {
 				prompt: {
 					modifyStart: (_: Message, text: string): string => `${text}\n\nDigite \`cancelar\` para cancelar a sessão do comando.`,
@@ -63,13 +63,17 @@ class BotClient extends AkairoClient implements BotClientTypes {
 					time: 3e4
 				}
 			},
+			commandUtil: true,
 			ignorePermissions: process.env.OWNER_ID,
 			ignoreCooldown: process.env.OWNER_ID,
 		})
 
 		this.listenerHandler = new ListenerHandler(this, {
-			directory: resolve(__dirname, "listeners")
+			directory: resolve(__dirname, "listeners"),
 		});
+		this.listenerHandler.setEmitters({
+			commandHandler: this.commandHandler,
+		})
 		this.commandHandler.useListenerHandler(this.listenerHandler);
 		this.listenerHandler.loadAll();
 	}
