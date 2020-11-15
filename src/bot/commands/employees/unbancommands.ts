@@ -6,15 +6,15 @@ import * as db from "quick.db"
 
 import getPrefix from "../../../utils/getPrefix";
 
-class BanCommands extends Command {
+class UnBanCommands extends Command {
 
     constructor() {
-        super("bancommands", {
-            aliases: ["bancommands"],
+        super("unbancommands", {
+            aliases: ["unbancommands"],
             category: "👷 Funcionários | workers",
             description: {
-                content: "Banir um usuário de usar meus comandos!",
-                metadata: "Comando para banir nos meus sistemas; banir; ban; remove;",
+                content: "Desbanir um usuário para usar meus comandos!",
+                metadata: "Comando para desbanir nos meus sistemas; desban; unpunish",
                 usage: "[command] [@user/userID]",
                 examples: [
                     "[command] @SMCodes#4207",
@@ -35,8 +35,8 @@ class BanCommands extends Command {
 
     exec(message: Message, { memberMention }: { memberMention: GuildMember | null }) {
 
-        if (!validatePermission(message.author, "bancommands"))
-            return message.util.reply("você não tem permissão para banir um usuário.")
+        if (!validatePermission(message.author, "unbancommands"))
+            return message.util.reply("você não tem permissão para desbanir um usuário.")
 
         if (!memberMention)
             return message.util.reply(
@@ -44,27 +44,22 @@ class BanCommands extends Command {
             )
         if (memberMention.user.id === message.author.id)
             return message.util.reply(
-                `você não pode banir a si mesmo.`
+                `você não pode desbanir a si mesmo.`
             )
         
-        if (db.get(`banned.${memberMention.user.id}`))
+        if (!db.get(`banned.${memberMention.user.id}`))
             return message.util.reply(
-                `o usuário mencionado já está banido.`
+                `o usuário mencionado não está banido.`
             )
 
-        if (validatePermission(memberMention.user, "*"))
-            return message.util.reply(
-                `você nao pode banir um usuário que tem permissão master.`
-            )
-
-        db.set(`banned.${memberMention.user.id}`, true)
+        db.delete(`banned.${memberMention.user.id}`)
 
         message.util.reply(
-            `você baniu o usuário \`${memberMention.user.tag}\` com sucesso!`
+            `você desbaniu o usuário \`${memberMention.user.tag}\` com sucesso!`
         )
         
     }
 
 }
 
-export default BanCommands
+export default UnBanCommands
