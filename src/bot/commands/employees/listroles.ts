@@ -58,7 +58,7 @@ class ListRoles extends Command {
                     )
                     .addField(
                         "**Setar cargo »**",
-                        `\`\`\`yaml\n${db.get(`${message.guild.id}.prefix`) || process.env.PREFIX}setborole ${role.name} @user\`\`\`\n \u200B`,
+                        `\`\`\`yaml\n${db.get(`${message.guild.id}.prefix`) || process.env.PREFIX}addbotrole ${role.name} @user\`\`\`\n \u200B`,
                         true
                     )
             })

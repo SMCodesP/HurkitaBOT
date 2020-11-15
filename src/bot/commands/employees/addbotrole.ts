@@ -1,4 +1,4 @@
-import { RoleBot } from './../../structures/entities/RoleBot';
+import { RoleBot } from '../../structures/entities/RoleBot';
 import { Message, GuildMember } from "discord.js";
 import { Command } from "discord-akairo";
 import * as db from "quick.db";
@@ -41,8 +41,8 @@ class AddBotRole extends Command {
 
         if (!validatePermission(message.author, "addbotrole"))
             return message.util.reply("você não tem permissão para setar um cargo a um usuário.")
-        if (message.author.id === memberMention.user.id)
-            return message.util.reply("você não tem permissão para setar um cargo a si mesmo.")
+        if (message.author.id === memberMention.user.id || !rolename)
+            return message.util.reply(`Syntax incorreta, digite dessa forma \`${db.get(`${message.guild.id}.prefix`) || process.env.PREFIX}addbotrole [nome do cargo] [@user]\``)
 
         const role: RoleBot = db.get(`roles.${rolename}`)
         if (!role)
@@ -50,10 +50,12 @@ class AddBotRole extends Command {
 
         const userBot: UserBot = db.get(`users.${memberMention.user.id}`)
 
+        console.log(userBot)
+
         if (!userBot) {
             db.set(`users.${memberMention.user.id}`, {
                 id: memberMention.user.id,
-                roles: [...userBot.roles, role],
+                roles: [role],
             })
         } else {
             db.set(`users.${memberMention.user.id}.roles`, [...userBot.roles, role])
