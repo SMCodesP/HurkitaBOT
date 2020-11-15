@@ -33,6 +33,10 @@ class ListRoles extends Command {
     async exec(message: Message, {page}: { page: number }) {
 
         const roles = db.get(`roles`)
+
+        if (!roles)
+            return message.util.reply("nenhum cargo disponível até o momento.")
+
         const rolesList: Array<RoleBot> = Object.values(roles)
         const rolesListPages: Array<Array<RoleBot>> = this.paginate(rolesList, 3)
         const rolesListPage: Array<RoleBot> = rolesListPages[page-1]

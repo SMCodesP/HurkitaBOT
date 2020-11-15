@@ -5,15 +5,15 @@ import * as db from "quick.db";
 import validatePermission from '../../../utils/validatePermission';
 import { UserBot } from '../../structures/entities/UserBot';
 
-class SetBotRole extends Command {
+class AddBotRole extends Command {
 
     constructor() {
-        super("setbotrole", {
-            aliases: ["setbotrole"],
+        super("addbotrole", {
+            aliases: ["addbotrole"],
             category: "👷 Funcionários | workers",
             description: {
-                content: "Setar cargos dentro do bot!",
-                metadata: "Set role; setar permissão; dar cargo; role; cargo;",
+                content: "Adicionar um cargo do bot a um usuário!",
+                metadata: "Add role; setar permissão; set permission; set role; dar cargo; role; cargo;",
                 usage: "[command] [role] [@user/userID]",
                 examples: [
                     "[command] owner @SMCodes#4207",
@@ -39,7 +39,7 @@ class SetBotRole extends Command {
 
     exec(message: Message, {rolename, memberMention}: {rolename: string, memberMention: GuildMember}) {
 
-        if (!validatePermission(message.author, "setbotrole"))
+        if (!validatePermission(message.author, "addbotrole"))
             return message.util.reply("você não tem permissão para setar um cargo a um usuário.")
         if (message.author.id === memberMention.user.id)
             return message.util.reply("você não tem permissão para setar um cargo a si mesmo.")
@@ -53,10 +53,10 @@ class SetBotRole extends Command {
         if (!userBot) {
             db.set(`users.${memberMention.user.id}`, {
                 id: memberMention.user.id,
-                role: role,
+                roles: [...userBot.roles, role],
             })
         } else {
-            db.set(`users.${memberMention.user.id}.role`, role)
+            db.set(`users.${memberMention.user.id}.roles`, [...userBot.roles, role])
         }
 
         message.util.reply(`você setou o cargo \`${role.name}\` para o usuário ${memberMention}.`)
@@ -65,4 +65,4 @@ class SetBotRole extends Command {
 
 }
 
-export default SetBotRole
+export default AddBotRole
