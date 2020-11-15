@@ -43,7 +43,7 @@ class CreateBotRole extends Command {
         if (!rolename)
             return message.util.reply(`por favor você tem que digitar o nome do cargo no comando, dessa forma \`${db.get(`${message.guild.id}.prefix`) || process.env.PREFIX}createbotrole [nome do cargo]\`.`)
 
-        if (!db.get(`roles.${rolename}`))
+        if (db.get(`roles.${rolename}`))
             return message.util.reply("você não criar um cargo com o mesmo nome de outro.")
 
         const permissionsList = permissions.split(" ")
