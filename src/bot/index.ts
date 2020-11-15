@@ -4,6 +4,7 @@ import * as db from 'quick.db'
 import { AkairoClient, CommandHandler, CommandHandlerOptions, ListenerHandler, InhibitorHandler, SQLiteProvider } from "discord-akairo"
 import { Message, Intents } from "discord.js"
 import { Ingest as SonicChannelIngest, Search as SonicChannelSearch } from "sonic-channel";
+import { QueueItem } from "./structures/entities/QueueItem";
 
 interface BotClientTypes extends AkairoClient {
 	commandHandler: CommandHandler;
@@ -14,6 +15,7 @@ interface BotClientTypes extends AkairoClient {
 	listenerHandler: ListenerHandler;
 	intents: Intents;
 	inhibitorHandler: InhibitorHandler;
+	queueSongs: Map<string, QueueItem>;
 }
 
 class BotClient extends AkairoClient implements BotClientTypes {
@@ -24,6 +26,7 @@ class BotClient extends AkairoClient implements BotClientTypes {
 	listenerHandler: ListenerHandler;
 	intents: Intents;
 	inhibitorHandler: InhibitorHandler;
+	queueSongs: Map<string, QueueItem>;
 	
 	constructor() {
 		let intentsLocal: Intents = new Intents([
@@ -40,6 +43,7 @@ class BotClient extends AkairoClient implements BotClientTypes {
 			}
 		});
 
+		this.queueSongs = new Map();
 		this.intents = intentsLocal
 		
 		this.startIngestSonic()
