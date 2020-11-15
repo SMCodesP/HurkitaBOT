@@ -1,7 +1,7 @@
 import { resolve } from "path"
 import { gray, green, red } from "colors/safe";
 import * as db from 'quick.db'
-import { AkairoClient, CommandHandler, CommandHandlerOptions, ListenerHandler, SQLiteProvider } from "discord-akairo"
+import { AkairoClient, CommandHandler, CommandHandlerOptions, ListenerHandler, InhibitorHandler, SQLiteProvider } from "discord-akairo"
 import { Message, Intents } from "discord.js"
 import { Ingest as SonicChannelIngest, Search as SonicChannelSearch } from "sonic-channel";
 
@@ -13,6 +13,7 @@ interface BotClientTypes extends AkairoClient {
 	sonicChannelIngest: SonicChannelIngest;
 	listenerHandler: ListenerHandler;
 	intents: Intents;
+	inhibitorHandler: InhibitorHandler;
 }
 
 class BotClient extends AkairoClient implements BotClientTypes {
@@ -22,6 +23,7 @@ class BotClient extends AkairoClient implements BotClientTypes {
 	sonicChannelIngest: SonicChannelIngest;
 	listenerHandler: ListenerHandler;
 	intents: Intents;
+	inhibitorHandler: InhibitorHandler;
 	
 	constructor() {
 		let intentsLocal: Intents = new Intents([
@@ -52,6 +54,7 @@ class BotClient extends AkairoClient implements BotClientTypes {
 			},
 			directory: resolve(__dirname, "commands"),
 			defaultCooldown: 15000,
+			blockBots: true,
 			argumentDefaults: {
 				prompt: {
 					modifyStart: (_: Message, text: string): string => `${text}\n\nDigite \`cancelar\` para cancelar a sessão do comando.`,
@@ -69,14 +72,23 @@ class BotClient extends AkairoClient implements BotClientTypes {
 			ignoreCooldown: process.env.OWNER_ID,
 		})
 
+        this.inhibitorHandler = new InhibitorHandler(this, {
+			directory: resolve(__dirname, 'inhibitors')
+		});
 		this.listenerHandler = new ListenerHandler(this, {
 			directory: resolve(__dirname, "listeners"),
 		});
+
+		this.commandHandler.useInhibitorHandler(this.inhibitorHandler);
+		this.commandHandler.useListenerHandler(this.listenerHandler);
+
 		this.listenerHandler.setEmitters({
 			commandHandler: this.commandHandler,
+			inhibitorHandler: this.inhibitorHandler,
 		})
-		this.commandHandler.useListenerHandler(this.listenerHandler);
+
 		this.listenerHandler.loadAll();
+		this.inhibitorHandler.loadAll();
 	}
 
 	startSearchSonic() {
