@@ -3,16 +3,16 @@ import { Command } from "discord-akairo";
 import {BotClientTypes} from '../../';
 import getPrefix from "../../../utils/getPrefix";
 
-class Mp3Pause extends Command {
+class Mp3Resume extends Command {
     client: BotClientTypes;
 
     constructor() {
-        super("mp3pause", {
-            aliases: ["mp3pausar", "mp3pause"],
+        super("mp3resume", {
+            aliases: ["mp3retomar", "mp3resume"],
             category: "📻 Mp3 rádio | mp3",
             description: {
-                content: "Com ele você pode pausar uma música mp3!",
-                metadata: "Mp3 pause; pausar; stop;",
+                content: "Você pode retornar em uma música quando pausada!",
+                metadata: "Mp3 resume; retomar; retornar;",
                 usage: "[command]",
                 examples: [
                     "[command]",
@@ -31,20 +31,20 @@ class Mp3Pause extends Command {
 
         if (!serverQueue)
             return message.util.reply(
-                `não estou com tocando nenhuma música, então não posso pausar.`
+                `não estou com tocando nenhuma música, então não posso retomar.`
             )
 
-        if (serverQueue.connection.dispatcher.paused)
+        if (!serverQueue.connection.dispatcher.paused)
             return (
-                `a fila já está pausada, use \`${getPrefix(message.guild.id)}mp3retomar\` para retormar a tocar as músicas.`
+                `a fila não está pausada, use \`${getPrefix(message.guild.id)}mp3pausar\` para pausar a fila.`
             )
 
-        serverQueue.connection.dispatcher.pause()
+        serverQueue.connection.dispatcher.resume()
 
         message.util.reply(
-            `a fila foi pausada com sucesso!\nUse \`${getPrefix(message.guild.id)}mp3retomar\` para retormar a tocar as músicas.`
+            `a fila foi foi retomada com sucesso!\nUse \`${getPrefix(message.guild.id)}mp3pausar\` para pausar a fila novamente.`
         )
     }
 }
 
-export default Mp3Pause
+export default Mp3Resume
