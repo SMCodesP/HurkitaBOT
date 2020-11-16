@@ -2,10 +2,10 @@ import { VoiceConnection, TextChannel, DMChannel, NewsChannel, VoiceChannel } fr
 import { Song } from "./Song";
 
 export interface QueueItem {
-    textChannel: TextChannel | DMChannel | NewsChannel,
-    voiceChannel: VoiceChannel,
-    connection: VoiceConnection,
-    songs: Array<Song>,
-    volume: number,
-    playing: boolean
+    textChannel: TextChannel | DMChannel | NewsChannel;
+    voiceChannel: VoiceChannel;
+    connection: VoiceConnection;
+    songs: Array<Song>;
+    volume: number;
+    playing: boolean;
 }

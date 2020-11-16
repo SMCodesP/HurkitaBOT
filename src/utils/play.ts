@@ -1,8 +1,8 @@
 import * as ytdl from "ytdl-core";
-import { Guild, User } from 'discord.js';
+import { Guild, User } from "discord.js";
 
-import { BotClientTypes } from '../bot';
-import { Song } from '../bot/structures/entities/Song';
+import { BotClientTypes } from "../bot";
+import { Song } from "../bot/structures/entities/Song";
 
 export default function play(guild: Guild, song: Song, client: BotClientTypes, user: User) {
     const serverQueue = client.queueSongs.get(guild.id);
