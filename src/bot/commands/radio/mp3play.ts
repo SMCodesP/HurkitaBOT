@@ -1,7 +1,9 @@
 import { Message } from "discord.js";
 import { Command } from "discord-akairo";
-import {BotClientTypes} from '../../';
 import * as ytdl from "ytdl-core";
+import { youtube_v3, google } from "googleapis";
+
+import {BotClientTypes} from '../../';
 import { QueueItem } from "../../structures/entities/QueueItem";
 import { Song } from "../../structures/entities/Song";
 import getPrefix from "../../../utils/getPrefix";
@@ -25,7 +27,7 @@ class Mp3Play extends Command {
             args: [
                 {
                     id: "searchQuery",
-                    type: "content"
+                    match: "content"
                 }
             ]
         })
@@ -51,7 +53,23 @@ class Mp3Play extends Command {
             )
         
         try {
-            const songInfo = await ytdl.getInfo(searchQuery);
+
+            console.log(searchQuery)
+
+            const {data: responseData} = await this.client.youtube.search.list({
+                part: ['snippet'],
+                q: searchQuery,
+                type: ['video'],
+                maxResults: 1
+            });
+
+            if (!responseData.items[0])
+                return message.util.reply(
+                    `nenhum conteúdo encontrado com o texto digitado.`
+                );
+
+            const videoLink = `https://www.youtube.com/watch?v=${responseData.items[0].id.videoId}`;
+            const songInfo = await ytdl.getInfo(videoLink);
 
             const song: Song = {
                 title: songInfo.videoDetails.title,

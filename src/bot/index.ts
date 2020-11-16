@@ -4,6 +4,8 @@ import * as db from 'quick.db'
 import { AkairoClient, CommandHandler, CommandHandlerOptions, ListenerHandler, InhibitorHandler, SQLiteProvider } from "discord-akairo"
 import { Message, Intents } from "discord.js"
 import { Ingest as SonicChannelIngest, Search as SonicChannelSearch } from "sonic-channel";
+import { google, youtube_v3 } from "googleapis";
+
 import { QueueItem } from "./structures/entities/QueueItem";
 
 interface BotClientTypes extends AkairoClient {
@@ -16,6 +18,7 @@ interface BotClientTypes extends AkairoClient {
 	intents: Intents;
 	inhibitorHandler: InhibitorHandler;
 	queueSongs: Map<string, QueueItem>;
+	youtube: youtube_v3.Youtube;
 }
 
 class BotClient extends AkairoClient implements BotClientTypes {
@@ -27,6 +30,7 @@ class BotClient extends AkairoClient implements BotClientTypes {
 	intents: Intents;
 	inhibitorHandler: InhibitorHandler;
 	queueSongs: Map<string, QueueItem>;
+	youtube: youtube_v3.Youtube;
 	
 	constructor() {
 		let intentsLocal: Intents = new Intents([
@@ -43,6 +47,10 @@ class BotClient extends AkairoClient implements BotClientTypes {
 			}
 		});
 
+		this.youtube = google.youtube({
+			version: "v3",
+			auth: process.env.YOUTUBE_KEY_API
+		})
 		this.queueSongs = new Map();
 		this.intents = intentsLocal
 		
