@@ -68,7 +68,7 @@ class Mp3Play extends Command {
             const song: Song = {
                 title: responseData.items[0].snippet.title,
                 url: videoLink,
-                responseData: responseData
+                responseData: responseData.items[0]
             };
             const serverQueueSongs = this.client.queueSongs.get(message.guild.id)
 
