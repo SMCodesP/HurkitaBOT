@@ -12,18 +12,14 @@ export default function play(guild: Guild, song: Song, client: BotClientTypes, u
         return;
     }
 
-    console.log(song)
-
     const dispatcher = serverQueue.connection
         .play(ytdl(song.url))
-        .on("start", () => {
-            serverQueue.textChannel.send(`📻 ${user}\nEstou tocando agora » **${song.title}**`);
-        })
         .on("finish", () => {
             serverQueue.songs.shift();
             play(guild, serverQueue.songs[0], client, user);
         })
         .on("error", error => console.error(error));
-
+        
     dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
+    serverQueue.textChannel.send(`📻 ${user}\nEstou tocando agora » **${song.title}**`);
 }

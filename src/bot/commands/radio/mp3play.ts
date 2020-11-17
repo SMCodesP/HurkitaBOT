@@ -1,7 +1,5 @@
 import { Message } from "discord.js";
 import { Command } from "discord-akairo";
-import * as ytdl from "ytdl-core";
-import { youtube_v3, google } from "googleapis";
 
 import {BotClientTypes} from '../../';
 import { QueueItem } from "../../structures/entities/QueueItem";
@@ -43,7 +41,7 @@ class Mp3Play extends Command {
         
         if (!voiceChannel)
             return message.util.reply(
-                `você não está conectado a uma canal de voz.`
+                `você não está conectado em um canal de voz.`
             )
         const permissionsOfVoiceChannel = voiceChannel.permissionsFor(message.client.user);
 
@@ -53,9 +51,6 @@ class Mp3Play extends Command {
             )
         
         try {
-
-            console.log(searchQuery)
-
             const {data: responseData} = await this.client.youtube.search.list({
                 part: ['snippet'],
                 q: searchQuery,
@@ -69,11 +64,11 @@ class Mp3Play extends Command {
                 );
 
             const videoLink = `https://www.youtube.com/watch?v=${responseData.items[0].id.videoId}`;
-            const songInfo = await ytdl.getInfo(videoLink);
-
+            
             const song: Song = {
-                title: songInfo.videoDetails.title,
-                url: songInfo.videoDetails.video_url,
+                title: responseData.items[0].snippet.title,
+                url: videoLink,
+                responseData: responseData
             };
             const serverQueueSongs = this.client.queueSongs.get(message.guild.id)
 
