@@ -4,7 +4,10 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "dev": "nodemon --watch 'src/' --exec 'ts-node src/index.ts' -e ts"
+    "dev": "nodemon --watch 'src/' --exec 'ts-node src/index.ts' -e ts",
+    "start": "node dist/index.js",
+    "build": "tsc",
+    "postinstall": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -37,6 +40,7 @@
     "discord-akairo": "^8.1.0",
     "discord.js": "^12.4.1",
     "dotenv": "^8.2.0",
+    "express": "^4.17.1",
     "ffmpeg": "0.0.4",
     "ffmpeg-static": "^4.2.7",
     "fluent-ffmpeg": "^2.1.2",
