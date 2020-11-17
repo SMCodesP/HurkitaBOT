@@ -1,6 +1,8 @@
-import express from 'express'
+import * as express from 'express'
 
 class Web {
+  app: express.Express;
+
   constructor() {
     this.app = express()
 
@@ -13,7 +15,7 @@ class Web {
     })
   }
 
-  init(port) {
+  init(port: number) {
     this.app.listen(port)
   }
 }
