@@ -15,7 +15,7 @@ class Web {
     })
   }
 
-  init(port: number) {
+  init(port: string | number) {
     this.app.listen(port)
   }
 }
