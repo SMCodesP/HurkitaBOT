@@ -13,7 +13,7 @@ class Web {
     })
   }
 
-  listen(port) {
+  init(port) {
     this.app.listen(port)
   }
 }
