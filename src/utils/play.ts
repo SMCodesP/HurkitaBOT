@@ -59,7 +59,7 @@ export default function play(guild: Guild, song: Song, client: BotClientTypes, u
             `\`\`\`yaml\n${item.snippet.description}\`\`\`\n \u200B`,
             false,
         )
-        .setThumbnail(item.snippet.thumbnails.high.url)
+        .setImage(item.snippet.thumbnails.high.url)
         .setTimestamp()
         .setFooter(`Copyright © 2020 - ${client.user.username}`, client.user.displayAvatarURL())
 
