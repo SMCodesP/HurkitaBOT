@@ -40,7 +40,7 @@ class UnBanCommands extends Command {
 
         if (!memberMention)
             return message.util.reply(
-                `syntax incorreta, use dessa forma \`${getPrefix(message.guild.id)}${this.description.usage.replace(/\[command\]/g, this.id)}\``
+                `sintaxe incorreta, use dessa forma \`${getPrefix(message.guild.id)}${this.description.usage.replace(/\[command\]/g, this.id)}\``
             )
         if (memberMention.user.id === message.author.id)
             return message.util.reply(

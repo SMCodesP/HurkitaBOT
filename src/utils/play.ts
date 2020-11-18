@@ -14,14 +14,16 @@ export default function play(guild: Guild, song: Song, client: BotClientTypes, u
     }
 
     const dispatcher = serverQueue.connection
-        .play(ytdl(song.url))
+        .play(ytdl(song.url, {
+            quality: "highestaudio"
+        }))
         .on("finish", () => {
             serverQueue.songs.shift();
             play(guild, serverQueue.songs[0], client, user);
         })
         .on("error", error => console.error(error));
         
-    dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
+    dispatcher.setVolumeLogarithmic(serverQueue.volume / 10);
     const options: Intl.DateTimeFormatOptions = {
         year: "numeric",
         month: "2-digit",

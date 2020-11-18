@@ -2,7 +2,6 @@ import { Command } from "discord-akairo";
 import { Message } from "discord.js";
 
 import {BotClientTypes} from "../../";
-import getPrefix from "../../../utils/getPrefix";
 
 class Mp3Skip extends Command {
   client: BotClientTypes;

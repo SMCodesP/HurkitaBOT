@@ -42,7 +42,7 @@ class AddBotRole extends Command {
         if (!validatePermission(message.author, "addbotrole"))
             return message.util.reply("você não tem permissão para setar um cargo a um usuário.")
         if (message.author.id === memberMention.user.id || !rolename)
-            return message.util.reply(`Syntax incorreta, digite dessa forma \`${db.get(`${message.guild.id}.prefix`) || process.env.PREFIX}addbotrole [nome do cargo] [@user]\``)
+            return message.util.reply(`Sintaxe incorreta, digite dessa forma \`${db.get(`${message.guild.id}.prefix`) || process.env.PREFIX}addbotrole [nome do cargo] [@user]\``)
 
         const role: RoleBot = db.get(`roles.${rolename}`)
         if (!role)

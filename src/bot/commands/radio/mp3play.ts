@@ -35,7 +35,7 @@ class Mp3Play extends Command {
     async exec(message: Message, {searchQuery}: {searchQuery: string}) {
         if (!searchQuery)
             return message.util.reply(
-                `syntax incorreta, você deve usar o comando dessa forma \`${getPrefix(message.guild.id)}${this.id} [Texto de pesquisa]\`.`
+                `sintaxe incorreta, você deve usar o comando dessa forma \`${getPrefix(message.guild.id)}${this.id} [Texto de pesquisa]\`.`
             )
 
         const voiceChannel = message.member.voice.channel;
@@ -79,7 +79,7 @@ class Mp3Play extends Command {
                     voiceChannel: voiceChannel,
                     connection: null,
                     songs: [],
-                    volume: 5,
+                    volume: 1,
                     playing: true
                 };
 
