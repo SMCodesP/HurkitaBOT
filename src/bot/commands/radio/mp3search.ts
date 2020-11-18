@@ -11,6 +11,7 @@ class Mp3Search extends Command {
         super("mp3search", {
             aliases: ["mp3search"],
             category: "📻 Mp3 rádio | mp3",
+            channel: "guild",
             description: {
                 content: "Comando para pesquisar algo como música/podcast!",
                 metadata: "Mp3 play; start; musica; music; podcast;",

@@ -10,6 +10,7 @@ class Mp3Resume extends Command {
         super("mp3resume", {
             aliases: ["mp3retomar", "mp3resume"],
             category: "📻 Mp3 rádio | mp3",
+            channel: "guild",
             description: {
                 content: "Você pode retornar em uma música quando pausada!",
                 metadata: "Mp3 resume; retomar; retornar;",

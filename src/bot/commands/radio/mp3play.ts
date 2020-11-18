@@ -14,6 +14,7 @@ class Mp3Play extends Command {
         super("mp3play", {
             aliases: ["mp3play"],
             category: "📻 Mp3 rádio | mp3",
+            channel: "guild",
             description: {
                 content: "Comando para escutar uma música/podcast!",
                 metadata: "Mp3 play; start; musica; music; podcast;",

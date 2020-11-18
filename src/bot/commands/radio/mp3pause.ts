@@ -10,6 +10,7 @@ class Mp3Pause extends Command {
         super("mp3pause", {
             aliases: ["mp3pausar", "mp3pause"],
             category: "📻 Mp3 rádio | mp3",
+            channel: "guild",
             description: {
                 content: "Com ele você pode pausar uma música mp3!",
                 metadata: "Mp3 pause; pausar; stop;",
