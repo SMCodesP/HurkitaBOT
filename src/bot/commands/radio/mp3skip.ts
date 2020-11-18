@@ -4,17 +4,17 @@ import { Message } from "discord.js";
 import {BotClientTypes} from "../../";
 import getPrefix from "../../../utils/getPrefix";
 
-class Mp3Stop extends Command {
+class Mp3Skip extends Command {
   client: BotClientTypes;
 
   constructor() {
-  	super("mp3stop", {
-      aliases: ["mp3stop", "mp3parar"],
+  	super("mp3skip", {
+      aliases: ["mp3skip", "mp3pular"],
       channel: "guild",
       category: "📻 Mp3 rádio | mp3",
       description: {
-          content: "Com esse comando você pode parar a música mp3!",
-          metadata: "Mp3 stop; parar;",
+          content: "Com esse comando você pode pular uma música mp3!",
+          metadata: "Mp3 skip; pular;",
           usage: "[command]",
           examples: [
               "[command]",
@@ -33,18 +33,16 @@ class Mp3Stop extends Command {
 
     if (!serverQueue)
         return message.util.reply(
-            `não estou com tocando nenhuma música, então não posso parar.`
+            `não estou com tocando nenhuma música, então não posso pular.`
         )
 
-    serverQueue.songs = [];
-    serverQueue.connection.dispatcher.pause()
-    serverQueue.voiceChannel.leave();
+    serverQueue.connection.dispatcher.end()
 
     message.util.reply(
-        `todas as músicas foram retiradas da fila!`
+        `você pulou uma música com sucesso!`
     )
   }
 
 }
 
-export default Mp3Stop
+export default Mp3Skip
