@@ -37,8 +37,6 @@ export default function play(guild: Guild, song: Song, client: BotClientTypes, u
 
     const {responseData: item} = serverQueue.songs[0]
 
-    console.log(item.snippet.thumbnails)
-    console.log(item.snippet.thumbnails.high.url)
     const datePublished = new Date(item.snippet.publishedAt)
     const embedSearch = new MessageEmbed()
         .setColor("RANDOM")

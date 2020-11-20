@@ -6,6 +6,7 @@ import { QueueItem } from "../../structures/entities/QueueItem";
 import { Song } from "../../structures/entities/Song";
 import getPrefix from "../../../utils/getPrefix";
 import play from "../../../utils/play";
+import { youtube_v3 } from "googleapis";
 
 class Mp3Play extends Command {
     client: BotClientTypes;
@@ -52,25 +53,42 @@ class Mp3Play extends Command {
             )
         
         try {
-            const {data: responseData} = await this.client.youtube.search.list({
-                part: ['snippet'],
-                q: searchQuery,
-                type: ['video'],
-                maxResults: 1
-            });
+            let responseData: youtube_v3.Schema$SearchListResponse | youtube_v3.Schema$VideoListResponse;
+            let song: Song;
+            let videoID = this.youtube_parser_link(searchQuery)
+            
+            if (videoID === false) {
+                const {data} = await this.client.youtube.search.list({
+                    part: ['snippet'],
+                    q: searchQuery,
+                    type: ['video'],
+                    maxResults: 1
+                });
+                responseData = data
+                song = {
+                    title: data.items[0].snippet.title,
+                    url: `https://www.youtube.com/watch?v=${data.items[0].id.videoId}`,
+                    responseData: data.items[0]
+                }
+            } else {
+                const {data} = await this.client.youtube.videos.list({
+                    part: ['snippet'],
+                    id: [videoID.toString()]
+                })
+                
+                responseData = data
+                song = {
+                    title: data.items[0].snippet.title,
+                    url: `https://www.youtube.com/watch?v=${data.items[0].id}`,
+                    responseData: responseData.items[0]
+                }
+            }
 
-            if (!responseData.items[0])
+            if (!song)
                 return message.util.reply(
                     `nenhum conteúdo encontrado com o texto digitado.`
                 );
 
-            const videoLink = `https://www.youtube.com/watch?v=${responseData.items[0].id.videoId}`;
-            
-            const song: Song = {
-                title: responseData.items[0].snippet.title,
-                url: videoLink,
-                responseData: responseData.items[0]
-            };
             const serverQueueSongs = this.client.queueSongs.get(message.guild.id)
 
             if (!serverQueueSongs) {
@@ -98,13 +116,18 @@ class Mp3Play extends Command {
                 }
             } else {
                 serverQueueSongs.songs.push(song);
-                console.log(serverQueueSongs.songs);
                 return message.channel.send(`${message.author}\n- **${song.title}** foi adicionado na fila!`);
             }
         }  catch (error) {
             console.error(error);
             return message.util.reply(error.message).catch(console.error);
         }
+    }
+
+    youtube_parser_link(url: string): string | boolean {
+        var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+        var match = url.match(regExp);
+        return (match && match[7].length == 11) ? match[7] : false;
     }
 
 }
