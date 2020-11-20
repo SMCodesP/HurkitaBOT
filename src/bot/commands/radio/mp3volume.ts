@@ -75,7 +75,7 @@ class Mp3Volume extends Command {
 		serverQueue.connection.dispatcher.setVolumeLogarithmic(newVolume / 10)
 
 		message.util.reply(
-			`você aumentou o volume de \`${oldVolume}\` para \`${newVolume}\`!\n**Volume padrão »** \`1\``
+			`você aumentou o volume de \`${oldVolume}\` para \`${newVolume}\`!\n**Volume padrão »** \`${serverQueue.defaultVolume}\``
 		)
 	}
 

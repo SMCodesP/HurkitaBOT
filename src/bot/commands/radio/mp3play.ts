@@ -97,7 +97,8 @@ class Mp3Play extends Command {
                     voiceChannel: voiceChannel,
                     connection: null,
                     songs: [],
-                    volume: 1,
+                    volume: 2,
+                    defaultVolume: 2,
                     playing: true
                 };
 

@@ -7,5 +7,6 @@ export interface QueueItem {
     connection: VoiceConnection;
     songs: Array<Song>;
     volume: number;
+    defaultVolume: number;
     playing: boolean;
 }

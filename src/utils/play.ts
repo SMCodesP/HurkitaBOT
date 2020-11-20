@@ -23,7 +23,7 @@ export default function play(guild: Guild, song: Song, client: BotClientTypes, u
         })
         .on("error", error => console.error(error));
         
-    dispatcher.setVolumeLogarithmic(serverQueue.volume / 10);
+    dispatcher.setVolumeLogarithmic(serverQueue.defaultVolume / 10);
     const options: Intl.DateTimeFormatOptions = {
         year: "numeric",
         month: "2-digit",
