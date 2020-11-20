@@ -36,9 +36,8 @@ class Mp3Stop extends Command {
             `não estou com tocando nenhuma música, então não posso parar.`
         )
 
-    serverQueue.songs = [];
-    serverQueue.connection.dispatcher.pause()
     serverQueue.voiceChannel.leave();
+    client.queueSongs.delete(guild.id);
 
     message.util.reply(
         `todas as músicas foram retiradas da fila!`
