@@ -37,7 +37,7 @@ class Mp3Stop extends Command {
         )
 
     serverQueue.voiceChannel.leave();
-    client.queueSongs.delete(guild.id);
+    this.client.queueSongs.delete(message.guild.id);
 
     message.util.reply(
         `todas as músicas foram retiradas da fila!`
