@@ -34,27 +34,27 @@ class ServerInfoCommand extends Command {
                     .setDescription(`Essas são as informações sobre o servidor **${message.guild.name}**`)
                     .addField(
                       `\u200B`,
-                      `**Nome » ** \`\`\`yaml\n${message.guild.name}\`\`\``,
+                      `🔤 **Nome » ** \`\`\`yaml\n${message.guild.name}\`\`\``,
                       true
                     )
                     .addField(
                       `\u200B`,
-                      `**ID » ** \`\`\`yaml\n${message.guild.id}\`\`\``,
+                      `🆔 **ID » ** \`\`\`yaml\n${message.guild.id}\`\`\``,
                       true
                     )
                     .addField(
                       `\u200B`,
-                      `**Membros » ** \`\`\`yaml\n${message.guild.memberCount}\`\`\``,
+                      `👨‍👧‍👦 **Membros » ** \`\`\`yaml\n${message.guild.memberCount}\`\`\``,
                       true
                     )
                     .addField(
                       `\u200B`,
-                      `**Cargos » ** \`\`\`yaml\n${message.guild.roles.cache.size}\`\`\``,
+                      `🛡️ **Cargos » ** \`\`\`yaml\n${message.guild.roles.cache.size}\`\`\``,
                       true
                     )
                     .addField(
                       `\u200B`,
-                      `**Canais texto/voz » ** \`\`\`yaml\n${
+                      `📢 **Canais texto/voz » ** \`\`\`yaml\n${
                         message.guild.channels.cache.filter(
                           (channelCount) => channelCount.type === 'text'
                         ).size
@@ -67,19 +67,19 @@ class ServerInfoCommand extends Command {
                     )
                     .addField(
                       `\u200B`,
-                      `**Região » ** \`\`\`yaml\n${
+                      `🏳️ **Região » ** \`\`\`yaml\n${
                         message.guild.region
                       }\`\`\``,
                       true
                     )
                     .addField(
                       `\u200B`,
-                      `**Criador » ** \`\`\`diff\n- ${message.guild.owner.user.tag}\`\`\``,
+                      `👤 **Criador(a) » ** \`\`\`diff\n- ${message.guild.owner.user.tag}\`\`\``,
                       false
                     )
                     .addField(
                       `\u200B`,
-                      `**Cargos » ** \`\`\`ini\n[${roles.array().join(', ')}]\`\`\` \n \u200B`,
+                      `<:586789843015565332:780881891032039464> **Cargos » ** \`\`\`ini\n[${roles.array().join(', ')}]\`\`\` \n \u200B`,
                       false
                     )
                     .setTimestamp()
