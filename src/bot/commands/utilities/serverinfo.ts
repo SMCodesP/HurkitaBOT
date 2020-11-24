@@ -1,7 +1,7 @@
 import { Message, MessageEmbed } from 'discord.js';
 import { Command } from "discord-akairo";
 import { BotClientTypes } from "../../index";
-import * as db from 'quick.db'
+import flagsEmojis from "../../../utils/flagsEmojis";
 
 class ServerInfoCommand extends Command {
     client: BotClientTypes;
@@ -67,7 +67,7 @@ class ServerInfoCommand extends Command {
                     )
                     .addField(
                       `\u200B`,
-                      `🏳️ **Região » ** \`\`\`yaml\n${
+                      `${this.client.emojis.cache.get(flagsEmojis[message.guild.region]) || "🏳️"} **Região » ** \`\`\`yaml\n${
                         message.guild.region
                       }\`\`\``,
                       true
