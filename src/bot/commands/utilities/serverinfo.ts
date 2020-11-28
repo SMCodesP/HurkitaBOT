@@ -32,7 +32,7 @@ class ServerInfoCommand extends Command {
 				return new MessageEmbed()
 					.setColor("RANDOM")
 					.setThumbnail(message.guild.iconURL())
-					.setTitle("📃 Informações do servidor")
+					.setTitle(`📃 Informações do servidor | ${page+1}`)
 					.setDescription(`Essas são as informações sobre o servidor **${message.guild.name}**`)
 					.addField(
 						`\u200B`,
@@ -90,6 +90,28 @@ class ServerInfoCommand extends Command {
 						this.client.user.avatarURL()
 					);
 			},
+			1: () => {
+				return new MessageEmbed()
+					.setColor("RANDOM")
+					.setThumbnail(message.guild.iconURL())
+					.setTitle("📃 Informações do servidor")
+					.setDescription(`Essas são as informações sobre o servidor **${message.guild.name}**`)
+					.addField(
+						`\u200B`,
+						`**Prefix »** \`\`\`yaml\n${db.get(`${message.guild.id}.prefix`) || process.env.PREFIX}\`\`\``,
+						true
+					)
+					.addField(
+						`\u200B`,
+						`**Emojis »** \`\`\`yaml\n${message.guild.emojis.cache.size}\`\`\``,
+						true
+					)
+					.setTimestamp()
+					.setFooter(
+						`Copyright © 2020 ${this.client.user.username}`,
+						this.client.user.avatarURL()
+					);
+			}
 		}
 
 		if (!pages[page])
@@ -108,16 +130,18 @@ class ServerInfoCommand extends Command {
 
 		const functionsReactions = {
 				"⬅️": async () => {
-						this.exec(message, { page: page-1 })
+					await messageInfo.reactions.removeAll()
+					this.exec(message, { page: page-1 })
 				},
 				"➡️": async () => {
-						this.exec(message, { page: page+1 })
+					await messageInfo.reactions.removeAll()
+					this.exec(message, { page: page+1 })
 				},
 		}
 
 		collectorReaction.on("collect", async (reaction) => {
 				if (functionsReactions[reaction.emoji.name]) {
-						return await functionsReactions[reaction.emoji.name]()
+					return await functionsReactions[reaction.emoji.name]()
 				}
 		});
 	}
