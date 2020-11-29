@@ -1,4 +1,6 @@
 import { Command } from "discord-akairo"
+import { User } from "discord.js"
+import { MessageReaction } from "discord.js"
 import { Message, MessageEmbed } from "discord.js"
 import * as db from 'quick.db'
 
@@ -71,7 +73,7 @@ class HelpCommand extends Command {
             .setTimestamp()
             .setFooter(`Copyright © 2020 - ${this.client.user.username}`, this.client.user.displayAvatarURL())
 
-        message.reply(embedHelpOfCommand)
+        message.util.reply(embedHelpOfCommand)
     }
 
     async helpCategory(message: Message, name: string) {
@@ -102,7 +104,7 @@ class HelpCommand extends Command {
                 )
         })
 
-        message.reply(embedHelpOfCategory)
+        message.util.reply(embedHelpOfCategory)
     }
 
     async exec(message: Message, { select }: { select: string; }) {
@@ -127,7 +129,7 @@ class HelpCommand extends Command {
             .setTimestamp()
             .setFooter(`Copyright © 2020 - ${this.client.user.username}`, this.client.user.displayAvatarURL())
 
-        this.handler.categories.keyArray().forEach((categoryKey) => {
+        this.handler.categories.keyArray().forEach(async (categoryKey) => {
             const namesOfSpliting: string[] = categoryKey.split('|')
             const name = namesOfSpliting[0].trim()
             const nameFormatted = namesOfSpliting[1].trim()
@@ -139,7 +141,20 @@ class HelpCommand extends Command {
             )
         })
 
-        await message.reply(embed)
+        const messageHelpEmbed = await message.util.reply(embed)
+
+        for (let indexHelp = 0; indexHelp < this.handler.categories.keyArray().length; indexHelp++) {
+            const name = this.handler.categories.keyArray()[indexHelp]
+            await messageHelpEmbed.react(name.split(" ")[0])
+
+            const filter = (reaction: MessageReaction, user: User) => user.id === message.author.id && reaction.emoji.name === name.split(" ")[0];
+            const collectorReaction = messageHelpEmbed.createReactionCollector(filter, { time: 60000 * 5, max: 1 });
+
+            collectorReaction.on("collect", async (reaction) => {
+                await messageHelpEmbed.reactions.removeAll()
+                this.helpCategory(message, name.split('|')[1].trim())
+		    });
+        }
 
     }
 
