@@ -5,6 +5,10 @@ import flagsEmojis from "../../../utils/flagsEmojis";
 import * as db from "quick.db";
 import { MessageReaction } from 'discord.js';
 import { User } from 'discord.js';
+import { MessageOptions } from 'discord.js';
+import { MessageAttachment } from 'discord.js';
+import { APIMessage } from 'discord.js';
+import { MessageEditOptions } from 'discord.js';
 
 class ServerInfoCommand extends Command {
 	client: BotClientTypes;
@@ -24,44 +28,50 @@ class ServerInfoCommand extends Command {
 		})
 	}
 
-	async exec(message: Message, { page = 0 }: { page: number }) {
+	async exec(message: Message, { page = 0, messageAlt }: { page: number, messageAlt: Message }) {
+		if (messageAlt) {
+			messageAlt = await messageAlt.fetch()
+		}
+		
 		const pages = {
-			0: () => {
-				const roles = message.guild.roles.cache.mapValues((role) => role.name);
-				
+			0: async () => {
+				const guild = await message.guild.fetch()
+				const roles = guild.roles.cache.mapValues((role) => role.name)
+				const guildOwner = await guild.members.fetch(guild.ownerID)
+
 				return new MessageEmbed()
 					.setColor("RANDOM")
-					.setThumbnail(message.guild.iconURL())
+					.setThumbnail(guild.iconURL())
 					.setTitle(`📃 Informações do servidor | ${page+1}`)
-					.setDescription(`Essas são as informações sobre o servidor **${message.guild.name}**`)
+					.setDescription(`Essas são as informações sobre o servidor **${guild.name}**`)
 					.addField(
 						`\u200B`,
-						`🔤 **Nome » ** \`\`\`yaml\n${message.guild.name}\`\`\``,
+						`🔤 **Nome » ** \`\`\`yaml\n${guild.name}\`\`\``,
 						true
 					)
 					.addField(
 						`\u200B`,
-						`🆔 **ID » ** \`\`\`yaml\n${message.guild.id}\`\`\``,
+						`🆔 **ID » ** \`\`\`yaml\n${guild.id}\`\`\``,
 						true
 					)
 					.addField(
 						`\u200B`,
-						`👨‍👧‍👦 **Membros » ** \`\`\`yaml\n${message.guild.memberCount}\`\`\``,
+						`👨‍👧‍👦 **Membros » ** \`\`\`yaml\n${guild.memberCount}\`\`\``,
 						true
 					)
 					.addField(
 						`\u200B`,
-						`🛡️ **Cargos » ** \`\`\`yaml\n${message.guild.roles.cache.size}\`\`\``,
+						`🛡️ **Cargos » ** \`\`\`yaml\n${guild.roles.cache.size}\`\`\``,
 						true
 					)
 					.addField(
 						`\u200B`,
 						`📢 **Canais texto/voz » ** \`\`\`yaml\n${
-							message.guild.channels.cache.filter(
+							guild.channels.cache.filter(
 								(channelCount) => channelCount.type === 'text'
 							).size
 						}/${
-							message.guild.channels.cache.filter(
+							guild.channels.cache.filter(
 								(channelCount) => channelCount.type === 'voice'
 							).size
 						}\`\`\``,
@@ -69,14 +79,14 @@ class ServerInfoCommand extends Command {
 					)
 					.addField(
 						`\u200B`,
-						`${this.client.emojis.cache.get(flagsEmojis[message.guild.region]) || "🏳️"} **Região » ** \`\`\`yaml\n${
-							message.guild.region
+						`${this.client.emojis.cache.get(flagsEmojis[guild.region]) || "🏳️"} **Região » ** \`\`\`yaml\n${
+							guild.region
 						}\`\`\``,
 						true
 					)
 					.addField(
 						`\u200B`,
-						`👤 **Criador(a) » ** \`\`\`diff\n- ${message.guild.owner.user.tag}\`\`\``,
+						`👤 **Criador(a) » ** \`\`\`diff\n- ${guildOwner.user.tag}\`\`\``,
 						false
 					)
 					.addField(
@@ -90,20 +100,22 @@ class ServerInfoCommand extends Command {
 						this.client.user.avatarURL()
 					);
 			},
-			1: () => {
+			1: async () => {
+				const guild = await message.guild.fetch()
+
 				return new MessageEmbed()
 					.setColor("RANDOM")
-					.setThumbnail(message.guild.iconURL())
+					.setThumbnail(guild.iconURL())
 					.setTitle("📃 Informações do servidor")
-					.setDescription(`Essas são as informações sobre o servidor **${message.guild.name}**`)
+					.setDescription(`Essas são as informações sobre o servidor **${guild.name}**`)
 					.addField(
 						`\u200B`,
-						`**Prefix »** \`\`\`yaml\n${db.get(`${message.guild.id}.prefix`) || process.env.PREFIX}\`\`\``,
+						`**Prefix »** \`\`\`yaml\n${db.get(`${guild.id}.prefix`) || process.env.PREFIX}\`\`\``,
 						true
 					)
 					.addField(
 						`\u200B`,
-						`**Emojis »** \`\`\`yaml\n${message.guild.emojis.cache.size}\`\`\``,
+						`**Emojis »** \`\`\`yaml\n${guild.emojis.cache.size}\`\`\``,
 						true
 					)
 					.setTimestamp()
@@ -114,10 +126,22 @@ class ServerInfoCommand extends Command {
 			}
 		}
 
-		if (!pages[page])
-			return message.util.reply(`página de inormação não encontrada.`)
+		if (!pages[page]) {
+			if (!messageAlt) {
+				message.channel.send(`página de informação não encontrada.`)
+			} else {
+				messageAlt.edit(`página de informação não encontrada.`)
+			}
+			return;
+		}
 
-		const messageInfo = await message.util.reply(pages[page]())
+		let messageInfo: Message;
+
+		if (!messageAlt) {
+			messageInfo = await message.channel.send(await pages[page]())
+		} else {
+			messageInfo = await messageAlt.edit(await pages[page]())
+		}
 
 		if (pages[page+1]) {
 			await messageInfo.react("➡️")
@@ -125,23 +149,24 @@ class ServerInfoCommand extends Command {
 		if (pages[page-1]) {
 			await messageInfo.react("⬅️")
 		}
+
 		const filter = (_: MessageReaction, user: User) => user.id === message.author.id;
-		const collectorReaction = messageInfo.createReactionCollector(filter, { time: 60000 * 5 });
+		const collectorReaction = messageInfo.createReactionCollector(filter, { time: 60000 * 5, max: 1 });
 
 		const functionsReactions = {
-				"⬅️": async () => {
-					await messageInfo.reactions.removeAll()
-					this.exec(message, { page: page-1 })
-				},
-				"➡️": async () => {
-					await messageInfo.reactions.removeAll()
-					this.exec(message, { page: page+1 })
-				},
+			"⬅️": async () => {
+				await messageInfo.reactions.removeAll()
+				this.exec(message, { page: page-1, messageAlt: messageInfo })
+			},
+			"➡️": async () => {
+				await messageInfo.reactions.removeAll()
+				this.exec(message, { page: page+1, messageAlt: messageInfo })
+			},
 		}
 
 		collectorReaction.on("collect", async (reaction) => {
 				if (functionsReactions[reaction.emoji.name]) {
-					return await functionsReactions[reaction.emoji.name]()
+					await functionsReactions[reaction.emoji.name]()
 				}
 		});
 	}
