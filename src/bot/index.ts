@@ -65,7 +65,7 @@ class BotClient extends AkairoClient implements BotClientTypes {
 				return process.env.PREFIX
 			},
 			directory: resolve(__dirname, "commands"),
-			defaultCooldown: 15000,
+			defaultCooldown: Number(process.env.DEFAULT_COOLDOWN) * 1000,
 			blockBots: true,
 			argumentDefaults: {
 				prompt: {

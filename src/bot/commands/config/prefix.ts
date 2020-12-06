@@ -29,6 +29,9 @@ class PrefixCommand extends Command {
     }
 
     async exec(message: Message, { prefix }) {
+        if (!message.member.hasPermission("MANAGE_MESSAGES"))
+            return message.util.reply("Você não tem permissão para usar esse comando.")
+
         const oldPrefix = db.get(`${message.guild.id}.prefix`)
 
         if (oldPrefix === prefix)
