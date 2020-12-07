@@ -1,6 +1,5 @@
 {
-  "compilerOptions": {
-    "module": "UMD",
+  "compilerOptions": {    "module": "UMD",
     "target": "ES2017",
     "outDir": "dist",
     "sourceMap": false,
@@ -8,12 +7,8 @@
     "inlineSources": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "moduleResolution": "node"
-  },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules/"
-  ]
+    "moduleResolution": "node",
+    "skipLibCheck": true,                     /* Skip type checking of declaration files. */
+    "forceConsistentCasingInFileNames": true  /* Disallow inconsistently-cased references to the same file. */
+  }
 }
