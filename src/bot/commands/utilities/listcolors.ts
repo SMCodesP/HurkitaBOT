@@ -49,11 +49,11 @@ class ListColorCommand extends Command {
 
         const roles: Array<Array<Role>> = paginate(rolesColor.array(), 5)
         let rolesName: Array<string> = []
-        if (roles[page-1].length !== 0) {
+        if (roles[page-1]) {
             rolesName = roles[page-1].map((role) => role.name.trim())
         }
 
-        const messageReply = await message.util.reply(`**Página ${page} | Lista de cores disponíveis »**\n\n${(roles[page-1].length === 0)
+        const messageReply = await message.util.reply(`**Página ${page} | Lista de cores disponíveis »**\n\n${(!roles[page-1])
                 ? 'Nenhuma cor disponível até o momento.'
                 : `\`${rolesName.join('\n')}\``}
         `)

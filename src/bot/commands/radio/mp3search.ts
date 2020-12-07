@@ -14,7 +14,7 @@ class Mp3Search extends Command {
             channel: "guild",
             description: {
                 content: "Comando para pesquisar algo como música/podcast!",
-                metadata: "Mp3 play; start; musica; music; podcast;",
+                metadata: "Mp3 musica; music; podcast; pesquisar; buscar; procurar;",
                 usage: "[command] {Página para pesquisar}",
                 examples: [
                     "[command] 2",

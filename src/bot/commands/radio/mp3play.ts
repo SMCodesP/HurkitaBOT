@@ -18,7 +18,7 @@ class Mp3Play extends Command {
             channel: "guild",
             description: {
                 content: "Comando para escutar uma música/podcast!",
-                metadata: "Mp3 play; start; musica; music; podcast;",
+                metadata: "Mp3 play; start; musica; music; podcast; tocar; música",
                 usage: "[command] [Texto para pesquisa de música/podcast]",
                 examples: [
                     "[command] podcast discord",

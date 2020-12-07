@@ -22,7 +22,8 @@ class SearchCommand extends Command {
             args: [
                 {
                     id: "query",
-                    type: "string"
+                    type: "string",
+                    match: "content"
                 }
             ]
         })
@@ -52,17 +53,10 @@ class SearchCommand extends Command {
                 .setFooter(`Copyright © 2020 - ${this.client.user.username}`, this.client.user.displayAvatarURL())
 
             if (response.length <= 0) {
-                const suggestSearch = await this.client.sonicChannelSearch.suggest("commands_test", "default", query)
                 embedOfSearch.addField(
                     "Nenhum comando encontrado.",
-                    (suggestSearch.length <= 0) ? '\n \u200B' : `Sugestões de pesquisa:\n \u200B`
+                    '\n \u200B'
                 )
-                suggestSearch.forEach((suggest) => {
-                    embedOfSearch.addField(
-                        '\u200B',
-                        `\`${suggest}\``,
-                    )
-                })
             } else {
                 response.forEach((command) => {
                     embedOfSearch
@@ -71,19 +65,6 @@ class SearchCommand extends Command {
                             `\`\`\`yaml\n${db.get(`${message.guild.id}.prefix`) || process.env.PREFIX}help ${command}\`\`\``
                         )
                 })
-                const suggestSearch = await this.client.sonicChannelSearch.suggest("commands_test", "default", query)
-                if (suggestSearch.length > 0) {
-                    embedOfSearch.addField(
-                        "\u200B",
-                        `**Sugestões de pesquisa:**`
-                    )
-                    suggestSearch.forEach((suggest) => {
-                        embedOfSearch.addField(
-                            '\u200B',
-                            `\`${suggest}\``,
-                        )
-                    })
-                }
             }
 
             messageEmbedOfSearching.edit(embedOfSearch)

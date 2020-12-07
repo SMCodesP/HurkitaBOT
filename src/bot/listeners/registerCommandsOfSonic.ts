@@ -30,7 +30,10 @@ class RegisterCommandsOfSonicListener extends Listener {
                 "commands_test",
                 "default",
                 key,
-                text
+                text,
+                {
+                    lang: 'por'
+                }
             )
         })
     }
