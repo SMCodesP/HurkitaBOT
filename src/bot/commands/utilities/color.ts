@@ -24,6 +24,7 @@ class ColorCommand extends Command {
             args: [
                 {
                     id: "color",
+                    match: "content",
                     type: "string"
                 }
             ]
@@ -49,8 +50,6 @@ class ColorCommand extends Command {
         })
 
         const prefix = db.get(`${message.guild.id}.prefix`) || process.env.PREFIX
-
-        console.log(this.prefix)
 
         if (!roleColor)
             return message.util.reply(

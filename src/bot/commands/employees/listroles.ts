@@ -5,6 +5,7 @@ import { RoleBot } from "../../structures/entities/RoleBot";
 import { MessageEmbed } from "discord.js";
 import { MessageReaction } from "discord.js";
 import { User } from "discord.js";
+import paginate from "../../../utils/paginate";
 
 class ListRoles extends Command {
 
@@ -38,7 +39,7 @@ class ListRoles extends Command {
             return message.util.reply("nenhum cargo disponível até o momento.")
 
         const rolesList: Array<RoleBot> = Object.values(roles)
-        const rolesListPages: Array<Array<RoleBot>> = this.paginate(rolesList, 3)
+        const rolesListPages: Array<Array<RoleBot>> = paginate(rolesList, 3)
         const rolesListPage: Array<RoleBot> = rolesListPages[page-1]
 
         const embedListRoles = new MessageEmbed()
@@ -105,16 +106,6 @@ class ListRoles extends Command {
             if (functionsReactions[reaction.emoji.name])
                 return functionsReactions[reaction.emoji.name]()
         });
-    }
-
-    paginate (arr: Array<any>, size: number) {
-        return arr.reduce((acc, val, i) => {
-            let idx = Math.floor(i / size)
-            let page = acc[idx] || (acc[idx] = [])
-            page.push(val)
-
-            return acc
-        }, [])
     }
 
 }
