@@ -3,6 +3,7 @@ import { User } from "discord.js"
 import { MessageReaction } from "discord.js"
 import { Message, MessageEmbed } from "discord.js"
 import * as db from 'quick.db'
+import paginate from "../../../utils/paginate"
 
 class HelpCommand extends Command {
 
@@ -13,18 +14,18 @@ class HelpCommand extends Command {
             description: {
                 content: "Ajudar a achar comandos util para você!",
                 metadata: "Comando de ajudar; ajuda; help; ?; outros comandos; me ajuda; help-me; ajude-me;",
-                usage: "[command] {categoria/comando}",
+                usage: "[command] {categoria/comando/page}",
                 examples: [
                     "[command]",
                     "[command] mod",
-                    "[command] clear"
+                    "[command] clear",
+                    "[command] 1"
                 ]
             },
             args: [
                 {
                     id: "select",
-                    type: "string",
-                    default: null
+                    default: 1
                 }
             ]
         })
@@ -107,8 +108,8 @@ class HelpCommand extends Command {
         message.util.reply(embedHelpOfCategory)
     }
 
-    async exec(message: Message, { select }: { select: string; }) {
-        if (select) {
+    async exec(message: Message, { select }: { select: string | number; }) {
+        if (select && typeof select === "string") {
             this.helpCategory(message, select)
                 .catch((errorOfCategory) => {
                     this.helpCommand(message, select)
@@ -122,14 +123,18 @@ class HelpCommand extends Command {
 
         const countAllCommands = this.handler.modules.size
 
+        const pages = paginate(this.handler.categories.keyArray(), 5)
+
         const embed = new MessageEmbed()
-            .setTitle("Ajuda da Hurkita")
+            .setTitle(`Ajuda da Hurkita${(typeof select === "number") ? ` | Page ${select}` : '.'}`)
             .setColor("RANDOM")
             .setDescription(`❗ Prefix » **\`${db.get(`${message.guild.id}.prefix`) || process.env.PREFIX}\`\n**📄 Comandos disponíveis » **\`${countAllCommands}\`\n**📅 Versão » **\`${process.env.VERSION || "1.0"}\`\n** \u200B`)
             .setTimestamp()
             .setFooter(`Copyright © 2020 - ${this.client.user.username}`, this.client.user.displayAvatarURL())
 
-        this.handler.categories.keyArray().forEach(async (categoryKey) => {
+        const cateogires = (typeof select === "number") ? pages[select-1] : this.handler.categories.keyArray()
+
+        cateogires.forEach(async (categoryKey) => {
             const namesOfSpliting: string[] = categoryKey.split('|')
             const name = namesOfSpliting[0].trim()
             const nameFormatted = namesOfSpliting[1].trim()
@@ -143,17 +148,43 @@ class HelpCommand extends Command {
 
         const messageHelpEmbed = await message.util.reply(embed)
 
-        for (let indexHelp = 0; indexHelp < this.handler.categories.keyArray().length; indexHelp++) {
-            const name = this.handler.categories.keyArray()[indexHelp]
+        for (let indexHelp = 0; indexHelp < cateogires.length; indexHelp++) {
+            const name = cateogires[indexHelp]
             await messageHelpEmbed.react(name.split(" ")[0])
 
             const filter = (reaction: MessageReaction, user: User) => user.id === message.author.id && reaction.emoji.name === name.split(" ")[0];
             const collectorReaction = messageHelpEmbed.createReactionCollector(filter, { time: 60000 * 5, max: 1 });
-
+    
             collectorReaction.on("collect", async (reaction) => {
                 await messageHelpEmbed.reactions.removeAll()
                 this.helpCategory(message, name.split('|')[1].trim())
-		    });
+            });
+        }
+
+        if (typeof select === "number" && (pages[select] || pages[select-2])) {
+            if (pages[select]) {
+                await messageHelpEmbed.react("➡️")
+            } else {
+                await messageHelpEmbed.react("⬅️")
+            }
+
+            const filter = (reaction: MessageReaction, user: User) => user.id === message.author.id && (reaction.emoji.name === "➡️" || reaction.emoji.name === "⬅️");
+            const collectorReaction = messageHelpEmbed.createReactionCollector(filter, { time: 60000 * 5, max: 1 });
+            const options = {
+                "➡️": async () => {
+                    this.exec(message, { select: select + 1 })
+                },
+                "⬅️": async () => {
+                    this.exec(message, { select: select - 1 })
+                }
+            }
+    
+            collectorReaction.on("collect", async (reaction) => {
+                if (options[reaction.emoji.name]) {
+                    await messageHelpEmbed.reactions.removeAll()
+                    await options[reaction.emoji.name]()
+                }
+            });
         }
 
     }
