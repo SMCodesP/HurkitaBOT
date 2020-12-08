@@ -6,6 +6,7 @@ import paginate from '../../../utils/paginate';
 import { Role } from 'discord.js';
 import { MessageReaction } from 'discord.js';
 import { User } from 'discord.js';
+import { Collection } from 'discord.js';
 
 class ListColorCommand extends Command {
     client: BotClientTypes
@@ -47,15 +48,25 @@ class ListColorCommand extends Command {
             return (roleCached.name.split(' ')[0] === "🎨")
         })
 
-        const roles: Array<Array<Role>> = paginate(rolesColor.array(), 5)
+        const database = db.fetchAll()
+        const {data: { color_role }} = database.find((item) => item.ID === message.guild.id)
+        const collection_roles: Collection<string, Role> = new Collection()
+        
+        Object.values(color_role).forEach((color: {
+            id: string;
+        }) => {
+            collection_roles.set(color.id, message.guild.roles.cache.get(color.id))
+        })
+
+        const roles: Array<Array<Role>> = paginate(collection_roles.array(), 5)
         let rolesName: Array<string> = []
         if (roles[page-1]) {
             rolesName = roles[page-1].map((role) => role.name.trim())
         }
-
+        
         const messageReply = await message.util.reply(`**Página ${page} | Lista de cores disponíveis »**\n\n${(!roles[page-1])
                 ? 'Nenhuma cor disponível até o momento.'
-                : `\`${rolesName.join('\n')}\``}
+                : roles[page-1].join('\n')}
         `)
 
         const utilOption = {

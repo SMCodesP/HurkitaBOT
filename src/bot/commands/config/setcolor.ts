@@ -54,7 +54,7 @@ class SetColorCommand extends Command {
 
         if (status === 'on') {
             message.util.reply(
-                `Você setou o status de cores de \`${oldStatus}\` para \`${status}\`.\n**1.** Para adicionar um cargo na lista de cores crie um cargo com o emoji 🎨 no primeiro caractere do nome, para a identificação automática. **Ex:** \`🎨 Vermelho\`\n**•** Ou use **\`${prefix}setcolorrole\`**\`@cargo\` para uma identificação manual.\n\n**2.** Para saber todas as cores criadas use \`${prefix}lc\`.\n**3.** Para obter uma cor use **\`${prefix}color\`**\`[Nome da cor/ID do cargo da cor/@cargo]\`.\n**Exemplos »**
+                `Você setou o status de cores de \`${oldStatus}\` para \`${status}\`.\n**1.** Para adicionar um cargo na lista de cores crie um cargo com o emoji 🎨 no primeiro caractere do nome, para a identificação automática. **Ex:** \`🎨 Vermelho\`\n**•** Ou use **\`${prefix}addcolorrole\`**\`@cargo\` para uma identificação manual.\n**2.** Após isso utilize **\`${prefix}atualizarcores\`** para atualizar cargos de cores.\n\n**3.** Para saber todas as cores criadas use \`${prefix}lc\`.\n**4.** Para obter uma cor use **\`${prefix}color\`**\`[Nome da cor/ID do cargo da cor/@cargo]\`.\n**Exemplos »**
 	**•** **\`${prefix}color\`**\`Vermelho\`
 	**•** **\`${prefix}color\`**\`🎨 Vermelho\`
 	**•** **\`${prefix}color\`**\`782371007318196254\`

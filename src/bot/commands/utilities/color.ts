@@ -2,6 +2,8 @@ import * as db from 'quick.db'
 import { Command } from "discord-akairo"
 import { Message } from "discord.js"
 import { BotClientTypes } from "../../index";
+import { Collection } from 'discord.js';
+import { Role } from 'discord.js';
 
 class ColorCommand extends Command {
     client: BotClientTypes
@@ -42,16 +44,16 @@ class ColorCommand extends Command {
 
         const guildRoles = await message.guild.roles.fetch()
         const roleColor = guildRoles.cache.find((roleCached) => {
-            return (roleCached.name.split(' ')[0] === "🎨"
-                && (roleCached.id === color
+            return (roleCached.id === color
                     || roleCached.name === color
+                    || (roleCached.name.includes(color) && roleCached.name.includes('🎨'))
                     || roleCached.name.split(' ')[1] === color
-                    || !!message.mentions.roles.get(roleCached.id)))
+                    || !!message.mentions.roles.get(roleCached.id))
         })
 
         const prefix = db.get(`${message.guild.id}.prefix`) || process.env.PREFIX
 
-        if (!roleColor)
+        if (!roleColor || !db.get(`${message.guild.id}.color_role.${roleColor.id}`))
             return message.util.reply(
                 `A cor escolhida não existe, use **\`${prefix}lc\`** para listar todas cores disponíveis.`
             )
@@ -64,10 +66,16 @@ class ColorCommand extends Command {
             )
 
         try {
-            
-            const rolesColors = message.member.roles.cache.filter(
-                (role) => (role.name.split(' ')[0] === "🎨")
-            )
+
+            const database = db.fetchAll()
+            const {data: { color_role }} = database.find((item) => item.ID === message.guild.id)
+            const rolesColors: Collection<string, Role> = new Collection()
+        
+            Object.values(color_role).forEach((color: {
+                id: string;
+            }) => {
+                rolesColors.set(color.id, message.guild.roles.cache.get(color.id))
+            })
 
             await message.member.roles.remove(rolesColors)
             await message.member.roles.add(roleColor)
