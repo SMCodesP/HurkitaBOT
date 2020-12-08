@@ -13,6 +13,9 @@ class RegisterMessageInTicketsListener extends Listener {
     }
 
     exec(message: Message) {
+        if (message.channel.type !== "text")
+            return;
+
         const guildTickets: Object = db.get(`tickets.${message.guild.id}`)
         
         if (guildTickets) {

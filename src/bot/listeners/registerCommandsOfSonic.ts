@@ -1,3 +1,4 @@
+import * as db from "quick.db"
 import { Listener } from "discord-akairo"
 
 import { BotClientTypes } from "../index"
@@ -17,6 +18,14 @@ class RegisterCommandsOfSonicListener extends Listener {
         
         commands.forEach((command, key) => {
             let text: string;
+
+            if (command.description.type_log) {
+                const types_log: string[] = db.get("types_log") || []
+
+                if (!types_log.includes(command.description.type_log)) {
+                    db.push("types_log", command.description.type_log)
+                }
+            }
 
             text += command.id
             text += " "

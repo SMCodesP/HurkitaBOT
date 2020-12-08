@@ -1,5 +1,8 @@
+import * as db from "quick.db"
 import { Message, GuildMember } from "discord.js"
-import { Argument, Command } from "discord-akairo"
+import { Command } from "discord-akairo"
+import { MessageEmbed } from "discord.js"
+import intlOptionsDate from "../../../utils/intlOptionsDate"
 
 class BanCommand extends Command {
 
@@ -8,6 +11,7 @@ class BanCommand extends Command {
             aliases: ["ban", "banir"],
             category: "👮‍♂️ Moderação | mod",
             description: {
+                type_log: "banimentos",
                 content: "Com esse comando um admnistrador pode banir um membro do servidor.",
                 metadata: "Comando para banir usuários; banir membros; banir; ban;",
                 usage: "[command] [@member/memberID] {razão}",
@@ -22,13 +26,21 @@ class BanCommand extends Command {
                     type: async (message: Message, member: GuildMember | string) => {
                         if (message.mentions.members.first())
                             return message.mentions.members.first()
-                        return await message.guild.members.fetch(member)
+                        if (typeof member === "string") {
+                            try {
+                                return await message.guild.members.fetch(member)
+                            } catch (error) {
+                                return null
+                            }
+                        }
+                        return null
                     }
                 },
                 {
                     id: "reason",
                     type: "string",
-                    default: "Nenhuma razão mencionada."
+                    default: "Nenhuma razão mencionada.",
+                    match: "restContent"
                 },
             ]
         })
@@ -36,9 +48,11 @@ class BanCommand extends Command {
 
     async exec(message: Message, { memberBanned, reason }: { memberBanned: GuildMember, reason: string }) {
 
+        const guildRefresh = await message.guild.fetch()
+
         const authorMember = message.member,
-            owner = message.guild.owner,
-            meMember = message.guild.me
+            owner = await guildRefresh.members.fetch(guildRefresh.ownerID),
+            meMember = guildRefresh.me
 
         if (!memberBanned)
             return message.reply("Por favor mencione um membro válido para ser banido.")
@@ -58,19 +72,44 @@ class BanCommand extends Command {
             return message.reply(`O usuário ${memberBanned}, não pode ser banido por algum motivo.`)
 
         try {
+            const nowDate = new Date()
+            const embed = new MessageEmbed()
+                .setTitle("🚪 Log de banimento")
+                .setColor("RANDOM")
+                .addField("👤 Usuário banido »", `\`\`\`diff\n- ${memberBanned.user.tag}\`\`\``, true)
+                .addField("👤 Expulsado por »", `\`\`\`yaml\n${message.author.tag}\`\`\``, true)
+                .addField("⏲️ Data de banimento »", `\`\`\`yaml\n${new Intl.DateTimeFormat('pt-BR', intlOptionsDate).format(nowDate)}\`\`\``, false)
+                .addField("📃 Razão »", `\`\`\`yaml\n${reason}\`\`\``, false)
+                .setThumbnail(guildRefresh.iconURL())
+                .setTimestamp()
+                .setFooter(`Copyright © 2020 - ${this.client.user.username}`, this.client.user.displayAvatarURL())
 
             await memberBanned.ban({ reason })
             await message.reply(`Você baniu o usuário \`${memberBanned.user.tag}\` com sucesso!`)
 
+
+            const channel_log_id = db.get(`${guildRefresh.id}.log.${this.description.type_log}`)
+
+            if (channel_log_id) {
+                try {
+                    const channel_log = guildRefresh.channels.cache.get(channel_log_id)
+
+                    if (channel_log.isText()) {
+                        channel_log.send(embed)
+                    }
+                } catch (error) {
+                    message.util.reply("Houve erro ao criar o log do banimento.")
+                }
+            }
+
         } catch {
             try {
-                await message.guild.members.ban(memberBanned.id, { reason })
+                await guildRefresh.members.ban(memberBanned.id, { reason })
                 await message.reply(`Você baniu o usuário \`${memberBanned.user.tag}\` com sucesso!`)
             } catch (error) {
                 return message.reply(`Houve um erro ao banir o usuário: ${error}`)
             }
         }
-        
 
     }
 

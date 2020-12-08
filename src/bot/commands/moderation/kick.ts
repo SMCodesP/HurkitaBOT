@@ -1,5 +1,8 @@
+import * as db from "quick.db"
 import { Message, GuildMember } from "discord.js"
-import { Argument, Command } from "discord-akairo"
+import { Command } from "discord-akairo"
+import { MessageEmbed } from "discord.js"
+import intlOptionsDate from "../../../utils/intlOptionsDate"
 
 class KickCommand extends Command {
 
@@ -8,6 +11,7 @@ class KickCommand extends Command {
             aliases: ["kick", "expulsar"],
             category: "👮‍♂️ Moderação | mod",
             description: {
+                type_log: "expulsoes",
                 content: "Nesse comando você consegue expulsar um membro do servidor.",
                 metadata: "Comando para expulsar; kick;",
                 usage: "[command] [@member/memberID] {razão}",
@@ -35,7 +39,8 @@ class KickCommand extends Command {
                 {
                     id: "reason",
                     type: "string",
-                    default: "Nenhuma razão mencionada."
+                    default: "Nenhuma razão mencionada.",
+                    match: "restContent"
                 },
             ]
         })
@@ -67,11 +72,35 @@ class KickCommand extends Command {
             return message.reply(`O usuário ${memberKicked}, não pode ser banido por algum motivo.`)
 
         try {
+            const nowDate = new Date()
+            const embed = new MessageEmbed()
+                .setTitle("🚪 Log de expulsão")
+                .setColor("RANDOM")
+                .addField("👤 Usuário expulsado »", `\`\`\`diff\n- ${memberKicked.user.tag}\`\`\``, true)
+                .addField("👤 Expulsado por »", `\`\`\`yaml\n${message.author.tag}\`\`\``, true)
+                .addField("⏲️ Data de expulsão »", `\`\`\`yaml\n${new Intl.DateTimeFormat('pt-BR', intlOptionsDate).format(nowDate)}\`\`\``, false)
+                .addField("📃 Razão »", `\`\`\`yaml\n${reason}\`\`\``, false)
+                .setThumbnail(message.guild.iconURL())
+                .setTimestamp()
+                .setFooter(`Copyright © 2020 - ${this.client.user.username}`, this.client.user.displayAvatarURL())
 
             memberKicked.user.send(`Você foi expulso do servidor \`${guildRefresh.name}\`, por \`${message.author.tag}\`.`)
             await memberKicked.kick(reason)
             await message.reply(`Você expulsou o usuário \`${memberKicked.user.tag}\` com sucesso!`)
 
+            const channel_log_id = db.get(`${message.guild.id}.log.${this.description.type_log}`)
+
+            if (channel_log_id) {
+                try {
+                    const channel_log = message.guild.channels.cache.get(channel_log_id)
+
+                    if (channel_log.isText()) {
+                        channel_log.send(embed)
+                    }
+                } catch (error) {
+                    message.util.reply("Houve erro ao criar o log do kick.")
+                }
+            }
         } catch (error) {
             return message.reply(`Houve um erro ao banir o usuário: ${error}`)
         }
