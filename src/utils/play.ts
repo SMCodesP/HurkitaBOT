@@ -14,14 +14,18 @@ export default function play(guild: Guild, song: Song, client: BotClientTypes, u
     }
 
     const dispatcher = serverQueue.connection
-        .play(ytdl(song.url, {
-            quality: "highestaudio"
-        }))
+        .play(ytdl(song.url))
         .on("finish", () => {
             serverQueue.songs.shift();
             play(guild, serverQueue.songs[0], client, user);
         })
-        .on("error", error => console.error(error));
+        .on("error", error => {
+            console.error(error)
+            serverQueue.textChannel.send("Houve um erro ao tocar a música, então ela foi pulada.")
+            serverQueue.songs.shift();
+            console.log(guild, serverQueue.songs[0], client, user)
+            play(guild, serverQueue.songs[0], client, user);
+        });
         
     dispatcher.setVolumeLogarithmic(serverQueue.defaultVolume / 10);
     const options: Intl.DateTimeFormatOptions = {
