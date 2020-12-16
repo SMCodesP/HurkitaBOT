@@ -12,7 +12,7 @@ export interface OptionsCommandHandler {
 
 export default class CommandHandler {
     commands: CommandCLI[];
-    aliases: string[];
+    aliases: Map<string, string>;
     categories: string[];
     options: OptionsCommandHandler;
     client: CLI;
@@ -23,6 +23,7 @@ export default class CommandHandler {
 
     loadAll(client: CLI) {
         this.client = client
+        this.aliases = new Map()
         const listCommands = walkSync(this.options.directory, [])
 
         this.commands = listCommands.map((path: string) => {
@@ -31,16 +32,24 @@ export default class CommandHandler {
             return command
         })
 
+        this.commands.forEach((command) => {
+            const aliases = command.options.aliases || []
+            aliases.forEach((aliase) => {
+                this.aliases.set(aliase, command.id)
+            })
+        })
+
         this.question()
     }
 
     question() {
         this.client.rl.question('» ', async (answer) => {
             const args = answer.split(' ')
-            const command = this.commands.find((command) => command.id === args[0])
+            const command = this.commands.find((command) => command.id === args[0]) || this.commands.find((command) => command.id === this.aliases.get(args[0]) || '')
             args.shift()
+
             if (command) {
-                await command.exec(args)
+                await command.exec(args, this.client, answer.split(' ')[0])
             } else {
                 console.log(`Comando inexistente, utilize ${black(bgWhite(`help`))} ou ${black(bgWhite(`?`))} para listar comandos.`)
             }

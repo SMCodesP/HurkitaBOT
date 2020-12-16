@@ -1,3 +1,5 @@
+import CLI from "../..";
+
 export interface OptionsCommand {
     name: string;
     aliases?: string[];
@@ -13,5 +15,5 @@ export abstract class CommandCLI {
     id: string;
     options: OptionsCommand;
     
-    abstract exec(args: string[]): any;
+    abstract exec(args: string[], client: CLI, commandUsage: string): any;
 }

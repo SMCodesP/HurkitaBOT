@@ -15,11 +15,11 @@ class CLI {
     }
 
     registerCommandHandler() {
-        const commandHandler = new CommandHandler({
+        this.commandHandler = new CommandHandler({
             directory: resolve(__dirname, 'commands')
         })
 
-        commandHandler.loadAll(this)
+        this.commandHandler.loadAll(this)
     }
 
     

@@ -3,6 +3,7 @@ import { bot } from "../../index";
 import * as db from "quick.db";
 import { UserBot } from "../../bot/structures/entities/UserBot";
 import { bgWhite, black } from "colors/safe";
+import CLI from "..";
 
 class CommandOp extends CommandCLI {
     constructor() {
@@ -15,12 +16,12 @@ class CommandOp extends CommandCLI {
         })
     }
 
-    async exec(args) {
+    async exec(args: string[], _: CLI, commandUsage: string) {
 
         const userID = args[0]
 
         if (!userID)
-            return console.log(`Syntax incorreta, utilize o comando dessa forma: ${black(bgWhite(`${this.id} [userID]`))}`)
+            return console.log(`Syntax incorreta, utilize o comando dessa forma: ${black(bgWhite(`${commandUsage} [userID]`))}`)
         
         try {
             const user = await bot.users.fetch(userID)
