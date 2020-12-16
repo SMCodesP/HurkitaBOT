@@ -140,13 +140,15 @@ class BotClient extends AkairoClient implements BotClientTypes {
 	}
 
 	async init(token: string) {
-		return super.login(token)
-			.then(() => {
-				console.log(`${green("[Sucesso]")} O bot foi iniciado!`)
-			}).catch((err) => {
-				console.log(`${red("[Error]")} Houve um erro ao iniciar o bot.`)
-				console.log(err)
-			})
+		try {
+			await super.login(token)
+			console.log(`${green("[Sucesso]")} O bot foi iniciado!`)
+			return token
+		} catch (err) {
+			console.log(`${red("[Error]")} Houve um erro ao iniciar o bot.`)
+			console.log(err)
+			return err
+		}
 	}
 }
 
