@@ -1,8 +1,11 @@
 import { green } from "colors/safe";
+import CommandHandler from "./structures/entities/CommandHandler";
 import * as readline from "readline";
+import { resolve } from "path";
 
 class CLI {
-    rl: readline.Interface
+    rl: readline.Interface;
+    commandHandler: CommandHandler;
 
     constructor() {
         this.rl = readline.createInterface({
@@ -11,19 +14,18 @@ class CLI {
         })
     }
 
-    questionContinue() {
-        this.question()
+    registerCommandHandler() {
+        const commandHandler = new CommandHandler({
+            directory: resolve(__dirname, 'commands')
+        })
+
+        commandHandler.loadAll(this)
     }
 
-    question() {
-        this.rl.question('» ', (answer) => {
-            this.question()
-        })
-    }
     
     init() {
         console.log(`${green('[Sucesso]')} Sistema de CLI foi iniciado!`)
-        this.questionContinue()
+        this.registerCommandHandler()
     }
 }
 

@@ -50,8 +50,6 @@ class AddBotRole extends Command {
 
         const userBot: UserBot = db.get(`users.${memberMention.user.id}`)
 
-        console.log(userBot)
-
         if (!userBot) {
             db.set(`users.${memberMention.user.id}`, {
                 id: memberMention.user.id,
