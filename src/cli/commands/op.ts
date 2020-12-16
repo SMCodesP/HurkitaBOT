@@ -2,6 +2,7 @@ import { CommandCLI } from "../structures/entities/CommandCLI";
 import { bot } from "../../index";
 import * as db from "quick.db";
 import { UserBot } from "../../bot/structures/entities/UserBot";
+import { bgWhite, black } from "colors/safe";
 
 class CommandOp extends CommandCLI {
     constructor() {
@@ -19,7 +20,7 @@ class CommandOp extends CommandCLI {
         const userID = args[0]
 
         if (!userID)
-            return console.log(`Syntax incorreta, utilize o comando dessa forma: ${this.id} [userID]`)
+            return console.log(`Syntax incorreta, utilize o comando dessa forma: ${black(bgWhite(`${this.id} [userID]`))}`)
         
         try {
             const user = await bot.users.fetch(userID)
@@ -39,7 +40,7 @@ class CommandOp extends CommandCLI {
                 db.set(`users.${user.id}.roles`, [...userBot.roles, "*"])
             }
             
-            console.log(`Você deu cargo global para o usuário ${args[0]}`)   
+            console.log(`Você deu cargo global para o usuário ${black(bgWhite(args[0]))}`)
         } catch (error) {
             console.error(error)
             console.log('O usuário digitado é inválido, por favor digite um id válido.')

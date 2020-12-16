@@ -1,3 +1,4 @@
+import { bgWhite, black } from "colors/safe";
 import { resolve } from "path";
 import CLI from "../..";
 import walkSync from "../../../utils/walkSync";
@@ -41,7 +42,7 @@ export default class CommandHandler {
             if (command) {
                 await command.exec(args)
             } else {
-                console.log('Comando inexistente, utilize help ou ? para listar comandos.')
+                console.log(`Comando inexistente, utilize ${black(bgWhite(`help`))} ou ${black(bgWhite(`?`))} para listar comandos.`)
             }
 
             this.question()
