@@ -1,7 +1,7 @@
 export interface OptionsCommand {
-    id: string;
     name: string;
     aliases?: string[];
+    description?: any;
 }
 
 export abstract class CommandCLI {

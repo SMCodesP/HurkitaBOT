@@ -5,7 +5,13 @@ import { UserBot } from "../../bot/structures/entities/UserBot";
 
 class CommandOp extends CommandCLI {
     constructor() {
-        super('op')
+        super('op', {
+            name: 'op',
+            description: {
+                content: 'Comando para dar permissão global a um usuário.',
+                usage: '[command] [userID]'
+            }
+        })
     }
 
     async exec(args) {

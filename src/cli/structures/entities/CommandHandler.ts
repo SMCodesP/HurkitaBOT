@@ -25,7 +25,6 @@ export default class CommandHandler {
         const listCommands = walkSync(this.options.directory, [])
 
         this.commands = listCommands.map((path: string) => {
-            console.log(path)
             const Command = require(path).default
             const command: CommandCLI = new Command()
             return command
