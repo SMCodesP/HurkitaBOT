@@ -1,4 +1,5 @@
 import { bgWhite, black } from "colors/safe";
+import { Collection } from "discord.js";
 import { resolve } from "path";
 import CLI from "../..";
 import walkSync from "../../../utils/walkSync";
@@ -11,8 +12,8 @@ export interface OptionsCommandHandler {
 }
 
 export default class CommandHandler {
-    commands: CommandCLI[];
-    aliases: Map<string, string>;
+    commands: Collection<string, CommandCLI>;
+    aliases: Collection<string, string>;
     categories: string[];
     options: OptionsCommandHandler;
     client: CLI;
@@ -23,13 +24,14 @@ export default class CommandHandler {
 
     loadAll(client: CLI) {
         this.client = client
-        this.aliases = new Map()
+        this.aliases = new Collection()
+        this.commands = new Collection()
         const listCommands = walkSync(this.options.directory, [])
 
-        this.commands = listCommands.map((path: string) => {
+        listCommands.forEach((path: string) => {
             const Command = require(path).default
             const command: CommandCLI = new Command()
-            return command
+            this.commands.set(command.id, command)
         })
 
         this.commands.forEach((command) => {
@@ -45,7 +47,9 @@ export default class CommandHandler {
     question() {
         this.client.rl.question('» ', async (answer) => {
             const args = answer.split(' ')
-            const command = this.commands.find((command) => command.id === args[0]) || this.commands.find((command) => command.id === this.aliases.get(args[0]) || '')
+            const command = this.commands.get(args[0])
+                || this.commands.get(this.aliases.get(args[0]) || '')
+
             args.shift()
 
             if (command) {
