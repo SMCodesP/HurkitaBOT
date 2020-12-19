@@ -33,22 +33,13 @@ class CommandDeOp extends CommandCLI {
                 
             const userBot: UserBot = db.get(`users.${user.id}`)
             
-            if (!userBot) {
+            if (!userBot || !userBot.roles.find((role) => role.name === "masterBot")) {
                 return console.log('O usuário não tem cargo global.')
-            } else {
-                let role: RoleBot = db.get(`roles.masterBot`)
-                console.log(role)
-                if (!role) {
-                    role = {
-                        id: uuid(),
-                        name: "masterBot",
-                        permissions: ["*"],
-                    }
-                    db.set(`users.${user.id}.roles`, userBot.roles.filter(role =>))
-                }
             }
+
+            db.set(`users.${userID}.roles`, userBot.roles.filter((role) => role.name === "masterBot"))
             
-            console.log(`Você deu cargo global para o usuário ${black(bgWhite(args[0]))}`)
+            console.log(`Você retirou o cargo global do usuário ${black(bgWhite(args[0]))}`)
         } catch (error) {
             console.error(error)
             console.log('O usuário digitado é inválido, por favor digite um id válido.')
