@@ -45,7 +45,7 @@ export default class CommandHandler {
     }
 
     question() {
-        this.client.rl.question('» ', async (answer) => {
+        this.client.rl.question('- ', async (answer) => {
             const args = answer.split(' ')
             const command = this.commands.get(args[0])
                 || this.commands.get(this.aliases.get(args[0]) || '')
