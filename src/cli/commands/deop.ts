@@ -37,7 +37,7 @@ class CommandDeOp extends CommandCLI {
                 return console.log('O usuário não tem cargo global.')
             }
 
-            db.set(`users.${userID}.roles`, userBot.roles.filter((role) => role.name === "masterBot"))
+            db.set(`users.${userID}.roles`, userBot.roles.filter((role) => role.name !== "masterBot"))
             
             console.log(`Você retirou o cargo global do usuário ${black(bgWhite(args[0]))}`)
         } catch (error) {

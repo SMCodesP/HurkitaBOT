@@ -35,14 +35,15 @@ class CommandOp extends CommandCLI {
             
             const role = this.createRoleGlobal()
 
-            console.log(role)
-
             if (!userBot) {
                 db.set(`users.${userID}`, {
                     id: userID,
                     roles: [role],
                 })
             } else {
+                if (userBot.roles.find((role) => role.name === "masterBot"))
+                    return console.log(`O usuário já tem cargo global.`)
+
                 db.set(`users.${userID}.roles`, [...userBot.roles, role])
             }
 

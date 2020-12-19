@@ -15,7 +15,8 @@ class CommandFinishListener extends Listener {
     }
 
     exec(message: Message, command: Command, args: { text: any | any[] }) {
-        const {text} = args;
+        const {text = ''} = args;
+
         const textArray = text.split(' ')
         const colorHex = message.member.roles.highest.hexColor
         const prefix = db.get(`${message.guild.id}.prefix`) || process.env.PREFIX
