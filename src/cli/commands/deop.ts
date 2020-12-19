@@ -7,12 +7,12 @@ import { bgWhite, black } from "colors/safe";
 import CLI from "..";
 import { RoleBot } from "../../bot/structures/entities/RoleBot";
 
-class CommandOp extends CommandCLI {
+class CommandDeOp extends CommandCLI {
     constructor() {
-        super('op', {
-            name: 'op',
+        super('deop', {
+            name: 'deop',
             description: {
-                content: 'Comando para dar permissão global a um usuário.',
+                content: 'Comando para retirar a permissão global de um usuário.',
                 usage: '[command] [userID]'
             }
         })
@@ -33,19 +33,21 @@ class CommandOp extends CommandCLI {
                 
             const userBot: UserBot = db.get(`users.${user.id}`)
             
-            const role = this.createRoleGlobal()
-
-            console.log(role)
-
             if (!userBot) {
-                db.set(`users.${userID}`, {
-                    id: userID,
-                    roles: [role],
-                })
+                return console.log('O usuário não tem cargo global.')
             } else {
-                db.set(`users.${userID}.roles`, [...userBot.roles, role])
+                let role: RoleBot = db.get(`roles.masterBot`)
+                console.log(role)
+                if (!role) {
+                    role = {
+                        id: uuid(),
+                        name: "masterBot",
+                        permissions: ["*"],
+                    }
+                    db.set(`users.${user.id}.roles`, userBot.roles.filter(role =>))
+                }
             }
-
+            
             console.log(`Você deu cargo global para o usuário ${black(bgWhite(args[0]))}`)
         } catch (error) {
             console.error(error)
@@ -53,19 +55,6 @@ class CommandOp extends CommandCLI {
         }
 
     }
-
-    createRoleGlobal() {
-        let role: RoleBot = db.get(`roles.masterBot`)
-        if (!role) {
-            role = {
-                id: uuid(),
-                name: "masterBot",
-                permissions: ["*"],
-            }
-        }
-
-        return role
-    }
 }
 
-export default CommandOp
+export default CommandDeOp
