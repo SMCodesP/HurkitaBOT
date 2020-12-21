@@ -68,7 +68,9 @@ class AnimeCommand extends Command {
             const embed = new MessageEmbed()
                 .setColor("RANDOM")
                 .setDescription(`Clique [aqui](${image.data.url}) para baixar a imagem.`)
-                .setImage(image.data.url);
+                .setImage(image.data.url)
+                .setTimestamp()
+                .setFooter(`Copyright © 2020 - ${this.client.user.username}`, this.client.user.displayAvatarURL());
     
             message.util.reply(embed);
         } catch (error) {
