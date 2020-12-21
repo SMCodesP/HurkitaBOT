@@ -4,6 +4,7 @@ import { promisify } from "util";
 
 class Web {
   app: express.Express;
+  server: import("http").Server;
 
   constructor() {
     this.app = express()
@@ -24,7 +25,7 @@ class Web {
 
   listenWeb(port: string | number) {
     return new Promise((res, rej) => {
-      this.app.listen(port, () => {
+      this.server = this.app.listen(port, () => {
         res(port)
       })
     })
