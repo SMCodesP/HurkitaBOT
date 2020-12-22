@@ -37,7 +37,7 @@ console.web = (...thisArguments: string[]) => {
   }
 }
 
-console.web = (...thisArguments: string[]) => {
+console.bot = (...thisArguments: string[]) => {
   const args = [];
   args.push(getNowTime())
   args.push(white(`[Web]`) + " -")
