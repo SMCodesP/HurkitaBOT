@@ -20,7 +20,7 @@ class Web {
 
   async init(port: string | number) {
     await this.listenWeb(port)
-    console.log(`${green('[Sucesso]')} Servidor web iniciado na porta ${red(String(port))}!`)
+    console.web(`${green('[Sucesso]')} Servidor web iniciado na porta ${red(String(port))}!`)
   }
 
   listenWeb(port: string | number) {
