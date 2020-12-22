@@ -14,7 +14,7 @@ declare global {
 
 const originalConsoleLog = console.log
 
-console.web = (...thisArguments: string[]) => {
+console.bot = (...thisArguments: string[]) => {
   const args = [];
   args.push(getNowTime())
   args.push(green(`[Bot]`) + " -")
@@ -37,7 +37,7 @@ console.web = (...thisArguments: string[]) => {
   }
 }
 
-console.bot = (...thisArguments: string[]) => {
+console.web = (...thisArguments: string[]) => {
   const args = [];
   args.push(getNowTime())
   args.push(white(`[Web]`) + " -")
