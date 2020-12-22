@@ -42,7 +42,7 @@ class LogCommand extends Command {
       .setFooter(`Copyright © 2020 - ${this.client.user.username}`, this.client.user.displayAvatarURL())
 
     types_log.forEach((log: string) => {
-      console.log(log)
+      console.bot(log)
     })
   }
 

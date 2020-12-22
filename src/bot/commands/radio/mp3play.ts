@@ -111,7 +111,7 @@ class Mp3Play extends Command {
                     queueContruct.connection = connection;
                     play(message.guild, queueContruct.songs[0], this.client, message.author)
                 } catch (err) {
-                    console.log(err);
+                    console.bot(err);
                     this.client.queueSongs.delete(message.guild.id);
                     return message.channel.send(err);
                 }

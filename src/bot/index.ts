@@ -111,10 +111,10 @@ class BotClient extends AkairoClient implements BotClientTypes {
 		})
 			.connect({
 				connected: () => {
-					console.log(`${green('[Sucesso]')} O bot se conectou com o sonic search!`);
+					console.bot(`${green('[Sucesso]')} O bot se conectou com o sonic search!`);
 				},
 				disconnected: () => {
-					console.log(`${gray('[Info]')} O bot se desconectou do sonic search!`);
+					console.bot(`${gray('[Info]')} O bot se desconectou do sonic search!`);
 				},
 			})
 	}
@@ -126,10 +126,10 @@ class BotClient extends AkairoClient implements BotClientTypes {
 			auth: process.env.SONIC_PASSWORD
 		}).connect({
 			connected: () => {
-				console.log(`${green('[Sucesso]')} O bot se conectou com o sonic ingest!`);
+				console.bot(`${green('[Sucesso]')} O bot se conectou com o sonic ingest!`);
 			},
 			disconnected: () => {
-				console.log(`${gray('[Info]')} O bot se desconectou do sonic ingest!`);
+				console.bot(`${gray('[Info]')} O bot se desconectou do sonic ingest!`);
 			},
 		})
 	}
@@ -142,11 +142,11 @@ class BotClient extends AkairoClient implements BotClientTypes {
 	async init(token: string) {
 		try {
 			await super.login(token)
-			console.log(`${green("[Sucesso]")} O bot foi iniciado!`)
+			console.bot(`${green("[Sucesso]")} O bot foi iniciado!`)
 			return token
 		} catch (err) {
-			console.log(`${red("[Error]")} Houve um erro ao iniciar o bot.`)
-			console.log(err)
+			console.bot(`${red("[Error]")} Houve um erro ao iniciar o bot.`)
+			console.bot(err)
 			return err
 		}
 	}

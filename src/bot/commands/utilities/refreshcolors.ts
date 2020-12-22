@@ -33,7 +33,7 @@ class RefreshColorRolesCommand extends Command {
         )
 
         rolesColor.forEach((role) => {
-            console.log(role)
+            console.bot(role)
             db.delete(`${message.guild.id}.color_role.${role.id}`)
             db.set(`${message.guild.id}.color_role.${role.id}`, role)
         });

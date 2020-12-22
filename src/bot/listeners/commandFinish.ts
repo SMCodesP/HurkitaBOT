@@ -27,11 +27,11 @@ class CommandFinishListener extends Listener {
                     ? `"${textArgument.trim()}"`
                     : textArgument.trim())
 
-        console.log("");
-        console.log(`${hex(colorHex).underline(message.author!.tag)} executou o comando ${red(command.id)}:`);
-        console.log(`${hex(randomColor())('Servidor »')} ${gray(message.guild.name)}`);
-        console.log(`${hex(randomColor())('Prefix »')} ${gray(prefix)}`);
-        console.log(`${hex(randomColor())('Argumentos »')} [${gray(arrayArguments.join(', '))}]`);
+        console.bot("");
+        console.bot(`${hex(colorHex).underline(message.author!.tag)} executou o comando ${red(command.id)}:`);
+        console.bot(`${hex(randomColor())('Servidor »')} ${gray(message.guild.name)}`);
+        console.bot(`${hex(randomColor())('Prefix »')} ${gray(prefix)}`);
+        console.bot(`${hex(randomColor())('Argumentos »')} [${gray(arrayArguments.join(', '))}]`);
     }
 }
 

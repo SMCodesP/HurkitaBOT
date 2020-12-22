@@ -51,15 +51,15 @@ class AnimeInfoCommand extends Command {
         try {
 
             const responseMal = await Anime.fromName(animeTitle)
-            console.log(responseMal)
+            console.bot(responseMal)
             const response = await JikanTS.Anime.byId(Number(responseMal.id))
-            console.log(response)
+            console.bot(response)
 
             const description = await translatte(response.synopsis, {
                 to: 'pt'
             })
 
-            console.log(description)
+            console.bot(description)
 
             const embedAnime = new MessageEmbed()
                 .setColor("RANDOM")
@@ -84,7 +84,7 @@ class AnimeInfoCommand extends Command {
             message.util.reply(embedAnime)
 
         } catch (error) {
-            console.log(error)
+            console.bot(error)
             message.util.reply("Houve um erro ao buscar o anime, tente novamente mais tarde.")
         }
     }

@@ -78,7 +78,7 @@ class AnimeNSFWCommand extends Command {
     
             message.util.reply(embed);
         } catch (error) {
-            console.log(error)
+            console.bot(error)
             message.util.reply("Houve um erro ao buscar o nsfw, tente novamente mais tarde.")
         }
     }

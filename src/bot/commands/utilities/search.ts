@@ -70,7 +70,7 @@ class SearchCommand extends Command {
             messageEmbedOfSearching.edit(embedOfSearch)
                 
         } catch (err) {
-            console.log(err)
+            console.bot(err)
             await messageEmbedOfSearching.delete()
             message.reply(`Houve um erro ao pesquisar o comando: ${err.message}`)
         }
