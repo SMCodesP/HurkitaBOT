@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "dev": "ts-node-dev --exit-child --transpile-only --clear src/index.ts",
+    "dev": "ts-node-dev --transpile-only --clear src/index.ts",
     "start": "node dist/index.js",
     "build": "tsc",
     "postinstall": "npm run build"
