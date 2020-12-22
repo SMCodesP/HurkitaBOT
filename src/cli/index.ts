@@ -24,7 +24,7 @@ class CLI {
 
     
     init() {
-        console.log(`${green('[Sucesso]')} Sistema de CLI foi iniciado!`)
+        console.cli(`${green('[Sucesso]')} Sistema de CLI foi iniciado!`)
         this.registerCommandHandler()
     }
 }

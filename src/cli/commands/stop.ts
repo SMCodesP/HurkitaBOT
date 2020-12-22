@@ -24,11 +24,11 @@ class CommandStop extends CommandCLI {
 
         bot.destroy()
         
-        console.cli(yellow('[Sucesso] Você fechou o app ') + red('Bot'))
+        console.bot(yellow('[Sucesso] Você fechou o app ') + red('Bot'))
 
         web.server.close()
         
-        console.cli(yellow('[Sucesso] Você fechou o app ') + red('Web'))
+        console.web(yellow('[Sucesso] Você fechou o app ') + red('Web'))
         console.cli("")
 
         console.cli(red('[Sucesso] Você fechou todos os apps inicializados.'))
