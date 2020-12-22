@@ -14,93 +14,95 @@ declare global {
 
 const originalConsoleLog = console.log
 
-console.bot = (...thisArguments: string[]) => {
-  const args = [];
-  args.push(getNowTime())
-  args.push(green(`[Bot]`) + " -")
+export function customizeConsole() {
+  console.bot = (...thisArguments: string[]) => {
+    const args = [];
+    args.push(getNowTime())
+    args.push(green(`[Bot]`) + " -")
 
-  for (var countArgumentsOfRegisterArgs = 0; countArgumentsOfRegisterArgs < thisArguments.length; countArgumentsOfRegisterArgs++) {
-    args.push(thisArguments[countArgumentsOfRegisterArgs])
+    for (var countArgumentsOfRegisterArgs = 0; countArgumentsOfRegisterArgs < thisArguments.length; countArgumentsOfRegisterArgs++) {
+      args.push(thisArguments[countArgumentsOfRegisterArgs])
+    }
+
+    if (cli) {
+      cli.commandHandler = new CommandHandler({
+        directory: resolve(__dirname, '..', 'cli', 'commands')
+      })
+      cli.commandHandler.loadAll(cli)
+    }
+
+    originalConsoleLog.apply(console, args)
+
+    if (cli) {
+      cli.commandHandler.question()
+    }
   }
 
-  if (cli) {
-    cli.commandHandler = new CommandHandler({
-      directory: resolve(__dirname, '..', 'cli', 'commands')
-    })
-    cli.commandHandler.loadAll(cli)
+  console.web = (...thisArguments: string[]) => {
+    const args = [];
+    args.push(getNowTime())
+    args.push(white(`[Web]`) + " -")
+
+    for (var countArgumentsOfRegisterArgs = 0; countArgumentsOfRegisterArgs < thisArguments.length; countArgumentsOfRegisterArgs++) {
+      args.push(thisArguments[countArgumentsOfRegisterArgs])
+    }
+
+    if (cli) {
+      cli.commandHandler = new CommandHandler({
+        directory: resolve(__dirname, '..', 'cli', 'commands')
+      })
+      cli.commandHandler.loadAll(cli)
+    }
+
+    originalConsoleLog.apply(console, args)
+
+    if (cli) {
+      cli.commandHandler.question()
+    }
   }
 
-  originalConsoleLog.apply(console, args)
+  console.cli = (...thisArguments: string[]) => {
+    const args = [];
+    args.push(getNowTime())
+    args.push(cyan(`[CLI]`) + " -")
 
-  if (cli) {
-    cli.commandHandler.question()
-  }
-}
+    for (var countArgumentsOfRegisterArgs = 0; countArgumentsOfRegisterArgs < thisArguments.length; countArgumentsOfRegisterArgs++) {
+      args.push(thisArguments[countArgumentsOfRegisterArgs])
+    }
 
-console.web = (...thisArguments: string[]) => {
-  const args = [];
-  args.push(getNowTime())
-  args.push(white(`[Web]`) + " -")
+    if (cli) {
+      cli.commandHandler = new CommandHandler({
+        directory: resolve(__dirname, '..', 'cli', 'commands')
+      })
+      cli.commandHandler.loadAll(cli)
+    }
 
-  for (var countArgumentsOfRegisterArgs = 0; countArgumentsOfRegisterArgs < thisArguments.length; countArgumentsOfRegisterArgs++) {
-    args.push(thisArguments[countArgumentsOfRegisterArgs])
-  }
+    originalConsoleLog.apply(console, args)
 
-  if (cli) {
-    cli.commandHandler = new CommandHandler({
-      directory: resolve(__dirname, '..', 'cli', 'commands')
-    })
-    cli.commandHandler.loadAll(cli)
-  }
-
-  originalConsoleLog.apply(console, args)
-
-  if (cli) {
-    cli.commandHandler.question()
-  }
-}
-
-console.cli = (...thisArguments: string[]) => {
-  const args = [];
-  args.push(getNowTime())
-  args.push(cyan(`[CLI]`) + " -")
-
-  for (var countArgumentsOfRegisterArgs = 0; countArgumentsOfRegisterArgs < thisArguments.length; countArgumentsOfRegisterArgs++) {
-    args.push(thisArguments[countArgumentsOfRegisterArgs])
+    if (cli) {
+      cli.commandHandler.question()
+    }
   }
 
-  if (cli) {
-    cli.commandHandler = new CommandHandler({
-      directory: resolve(__dirname, '..', 'cli', 'commands')
-    })
-    cli.commandHandler.loadAll(cli)
-  }
+  console.log = (...thisArguments: string[]) => {
+    const args = [];
+    args.push(getNowTime() + " -")
 
-  originalConsoleLog.apply(console, args)
+    for (var countArgumentsOfRegisterArgs = 0; countArgumentsOfRegisterArgs < thisArguments.length; countArgumentsOfRegisterArgs++) {
+      args.push(thisArguments[countArgumentsOfRegisterArgs])
+    }
 
-  if (cli) {
-    cli.commandHandler.question()
-  }
-}
+    if (cli) {
+      cli.commandHandler = new CommandHandler({
+        directory: resolve(__dirname, '..', 'cli', 'commands')
+      })
+      cli.commandHandler.loadAll(cli)
+    }
 
-console.log = (...thisArguments: string[]) => {
-  const args = [];
-  args.push(getNowTime() + " -")
+    originalConsoleLog.apply(console, args)
 
-  for (var countArgumentsOfRegisterArgs = 0; countArgumentsOfRegisterArgs < thisArguments.length; countArgumentsOfRegisterArgs++) {
-    args.push(thisArguments[countArgumentsOfRegisterArgs])
-  }
-
-  if (cli) {
-    cli.commandHandler = new CommandHandler({
-      directory: resolve(__dirname, '..', 'cli', 'commands')
-    })
-    cli.commandHandler.loadAll(cli)
-  }
-
-  originalConsoleLog.apply(console, args)
-
-  if (cli) {
-    cli.commandHandler.question()
+    if (cli) {
+      cli.commandHandler.question()
+    }
   }
 }
