@@ -3,6 +3,7 @@ import CommandHandler from "./structures/entities/CommandHandler";
 import * as readline from "readline";
 import { resolve } from "path";
 import { io, web } from "..";
+import * as jwt from "jsonwebtoken";
 
 class CLI {
     rl: readline.Interface;
@@ -32,21 +33,26 @@ class CLI {
 
     ioEvents() {
         io.on("connection", (socket: any) => {
-          socket.on('commandHandler', async (commandString: string) => {
-            console.log(commandString)
-            const args = commandString.split(' ')
-            const command = this.commandHandler.commands.get(args[0])
-                || this.commandHandler.commands.get(this.commandHandler.aliases.get(args[0]) || '')
-
-            args.shift()
-
-            if (command) {
-                await command.exec(args, this.commandHandler.client, commandString.split(' ')[0])
-            } else {
-                console.cli(`Comando inexistente, utilize ${black(bgWhite(`help`))} ou ${black(bgWhite(`?`))} para listar comandos.`)
+          socket.on('commandHandler', async ({ commandString, token }: { commandString: string, token: string }) => {
+            try {
+                jwt.verify(token, process.env.JWT_SECRET);
+                console.log(commandString)
+                const args = commandString.split(' ')
+                const command = this.commandHandler.commands.get(args[0])
+                    || this.commandHandler.commands.get(this.commandHandler.aliases.get(args[0]) || '')
+    
+                args.shift()
+    
+                if (command) {
+                    await command.exec(args, this.commandHandler.client, commandString.split(' ')[0])
+                } else {
+                    console.cli(`Comando inexistente, utilize ${black(bgWhite(`help`))} ou ${black(bgWhite(`?`))} para listar comandos.`)
+                }
+    
+                this.commandHandler.question()   
+            } catch (error) {
+                console.cli('Você não pode executar esse comando!')
             }
-
-            this.commandHandler.question()
           })
         });
     }

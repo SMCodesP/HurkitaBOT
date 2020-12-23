@@ -11,6 +11,9 @@ import CLIClass from "./cli"
 
 config()
 
+class ServerIO extends socketIo.Server {
+    socketsAccess: string[];
+}
 
 const web: Web = new Web(process.env.PORT || 3333)
 const http: Server = require("http").Server(web.app);
