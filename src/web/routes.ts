@@ -10,12 +10,12 @@ class Routes {
     constructor(client: Web) {
         
         client.app.use(express.json())
-        client.app.use('/static', express.static(resolve(__dirname, 'public')));
+        client.app.use('/static', express.static(resolve(__dirname, '..', '..', 'public')));
         
         this.router = express.Router()
         
         this.router.get('/', async (req, res) => 
-            res.sendFile(resolve(__dirname, 'views', 'index.html')));
+            res.sendFile(resolve(__dirname, '..', '..', 'views', 'index.html')));
 
         this.router.post('/login', async (req, res) => {
             if (process.env.PASSWORD_CLI === req.body.password) {
