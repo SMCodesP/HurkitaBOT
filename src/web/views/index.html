@@ -13,51 +13,13 @@
 </head>
 <body>
 	
+	<center>
+		<h1 style="margin: 25px;">Terminal da HurkitaBOT</h1>
+	</center>
+
 	<div id="terminal"></div>
-	
-	<script>
-		const term = new Terminal();
-		term.open(document.getElementById('terminal'));
 
-		function runFakeTerminal() {
-			if (term._initialized) {
-				return;
-			}
-
-			term._initialized = true;
-			let digitalized = '';
-
-			term.prompt = () => {
-				digitalized = ''
-				term.write('\r\n$ ');
-			};
-
-			term.writeln('Olá, seja bem-vindo(a) ao terminal da HurkitaBOT!')
-			term.writeln('Aqui você pode executar comandos de forma admnistrativa.')
-			term.writeln('');
-			term.prompt();
-
-			term.on('key', function(key, ev) {
-				const printable = !ev.altKey && !ev.altGraphKey && !ev.ctrlKey && !ev.metaKey;
-
-				if (ev.keyCode === 13) {
-					console.log(digitalized)
-					term.prompt();
-				} else if (ev.keyCode === 8) {
-					if (term._core.buffer.x > 2) {
-						term.write('\b \b');
-					}
-				} else if (printable) {
-					digitalized += key
-					term.write(key);
-				}
-			});
-
-			term.on('paste', function(data) {
-				term.write(data);
-			});
-		}
-		runFakeTerminal();
-	</script>
+	<script src="https://cdn.socket.io/socket.io-3.0.1.min.js"></script>
+	<script type="module" src="/static/assets/js/terminal.js"></script>
 </body>
 </html>

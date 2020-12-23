@@ -1,5 +1,5 @@
 import getNowTime from "./getNowTime";
-import { cli } from "../index";
+import { cli, web } from "../index";
 import CommandHandler from "../cli/structures/entities/CommandHandler";
 import { resolve } from "path";
 import { cyan, green, white } from "colors/safe";
@@ -12,9 +12,14 @@ declare global {
   }
 }
 
+let logs = []
 const originalConsoleLog = console.log
 
-export function customizeConsole() {
+export function customizeConsole(io) {
+  io.on("connection", (socket: any) => {
+    socket.emit('logs', logs)
+  })
+
   console.bot = (...thisArguments: string[]) => {
     const args = [];
     args.push(getNowTime())
@@ -31,6 +36,8 @@ export function customizeConsole() {
       cli.commandHandler.loadAll(cli)
     }
 
+    logs.push(args.join(' '))
+    io.emit('log', args)
     originalConsoleLog.apply(console, args)
 
     if (cli) {
@@ -54,6 +61,8 @@ export function customizeConsole() {
       cli.commandHandler.loadAll(cli)
     }
 
+    logs.push(args.join(' '))
+    io.emit('log', args)
     originalConsoleLog.apply(console, args)
 
     if (cli) {
@@ -77,6 +86,8 @@ export function customizeConsole() {
       cli.commandHandler.loadAll(cli)
     }
 
+    logs.push(args.join(' '))
+    io.emit('log', args)
     originalConsoleLog.apply(console, args)
 
     if (cli) {
@@ -99,6 +110,8 @@ export function customizeConsole() {
       cli.commandHandler.loadAll(cli)
     }
 
+    logs.push(args.join(' '))
+    io.emit('log', args)
     originalConsoleLog.apply(console, args)
 
     if (cli) {
