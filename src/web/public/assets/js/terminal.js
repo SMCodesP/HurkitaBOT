@@ -25,7 +25,7 @@ function initializedTerminal() {
     
     if (ev.keyCode === 13) {
       socket.emit('commandHandler', {
-        digitalized,
+        commandString: digitalized,
         token: jwt
       })
       term.prompt();
@@ -39,7 +39,7 @@ function initializedTerminal() {
     }
   });
 
-  // term.prompt()
+  term.prompt()
   
   term.on('paste', function(data) {
     term.write(data);
@@ -60,15 +60,11 @@ function runFakeTerminal() {
   term.writeln('Digite a senha de acesso para entrar:');
   
   term.on('key', async (key, ev) => {
-    console.log(jwt.length)
     if (jwt.length === 0){
       const printable = !ev.altKey && !ev.altGraphKey && !ev.ctrlKey && !ev.metaKey;
       
       if (ev.keyCode === 13) {
         
-        console.log(digitalized)
-        console.log(socket.id)
-
         try {
           const {data} = await axios.post('/login', {
             password: digitalized,
@@ -100,3 +96,4 @@ function runFakeTerminal() {
 }
 
 runFakeTerminal();
+// initializedTerminal()

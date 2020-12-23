@@ -36,23 +36,23 @@ class CLI {
           socket.on('commandHandler', async ({ commandString, token }: { commandString: string, token: string }) => {
             try {
                 jwt.verify(token, process.env.JWT_SECRET);
-                console.log(commandString)
-                const args = commandString.split(' ')
-                const command = this.commandHandler.commands.get(args[0])
-                    || this.commandHandler.commands.get(this.commandHandler.aliases.get(args[0]) || '')
-    
-                args.shift()
-    
-                if (command) {
-                    await command.exec(args, this.commandHandler.client, commandString.split(' ')[0])
-                } else {
-                    console.cli(`Comando inexistente, utilize ${black(bgWhite(`help`))} ou ${black(bgWhite(`?`))} para listar comandos.`)
-                }
-    
-                this.commandHandler.question()   
             } catch (error) {
-                console.cli('Você não pode executar esse comando!')
+                return console.cli('Você não pode executar esse comando!')
             }
+
+            const args = commandString.split(' ')
+            const command = this.commandHandler.commands.get(args[0])
+                || this.commandHandler.commands.get(this.commandHandler.aliases.get(args[0]) || '')
+
+            args.shift()
+
+            if (command) {
+                await command.exec(args, this.commandHandler.client, commandString.split(' ')[0])
+            } else {
+                console.cli(`Comando inexistente, utilize ${black(bgWhite(`help`))} ou ${black(bgWhite(`?`))} para listar comandos.`)
+            }
+
+            this.commandHandler.question()   
           })
         });
     }

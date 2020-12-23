@@ -6,8 +6,6 @@ export default (user: User, permission: string): boolean => {
     
     const userBot: UserBot = db.get(`users.${user.id}`)
 
-    console.log(userBot)
-
     if (!userBot)
         return (process.env.OWNER_ID === user.id)   
 
