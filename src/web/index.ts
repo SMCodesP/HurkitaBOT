@@ -1,6 +1,7 @@
 import * as express from 'express'
 import { red, green } from "colors/safe";
 import { promisify } from "util";
+import Routes from './routes';
 
 class Web {
   app: express.Express;
@@ -13,9 +14,7 @@ class Web {
   }
 
   routes() {
-    this.app.get('/', (req, res) => {
-      return res.send('Status » Ok')
-    })
+    new Routes(this)
   }
 
   async init(port: string | number) {

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Terminal - HurkitaBOT</title>
+	<meta name="theme-color" content="#44475a" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="#44475a" />
+	<meta name="msapplication-navbutton-color" content="#44475a" />
+	<link rel="stylesheet" href="/static/assets/css/global.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.14.5/xterm.min.css" integrity="sha512-iLYuqv+v/P4u9erpk+KM83Ioe/l7SEmr7wB6g+Kg1qmEit8EShDKnKtLHlv2QXUp7GGJhmqDI+1PhJYLTsfb8w==" crossorigin="anonymous" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.14.5/xterm.min.js" integrity="sha512-2PRgAav8Os8vLcOAh1gSaDoNLe1fAyq8/G3QSdyjFFD+OqNjLeHE/8q4+S4MEZgPsuo+itHopj+hJvqS8XUQ8A==" crossorigin="anonymous"></script>
+</head>
+<body>
+	
+	<div id="terminal"></div>
+	
+	<script>
+		const term = new Terminal();
+		term.open(document.getElementById('terminal'));
+
+		function runFakeTerminal() {
+			if (term._initialized) {
+				return;
+			}
+
+			term._initialized = true;
+			let digitalized = '';
+
+			term.prompt = () => {
+				digitalized = ''
+				term.write('\r\n$ ');
+			};
+
+			term.writeln('Olá, seja bem-vindo(a) ao terminal da HurkitaBOT!')
+			term.writeln('Aqui você pode executar comandos de forma admnistrativa.')
+			term.writeln('');
+			term.prompt();
+
+			term.on('key', function(key, ev) {
+				const printable = !ev.altKey && !ev.altGraphKey && !ev.ctrlKey && !ev.metaKey;
+
+				if (ev.keyCode === 13) {
+					console.log(digitalized)
+					term.prompt();
+				} else if (ev.keyCode === 8) {
+					if (term._core.buffer.x > 2) {
+						term.write('\b \b');
+					}
+				} else if (printable) {
+					digitalized += key
+					term.write(key);
+				}
+			});
+
+			term.on('paste', function(data) {
+				term.write(data);
+			});
+		}
+		runFakeTerminal();
+	</script>
+</body>
+</html>
