@@ -51,15 +51,11 @@ class AnimeInfoCommand extends Command {
         try {
 
             const responseMal = await Anime.fromName(animeTitle)
-            console.bot(responseMal)
             const response = await JikanTS.Anime.byId(Number(responseMal.id))
-            console.bot(response)
 
             const description = await translatte(response.synopsis, {
                 to: 'pt'
             })
-
-            console.bot(description)
 
             const embedAnime = new MessageEmbed()
                 .setColor("RANDOM")

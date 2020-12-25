@@ -69,7 +69,10 @@ class HelpCommand extends Command {
             )
             .addField(
                 "Exemplos »",
-                `\`\`\`yaml\n${commandSelected.description.examples.join("\n").replace(/\[command\]/g, `${db.get(`${message.guild.id}.prefix`) || process.env.PREFIX}` + commandSelected.id)}\`\`\`\n \u200B`
+                `\`\`\`yaml\n${commandSelected.description.examples.join("\n")
+                    .replace(/\[command\]/g, `${db.get(`${message.guild.id}.prefix`) || process.env.PREFIX}` + commandSelected.id)
+                    .replace(/\[member\]/g, message.author.username)
+                }\`\`\`\n \u200B`
             )
             .setTimestamp()
             .setFooter(`Copyright © 2020 - ${this.client.user.username}`, this.client.user.displayAvatarURL())
