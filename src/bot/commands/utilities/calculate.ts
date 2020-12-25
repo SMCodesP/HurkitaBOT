@@ -1,8 +1,6 @@
 import { Command } from "discord-akairo"
 import { MessageEmbed } from "discord.js";
 import { Message } from "discord.js"
-import * as db from "quick.db"
-import axios from "axios";
 import { BotClientTypes } from "../../index";
 
 class CalculateCommand extends Command {
