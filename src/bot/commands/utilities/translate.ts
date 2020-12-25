@@ -46,12 +46,9 @@ class TranslategCommand extends Command {
         try {
             const textTranslate = text.split(" ")
             textTranslate.shift()
-            console.log(textTranslate)
             const textTranslated = await translatte(textTranslate.join(" "), {
                 to: language
             })
-
-            console.log(textTranslated)
 
             const embedTranslated = new MessageEmbed()
                 .setColor("RANDOM")

@@ -12,7 +12,7 @@ class HelpCommand extends Command {
             aliases: ['help', 'ajuda', '?'],
             category: '🛠️ Utilitários | utils',
             description: {
-                content: "Ajudar a achar comandos util para você!",
+                content: "Ajudar a achar comandos úteis para você utilizar!",
                 metadata: "Comando de ajudar; ajuda; help; ?; outros comandos; me ajuda; help-me; ajude-me;",
                 usage: "[command] {categoria/comando/page}",
                 examples: [
@@ -44,28 +44,28 @@ class HelpCommand extends Command {
             .setDescription("**Atenção »** Argumentos de comandos que tenham \`[]\` são obrigatórios, com \`{}\` são argumentos opicionais.\n \u200B")
             .addField(
                 "Nome »",
-                `\`\`\`yaml\n${commandSelected.id}\`\`\``,
+                `\`\`\`diff\n- ${commandSelected.id}\`\`\``,
                 true
             )
             .addField(
-                "Descrição »",
-                `\`\`\`yaml\n${commandSelected.description.content}\`\`\``,
+                "Alternativas »",
+                `\`\`\`ini\n[${commandSelected.aliases.join(', ')}]\`\`\``,
                 true
             )
             .addField(
                 "Categoria »",
-                `\`\`\`yaml\n${commandSelected.categoryID.split('|')[0].trim()}\`\`\``,
-                false
+                `\`\`\`fix\n${commandSelected.categoryID.split('|')[0].trim()}\`\`\``,
+                true
             )
             .addField(
-                "Alternativas »",
-                `\`\`\`yaml\n[${commandSelected.aliases.join(', ')}]\`\`\``,
-                true
+                "Descrição »",
+                `\`\`\`bash\n# ${commandSelected.description.content}\`\`\``,
+                false
             )
             .addField(
                 "Modo de usar »",
                 `\`\`\`yaml\n${db.get(`${message.guild.id}.prefix`) || process.env.PREFIX}${commandSelected.description.usage.replace('[command]', commandSelected.id)}\`\`\``,
-                true
+                false
             )
             .addField(
                 "Exemplos »",

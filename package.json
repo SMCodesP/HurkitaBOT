@@ -46,6 +46,7 @@
     "i": "^0.3.6",
     "jikants": "^1.2.13",
     "jsonwebtoken": "^8.5.1",
+    "lorem-ipsum": "^2.0.3",
     "malapi": "^0.0.3",
     "npm": "^6.14.8",
     "polished": "^4.0.5",
