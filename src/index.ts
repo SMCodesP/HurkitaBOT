@@ -12,7 +12,7 @@ import CLIClass from "./cli"
 config()
 
 class ServerIO extends socketIo.Server {
-    socketsAccess: string[];
+	socketsAccess: string[];
 }
 
 const web: Web = new Web(process.env.PORT || 3333)
@@ -24,15 +24,15 @@ const bot: Bot = new Bot()
 const cli: CLIClass = new CLIClass()
 
 async function load() {
-    await web.init(http, process.env.PORT || 3333)
-    await bot.init(process.env.TOKEN)
-    cli.init()
+	await web.init(http, process.env.PORT || 3333)
+	await bot.init(process.env.TOKEN)
+	cli.init()
 }
 load()
 
 export {
-    web,
-    bot,
-    cli,
-    io
+	web,
+	bot,
+	cli,
+	io
 }
