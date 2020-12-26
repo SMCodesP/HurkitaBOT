@@ -3,6 +3,7 @@ import { User } from "discord.js"
 import { MessageReaction } from "discord.js"
 import { Message, MessageEmbed } from "discord.js"
 import * as db from 'quick.db'
+import getPrefix from "../../../utils/getPrefix"
 import paginate from "../../../utils/paginate"
 
 class HelpCommand extends Command {
@@ -32,7 +33,12 @@ class HelpCommand extends Command {
     }
 
     async helpCommand(message: Message, name: string) {
-        const nameCommadSelected = this.handler.aliases.get(name)
+        let nameCommadSelected = this.handler.aliases.get(name)
+
+        if (name[0] === getPrefix(message.guild.id)) {
+            nameCommadSelected = this.handler.aliases.get(name.substring(1))
+        }
+
         const commandSelected = this.handler.modules.get(nameCommadSelected)
 
         if (!nameCommadSelected || !commandSelected)
@@ -96,7 +102,7 @@ class HelpCommand extends Command {
         const embedHelpOfCategory = new MessageEmbed()
             .setColor("RANDOM")
             .setTitle(`Lista de comandos da categoria: __${categorySelected.id.split('|')[0].trim()}__`)
-            .setDescription(`❗ Prefix » **\`${db.get(`${message.guild.id}.prefix`) || process.env.PREFIX}\`\n**📄 Comandos disponíveis nessa categoria » **\`${categorySelected.size}\`\n**📅 Versão » **\`${process.env.VERSION || "1.0"}\`**`)
+            .setDescription(`❗ **Prefix »** \`${db.get(`${message.guild.id}.prefix`) || process.env.PREFIX}\`\n📄 **Comandos disponíveis nessa categoria »** \`${categorySelected.size}\`\n📅 **Versão »** \`${process.env.VERSION || "1.0"}\``)
             .setTimestamp()
             .setFooter(`Copyright © 2020 - ${this.client.user.username}`, this.client.user.displayAvatarURL())
 
@@ -111,8 +117,15 @@ class HelpCommand extends Command {
         message.util.reply(embedHelpOfCategory)
     }
 
-    async exec(message: Message, { select }: { select: string | number; }) {
-        if (select && typeof select === "string") {
+    isNumeric(value: string) {
+        return /^-?\d+$/.test(value);
+    }
+
+    async exec(message: Message, { select }: { select: string; }) {
+
+        let page: number
+
+        if (select && typeof select === "string" && !this.isNumeric(select)) {
             this.helpCategory(message, select)
                 .catch((errorOfCategory) => {
                     this.helpCommand(message, select)
@@ -122,6 +135,8 @@ class HelpCommand extends Command {
                 })
 
             return;
+        } else {
+            page = Number(select)
         }
 
         const countAllCommands = this.handler.modules.size
@@ -129,15 +144,22 @@ class HelpCommand extends Command {
         const pages = paginate(this.handler.categories.keyArray(), 5)
 
         const embed = new MessageEmbed()
-            .setTitle(`Ajuda da Hurkita${(typeof select === "number") ? ` | Page ${select}` : '.'}`)
+            .setTitle(`Ajuda da Hurkita${(typeof page === "number") ? ` | Page ${page}` : '.'}`)
             .setColor("RANDOM")
-            .setDescription(`❗ Prefix » **\`${db.get(`${message.guild.id}.prefix`) || process.env.PREFIX}\`\n**📄 Comandos disponíveis » **\`${countAllCommands}\`\n**📅 Versão » **\`${process.env.VERSION || "1.0"}\`\n** \u200B`)
+            .setDescription(`❗ **Prefix »** \`${db.get(`${message.guild.id}.prefix`) || process.env.PREFIX}\`\n📄 **Comandos disponíveis »** \`${countAllCommands}\`\n📅 **Versão »** \`${process.env.VERSION || "1.0"}\`\n \u200B`)
             .setTimestamp()
             .setFooter(`Copyright © 2020 - ${this.client.user.username}`, this.client.user.displayAvatarURL())
 
-        const cateogires = (typeof select === "number") ? pages[select-1] : this.handler.categories.keyArray()
+        const categories = (typeof page === "number") ? pages[page-1] : this.handler.categories.keyArray()
 
-        cateogires.forEach(async (categoryKey) => {
+        if (!categories) {
+            embed.addField("A página selecionada não possuí nenhum item disponível.", "\u200B")
+
+            await message.util.reply(embed)
+            return;
+        }
+
+        categories.forEach(async (categoryKey) => {
             const namesOfSpliting: string[] = categoryKey.split('|')
             const name = namesOfSpliting[0].trim()
             const nameFormatted = namesOfSpliting[1].trim()
@@ -151,8 +173,8 @@ class HelpCommand extends Command {
 
         const messageHelpEmbed = await message.util.reply(embed)
 
-        for (let indexHelp = 0; indexHelp < cateogires.length; indexHelp++) {
-            const name = cateogires[indexHelp]
+        for (let indexHelp = 0; indexHelp < categories.length; indexHelp++) {
+            const name = categories[indexHelp]
             await messageHelpEmbed.react(name.split(" ")[0])
 
             const filter = (reaction: MessageReaction, user: User) => user.id === message.author.id && reaction.emoji.name === name.split(" ")[0];
@@ -164,8 +186,8 @@ class HelpCommand extends Command {
             });
         }
 
-        if (typeof select === "number" && (pages[select] || pages[select-2])) {
-            if (pages[select]) {
+        if (typeof page === "number" && (pages[page] || pages[page-2])) {
+            if (pages[page]) {
                 await messageHelpEmbed.react("➡️")
             } else {
                 await messageHelpEmbed.react("⬅️")
@@ -175,10 +197,10 @@ class HelpCommand extends Command {
             const collectorReaction = messageHelpEmbed.createReactionCollector(filter, { time: 60000 * 5, max: 1 });
             const options = {
                 "➡️": async () => {
-                    this.exec(message, { select: select + 1 })
+                    this.exec(message, { select: (page + 1).toString() })
                 },
                 "⬅️": async () => {
-                    this.exec(message, { select: select - 1 })
+                    this.exec(message, { select: (page - 1).toString() })
                 }
             }
     
