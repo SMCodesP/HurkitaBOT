@@ -1,5 +1,3 @@
-import "./utils/customConsolePrefixes";
-
 import { config } from "dotenv";
 import { customizeConsole } from "./utils/customConsolePrefixes";
 import { Server } from "http";
