@@ -127,9 +127,9 @@ class HelpCommand extends Command {
 
         if (select && typeof select === "string" && !this.isNumeric(select)) {
             this.helpCategory(message, select)
-                .catch((errorOfCategory) => {
+                .catch(_ => {
                     this.helpCommand(message, select)
-                        .catch((errorOfCommand) => {
+                        .catch(_ => {
                             message.reply(`Não foi possível localizar um comando nem uma categoria com esse nome, utilize \`${db.get(`${message.guild.id}.prefix`) || process.env.PREFIX}pesquisar [Alguma palavra chave para encontrar o nome do comando]\``)
                         })
                 })
@@ -150,7 +150,7 @@ class HelpCommand extends Command {
             .setTimestamp()
             .setFooter(`Copyright © 2020 - ${this.client.user.username}`, this.client.user.displayAvatarURL())
 
-        const categories = (typeof page === "number") ? pages[page-1] : this.handler.categories.keyArray()
+        const categories: string[] = (typeof page === "number") ? pages[page-1] : this.handler.categories.keyArray()
 
         if (!categories) {
             embed.addField("A página selecionada não possuí nenhum item disponível.", "\u200B")
@@ -179,7 +179,7 @@ class HelpCommand extends Command {
 
             const filter = (reaction: MessageReaction, user: User) => user.id === message.author.id && reaction.emoji.name === name.split(" ")[0];
             const collectorReaction = messageHelpEmbed.createReactionCollector(filter, { time: 60000 * 5, max: 1 });
-    
+
             collectorReaction.on("collect", async (reaction) => {
                 await messageHelpEmbed.reactions.removeAll()
                 this.helpCategory(message, name.split('|')[1].trim())
@@ -203,7 +203,7 @@ class HelpCommand extends Command {
                     this.exec(message, { select: (page - 1).toString() })
                 }
             }
-    
+
             collectorReaction.on("collect", async (reaction) => {
                 if (options[reaction.emoji.name]) {
                     await messageHelpEmbed.reactions.removeAll()

@@ -11,7 +11,7 @@ class AnimeInfoCommand extends Command {
 
     constructor() {
         super('infoanime', {
-            aliases: ['infoanime'],
+            aliases: ['infoanime', 'ianime'],
             category: '🛠️ Utilitários | utils',
             description: {
                 content: "Pesquisar informações sobre um anime!",

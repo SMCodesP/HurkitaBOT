@@ -11,8 +11,8 @@ class AnimeCommand extends Command {
     client: BotClientTypes
 
     constructor() {
-        super('anime', {
-            aliases: ['anime'],
+        super('animeimage', {
+            aliases: ['animeimage', 'animei', 'imga', 'animeimg', 'aimg'],
             category: "🛠️ Utilitários | utils",
             description: {
                 content: "Com esse comando você pode ganhar uma imagem de anime.",
