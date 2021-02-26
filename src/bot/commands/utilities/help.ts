@@ -83,7 +83,7 @@ class HelpCommand extends Command {
             .setTimestamp()
             .setFooter(`Copyright © 2020 - ${this.client.user.username}`, this.client.user.displayAvatarURL())
 
-        message.util.reply(embedHelpOfCommand)
+        await message.util.reply(embedHelpOfCommand)
     }
 
     async helpCategory(message: Message, name: string) {
@@ -98,10 +98,16 @@ class HelpCommand extends Command {
 
         if (!categorySelected)
             throw new Error('Nenhuma categoria encontrada.')
+            
+        const categoryFullName = categorySelected.id.split('|')[0].trim()
+        
+        const emoji = this.client.emojis.cache.find((emoji) => {
+            return emoji.id === categoryFullName.split(" ")[0] || emoji.name === categoryFullName.split(" ")[0]
+        }) || categoryFullName.split(" ")[0]
 
         const embedHelpOfCategory = new MessageEmbed()
             .setColor("RANDOM")
-            .setTitle(`Lista de comandos da categoria: __${categorySelected.id.split('|')[0].trim()}__`)
+            .setTitle(`Lista de comandos da categoria: __${emoji} ${categoryFullName.split(" ")[1].trim()}__`)
             .setDescription(`❗ **Prefix »** \`${db.get(`${message.guild.id}.prefix`) || process.env.PREFIX}\`\n📄 **Comandos disponíveis nessa categoria »** \`${categorySelected.size}\`\n📅 **Versão »** \`${process.env.VERSION || "1.0"}\``)
             .setTimestamp()
             .setFooter(`Copyright © 2020 - ${this.client.user.username}`, this.client.user.displayAvatarURL())
@@ -110,11 +116,11 @@ class HelpCommand extends Command {
             embedHelpOfCategory
                 .addField(
                     `\u200B`,
-                    `**\`${db.get(`${message.guild.id}.prefix`) || process.env.PREFIX}${command.description.usage.replace('[command]', command.aliases[0])}\`** - ${command.description.content}`
+                    `> **\`${db.get(`${message.guild.id}.prefix`) || process.env.PREFIX}${command.description.usage.replace('[command]', command.aliases[0])}\`** - ${command.description.content}`
                 )
         })
 
-        message.util.reply(embedHelpOfCategory)
+        await message.util.reply(embedHelpOfCategory)
     }
 
     isNumeric(value: string) {
@@ -164,9 +170,13 @@ class HelpCommand extends Command {
             const name = namesOfSpliting[0].trim()
             const nameFormatted = namesOfSpliting[1].trim()
             const countCommandsInCategory = this.handler.categories.get(categoryKey)
+            
+            const emoji = this.client.emojis.cache.find((emoji) => {
+                return emoji.id === name.split(" ")[0] || emoji.name === name.split(" ")[0]
+            }) || name.split(" ")[0]
 
             embed.addField(
-                `${name} \`[${countCommandsInCategory.size} comandos]\``,
+                `> ${emoji} ${name.split(" ")[1]} \`[${countCommandsInCategory.size} comandos]\``,
                 `\`${db.get(`${message.guild.id}.prefix`) || process.env.PREFIX}${this.id} ${nameFormatted}\`\n \u200B`
             )
         })
@@ -174,15 +184,34 @@ class HelpCommand extends Command {
         const messageHelpEmbed = await message.util.reply(embed)
 
         for (let indexHelp = 0; indexHelp < categories.length; indexHelp++) {
-            const name = categories[indexHelp]
-            await messageHelpEmbed.react(name.split(" ")[0])
+            const namesOfSpliting: string[] = categories[indexHelp].split('|')
+            const name = namesOfSpliting[0].trim()
+            const nameFormatted = namesOfSpliting[1].trim()
 
-            const filter = (reaction: MessageReaction, user: User) => user.id === message.author.id && reaction.emoji.name === name.split(" ")[0];
+            const emoji = this.client.emojis.cache.find((emoji) => {
+                return emoji.id === name.split(" ")[0] || emoji.name === name.split(" ")[0]
+            })
+
+            await messageHelpEmbed.react(emoji || name.split(" ")[0])
+
+            let filter;
+            if (emoji != null) {
+                filter = (reaction: MessageReaction, user: User) =>
+                    user.id === message.author.id
+                    && (reaction.emoji.name === name.split(" ")[0]
+                        || reaction.emoji.name === nameFormatted
+                        || reaction.emoji?.id === emoji.id);
+            } else {
+                filter = (reaction: MessageReaction, user: User) =>
+                    user.id === message.author.id
+                    && (reaction.emoji.name === name.split(" ")[0]
+                        || reaction.emoji.name === nameFormatted);
+            }
             const collectorReaction = messageHelpEmbed.createReactionCollector(filter, { time: 60000 * 5, max: 1 });
 
-            collectorReaction.on("collect", async (reaction) => {
+            collectorReaction.on("collect", async (_reaction) => {
                 await messageHelpEmbed.reactions.removeAll()
-                this.helpCategory(message, name.split('|')[1].trim())
+                this.helpCategory(message, nameFormatted)
             });
         }
 

@@ -1,0 +1,46 @@
+import { Command } from "discord-akairo"
+import { MessageEmbed } from "discord.js"
+import { Message } from "discord.js"
+import getUUID from "../../../utils/getUUID"
+import { BotClientTypes } from "../../index"
+
+class McSkinCommand extends Command {
+	client: BotClientTypes
+	
+	constructor() {
+		super("mc-skin", {
+			aliases: ["mc-skin"],
+			category: "814841361983340544 Minecraft | minecraft",
+			description: {
+				content: "Comando para ver a skin de um player.",
+				metadata: "Comando para visualizar a skin; player",
+				usage: "[command] [nickname]",
+				examples: [
+					"[command] SMCodes",
+				],
+			},
+			args: [
+				{
+					id: "nickname",
+					type: "string"
+				}
+			]
+		})
+	}
+	
+	async exec(message: Message, { nickname }: { nickname?: string }) {
+    const uuid = await getUUID(nickname)
+    
+    const embed = new MessageEmbed()
+      .setTitle(`**Skin de \`${nickname}\`**`)
+      .setColor("RANDOM")
+      .setDescription(`Clique [aqui](https://crafatar.com/skins/${uuid}?size=4&default=c06f89064c8a49119c29ea1dbd1aab82&overlay) para baixar a skin`)
+      .setImage(`https://crafatar.com/skins/${uuid}?size=256&default=c06f89064c8a49119c29ea1dbd1aab82&overlay`)
+      .setTimestamp()
+      .setFooter(nickname, `https://crafatar.com/avatars/${uuid}?size=256&default=c06f89064c8a49119c29ea1dbd1aab82&overlay`)
+
+    await message.util.reply({embed})
+  }
+}
+
+export default McSkinCommand
