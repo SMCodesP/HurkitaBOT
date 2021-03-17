@@ -1,5 +1,6 @@
 {
-  "compilerOptions": {    "module": "UMD",
+  "compilerOptions": {
+    "module": "UMD",
     "target": "ES2017",
     "outDir": "dist",
     "sourceMap": false,

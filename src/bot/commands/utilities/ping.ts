@@ -22,11 +22,8 @@ class PingCommand extends Command {
     }
 
     async exec(message: Message) {
-        
         message.util.reply(`aqui está minhas informações sobre tempo de resposta.\n📶 - **API ping »** \`${this.client.ws.ping}ms\`\n⌚ - **Latência »** \`${Date.now() - message.createdTimestamp}ms\``)
-
     }
-
 }
 
 export default PingCommand

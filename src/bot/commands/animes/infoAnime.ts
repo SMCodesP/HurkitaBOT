@@ -40,6 +40,7 @@ class AnimeInfoCommand extends Command {
             return message.util.reply(
                 `Sintaxe incorreta, utilize o comando dessa forma \`${this.description.usage.replace('[command]', `${prefix}${this.id}`)}\`.`
             )
+
         const embedAnimeLoading = new MessageEmbed()
             .setColor("RANDOM")
             .setTitle("Carregando...")
@@ -53,14 +54,14 @@ class AnimeInfoCommand extends Command {
             const responseMal = await Anime.fromName(animeTitle)
             const response = await JikanTS.Anime.byId(Number(responseMal.id))
 
-            const description = await translatte(response.synopsis, {
+            const description = await translatte(response.synopsis.substring(0, 1000), {
                 to: 'pt'
             })
 
             const embedAnime = new MessageEmbed()
                 .setColor("RANDOM")
                 .setTitle(response.title)
-                .setDescription(`Fonte **[MyAnimeList](${response.url})**.\n**[Trailer](${response.trailer_url})**\n**Sinopse (Traduzida) »**\n${description.text}\n\u200B`)
+                .setDescription(`Fonte **[MyAnimeList](${response.url})**.\n**[Trailer](${response.trailer_url})**\n**Sinopse (Traduzida) »**\n${description.text}...\n\u200B`)
                 .addField("ID »", `\`\`\`diff\n- ${response.mal_id}\`\`\``, false)
                 .addField("Classificação »", `\`\`\`yaml\n${response.rating}\`\`\``, true)
                 .addField("Episódios »", `\`\`\`yaml\n${response.episodes}\`\`\``, true)
@@ -73,10 +74,10 @@ class AnimeInfoCommand extends Command {
                 .addField("Favoritados »", `\`\`\`yaml\n${response.favorites}\`\`\``, true)
                 .addField("Licenciadores »", `[${response.licensors.map((licensor) => `[${licensor.name}](${licensor.url})`).join(', ')}]`, false)
                 .addField("Produtores »", `[${response.producers.map((producer) => `[${producer.name}](${producer.url})`).join(', ')}]`, false)
-                .setThumbnail(response.image_url)
+                .setImage(response.image_url)
                 .setTimestamp()
                 .setFooter(`Copyright © 2020 - ${this.client.user.username}`, this.client.user.displayAvatarURL());
-            
+
             message.util.reply(embedAnime)
 
         } catch (error) {

@@ -7,6 +7,9 @@ import { Ingest as SonicChannelIngest, Search as SonicChannelSearch } from "soni
 import { google, youtube_v3 } from "googleapis";
 
 import { QueueItem } from "./structures/entities/QueueItem";
+import getBotInfo from "../utils/getBotInfo";
+
+const { version } = require('../../package.json')
 
 interface BotClientTypes extends AkairoClient {
 	commandHandler: CommandHandler;
@@ -19,6 +22,7 @@ interface BotClientTypes extends AkairoClient {
 	inhibitorHandler: InhibitorHandler;
 	queueSongs: Map<string, QueueItem>;
 	youtube: youtube_v3.Youtube;
+	version: String;
 }
 
 class BotClient extends AkairoClient implements BotClientTypes {
@@ -31,7 +35,8 @@ class BotClient extends AkairoClient implements BotClientTypes {
 	inhibitorHandler: InhibitorHandler;
 	queueSongs: Map<string, QueueItem>;
 	youtube: youtube_v3.Youtube;
-	
+	version: String;
+
 	constructor() {
 		let intentsLocal: Intents = new Intents([
 			Intents.NON_PRIVILEGED,
@@ -47,13 +52,14 @@ class BotClient extends AkairoClient implements BotClientTypes {
 			}
 		});
 
+		this.version = version
 		this.youtube = google.youtube({
 			version: "v3",
 			auth: process.env.YOUTUBE_KEY_API
 		})
 		this.queueSongs = new Map();
 		this.intents = intentsLocal
-		
+
 		this.startIngestSonic()
 		this.startSearchSonic()
 
@@ -84,7 +90,7 @@ class BotClient extends AkairoClient implements BotClientTypes {
 			ignoreCooldown: process.env.OWNER_ID,
 		})
 
-        this.inhibitorHandler = new InhibitorHandler(this, {
+		this.inhibitorHandler = new InhibitorHandler(this, {
 			directory: resolve(__dirname, 'inhibitors')
 		});
 		this.listenerHandler = new ListenerHandler(this, {
@@ -101,6 +107,8 @@ class BotClient extends AkairoClient implements BotClientTypes {
 
 		this.listenerHandler.loadAll();
 		this.inhibitorHandler.loadAll();
+
+		// getBotInfo()
 	}
 
 	startSearchSonic() {

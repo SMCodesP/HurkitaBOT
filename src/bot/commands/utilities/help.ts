@@ -3,10 +3,12 @@ import { User } from "discord.js"
 import { MessageReaction } from "discord.js"
 import { Message, MessageEmbed } from "discord.js"
 import * as db from 'quick.db'
+import { BotClientTypes } from "../.."
 import getPrefix from "../../../utils/getPrefix"
 import paginate from "../../../utils/paginate"
 
 class HelpCommand extends Command {
+    client: BotClientTypes;
 
     constructor() {
         super('help', {
@@ -33,6 +35,8 @@ class HelpCommand extends Command {
     }
 
     async helpCommand(message: Message, name: string) {
+        console.log(process.env)
+
         let nameCommadSelected = this.handler.aliases.get(name)
 
         if (name[0] === getPrefix(message.guild.id)) {
@@ -108,7 +112,7 @@ class HelpCommand extends Command {
         const embedHelpOfCategory = new MessageEmbed()
             .setColor("RANDOM")
             .setTitle(`Lista de comandos da categoria: __${emoji} ${categoryFullName.split(" ")[1].trim()}__`)
-            .setDescription(`❗ **Prefix »** \`${db.get(`${message.guild.id}.prefix`) || process.env.PREFIX}\`\n📄 **Comandos disponíveis nessa categoria »** \`${categorySelected.size}\`\n📅 **Versão »** \`${process.env.VERSION || "1.0"}\``)
+            .setDescription(`❗ **Prefix »** \`${db.get(`${message.guild.id}.prefix`) || process.env.PREFIX}\`\n📄 **Comandos disponíveis nessa categoria »** \`${categorySelected.size}\`\n📅 **Versão »** \`${this.client.version || "1.0"}\``)
             .setTimestamp()
             .setFooter(`Copyright © 2020 - ${this.client.user.username}`, this.client.user.displayAvatarURL())
 
@@ -152,7 +156,7 @@ class HelpCommand extends Command {
         const embed = new MessageEmbed()
             .setTitle(`Ajuda da Hurkita${(typeof page === "number") ? ` | Page ${page}` : '.'}`)
             .setColor("RANDOM")
-            .setDescription(`❗ **Prefix »** \`${db.get(`${message.guild.id}.prefix`) || process.env.PREFIX}\`\n📄 **Comandos disponíveis »** \`${countAllCommands}\`\n📅 **Versão »** \`${process.env.VERSION || "1.0"}\`\n \u200B`)
+            .setDescription(`❗ **Prefix »** \`${db.get(`${message.guild.id}.prefix`) || process.env.PREFIX}\`\n📄 **Comandos disponíveis »** \`${countAllCommands}\`\n📅 **Versão »** \`${this.client.version || "1.0.0"}\`\n \u200B`)
             .setTimestamp()
             .setFooter(`Copyright © 2020 - ${this.client.user.username}`, this.client.user.displayAvatarURL())
 
