@@ -12,7 +12,7 @@ class HelpCommand extends Command {
 
     constructor() {
         super('help', {
-            aliases: ['help', 'ajuda', '?'],
+            aliases: ['help', 'ajuda', '?', 'comandos', 'commands'],
             category: '🛠️ Utilitários | utils',
             description: {
                 content: "Ajudar a achar comandos úteis para você utilizar!",
@@ -102,9 +102,9 @@ class HelpCommand extends Command {
 
         if (!categorySelected)
             throw new Error('Nenhuma categoria encontrada.')
-            
+
         const categoryFullName = categorySelected.id.split('|')[0].trim()
-        
+
         const emoji = this.client.emojis.cache.find((emoji) => {
             return emoji.id === categoryFullName.split(" ")[0] || emoji.name === categoryFullName.split(" ")[0]
         }) || categoryFullName.split(" ")[0]
@@ -151,7 +151,12 @@ class HelpCommand extends Command {
 
         const countAllCommands = this.handler.modules.size
 
-        const pages = paginate(this.handler.categories.keyArray(), 5)
+        const organize = () => {
+            return new Map([...this.handler.categories.entries()]
+                .sort((a, b) => b[1].size - a[1].size))
+        }
+
+        const pages = paginate([...organize().keys()], 5)
 
         const embed = new MessageEmbed()
             .setTitle(`Ajuda da Hurkita${(typeof page === "number") ? ` | Page ${page}` : '.'}`)
@@ -160,7 +165,7 @@ class HelpCommand extends Command {
             .setTimestamp()
             .setFooter(`Copyright © 2020 - ${this.client.user.username}`, this.client.user.displayAvatarURL())
 
-        const categories: string[] = (typeof page === "number") ? pages[page-1] : this.handler.categories.keyArray()
+        const categories: string[] = (typeof page === "number") ? pages[page - 1] : [...organize().keys()]
 
         if (!categories) {
             embed.addField("A página selecionada não possuí nenhum item disponível.", "\u200B")
@@ -174,7 +179,7 @@ class HelpCommand extends Command {
             const name = namesOfSpliting[0].trim()
             const nameFormatted = namesOfSpliting[1].trim()
             const countCommandsInCategory = this.handler.categories.get(categoryKey)
-            
+
             const emoji = this.client.emojis.cache.find((emoji) => {
                 return emoji.id === name.split(" ")[0] || emoji.name === name.split(" ")[0]
             }) || name.split(" ")[0]
@@ -219,7 +224,7 @@ class HelpCommand extends Command {
             });
         }
 
-        if (typeof page === "number" && (pages[page] || pages[page-2])) {
+        if (typeof page === "number" && (pages[page] || pages[page - 2])) {
             if (pages[page]) {
                 await messageHelpEmbed.react("➡️")
             } else {
@@ -244,9 +249,7 @@ class HelpCommand extends Command {
                 }
             });
         }
-
     }
-
 }
 
 export default HelpCommand
