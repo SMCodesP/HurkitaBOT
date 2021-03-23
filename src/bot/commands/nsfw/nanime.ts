@@ -15,7 +15,7 @@ class AnimeNSFWCommand extends Command {
             aliases: ['nanime'],
             category: "🔞 NSFW | nsfw",
             description: {
-                content: "Com esse comando você pode gerar uma imagem nsfw de anime.",
+                content: "Com esse comando você pode gerar uma imagem nsfw de anime, você pode usar o comando nwa para pesquisar uma imagem nsfw de acordo com seu pedido.",
                 metadata: "Comando para gerar waifu; anime;",
                 usage: "[command] {waifu/neko/trap/blowjob}",
                 examples: [
@@ -48,6 +48,7 @@ class AnimeNSFWCommand extends Command {
             const embedTypes = new MessageEmbed()
                 .setColor("RANDOM")
                 .setTitle("Lista de tipos de nsfw")
+                .setDescription(`Para você buscar uma imagem NSFW de acordo com uma pesquisa utilize \`${prefix}nwa [anime/personagem/pesquisa]\``)
                 .setTimestamp()
                 .setFooter(`Copyright © 2020 - ${this.client.user.username}`, this.client.user.displayAvatarURL())
             
@@ -73,7 +74,7 @@ class AnimeNSFWCommand extends Command {
     
             const embed = new MessageEmbed()
                 .setColor("RANDOM")
-                .setDescription(`Clique [aqui](${image.data.url}) para baixar o nsfw.`)
+                .setDescription(`Clique [aqui](${image.data.url}) para baixar o NSFW.\nPara você buscar uma imagem NSFW com uma ótima qualidade de acordo com um termo utilize \`${prefix}nwa [anime/personagem/pesquisa]\``)
                 .setImage(image.data.url);
     
             message.util.reply(embed);
