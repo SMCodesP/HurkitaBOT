@@ -64,7 +64,7 @@ class WallpaperAnimeCommand extends Command {
       }
 
       console.log(response.data.sort((a, b) => b.favorites - a.favorites))
-      const thumbs = response.data.sort((a, b) => b.favorites - a.favorites).map(r => r.path)
+      const thumbs = response.data.sort((a, b) => b.favorites - a.favorites)
 
       let item = 0
 
@@ -72,8 +72,8 @@ class WallpaperAnimeCommand extends Command {
         const messageWallpaper = await message.util.reply(new MessageEmbed()
           .setColor("RANDOM")
           .setTitle("🔖 Wallpaper encontrado")
-          .setDescription(`Clique [aqui](${thumbs[page]}) para baixar o wallpaper.`)
-          .setImage(thumbs[page])
+          .setDescription(`Clique [aqui](${thumbs[page].path}) para baixar o wallpaper em qualidade total.`)
+          .setImage(thumbs[page].thumbs.large)
           .setTimestamp()
           .setFooter(`Copyright © 2020 - ${this.client.user.username}`, this.client.user.displayAvatarURL())
         );
