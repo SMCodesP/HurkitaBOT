@@ -57,7 +57,7 @@ class WallpaperAnimeCommand extends Command {
             small: string
           }
         }[]
-      }>(`https://wallhaven.cc/api/v1/search?categories=anime&q=${query}`)
+      }>(`https://wallhaven.cc/api/v1/search?categories=anime&sorting=favorites&q=${query}`)
       
       if (response.data.length === 0) {
         throw new Error("Nenhum wallpaper foi encontrado.")
