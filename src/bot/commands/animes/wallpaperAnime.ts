@@ -73,7 +73,7 @@ class WallpaperAnimeCommand extends Command {
           .setColor("RANDOM")
           .setTitle("🔖 Wallpaper encontrado")
           .setDescription(`Clique [aqui](${thumbs[page].path}) para baixar o wallpaper em qualidade total.`)
-          .setImage(thumbs[page].thumbs.large)
+          .setImage(thumbs[page].thumbs.original)
           .setTimestamp()
           .setFooter(`Copyright © 2020 - ${this.client.user.username}`, this.client.user.displayAvatarURL())
         );
