@@ -1,8 +1,9 @@
 import { Command } from "discord-akairo"
-import { CollectorFilter, Message, MessageAttachment } from "discord.js"
+import { CollectorFilter, Message } from "discord.js"
 import axios from "axios";
-import { BotClientTypes } from "../../index";
 import { MessageEmbed } from "discord.js";
+import * as db from "quick.db"
+import { BotClientTypes } from "../../index";
 
 function getRandom(arr: string[], n: number) {
   var result = new Array(n),
@@ -18,15 +19,15 @@ function getRandom(arr: string[], n: number) {
   return result;
 }
 
-class WallpaperAnimeCommand extends Command {
+class NSFWWallpaperAnimeCommand extends Command {
 	client: BotClientTypes
 
 	constructor() {
-		super('wallpaperanime', {
-			aliases: ['wallpaperanime', 'wallpapera', 'animewallpaper', 'awallpaper', 'aw'],
-			category: "🦊 Animes | animes",
+		super('nwallpaperanime', {
+			aliases: ['nwallpaperanime', 'nsfwwallpaperanime', 'nwa', 'nsfwwa', 'awnsfw'],
+			category: "🔞 NSFW | nsfw",
 			description: {
-				content: "Com esse comando você pode gerar um wallpaper de acordo com seu pedido.",
+				content: "Com esse comando você pode gerar um wallpaper NSFW de acordo com sua pesquisa.",
 				metadata: "Comando para gerar wallpaper; anime;",
 				usage: "[command] [pesquisa]",
 				examples: [
@@ -45,8 +46,13 @@ class WallpaperAnimeCommand extends Command {
 	}
 
 	async exec(message: Message, { query }: { query: string }) {
-    
     try {
+      const prefix = db.get(`${message.guild.id}.prefix`) || process.env.PREFIX
+      if (message.channel.type !== "text")
+          throw new Error(`Você não pode executar um comando NSFW nesse canal, para um wallpaper SFW use \`${prefix}aw ${query}\``)
+      if (!message.channel.nsfw)
+          throw new Error(`O canal não é um NSFW então você não pode executar esse comando aqui, para um wallpaper SFW use \`${prefix}aw ${query}\`.`)
+
       const {data: response} = await axios.get<{
         data: {
           path: string
@@ -57,7 +63,7 @@ class WallpaperAnimeCommand extends Command {
             small: string
           }
         }[]
-      }>(`https://wallhaven.cc/api/v1/search?categories=010&sorting=favorites&q=${query}`)
+      }>(`https://wallhaven.cc/api/v1/search?apikey=${process.env.WHALLHAVEN_API_KEY}&categories=010&purity=001&q=${query}`)
       
       if (response.data.length === 0) {
         throw new Error("Nenhum wallpaper foi encontrado.")
@@ -65,6 +71,9 @@ class WallpaperAnimeCommand extends Command {
 
       console.log(response.data.sort((a, b) => b.favorites - a.favorites))
       const thumbs = response.data.sort((a, b) => b.favorites - a.favorites).map(r => r.path)
+
+      console.log(thumbs)
+      console.log(getRandom(thumbs, 2))
 
       let item = 0
 
@@ -114,4 +123,4 @@ class WallpaperAnimeCommand extends Command {
 	}
 }
 
-export default WallpaperAnimeCommand
+export default NSFWWallpaperAnimeCommand
