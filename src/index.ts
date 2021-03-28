@@ -6,6 +6,8 @@ import * as socketIo from "socket.io";
 import Bot from "./bot";
 import Web from "./web"
 import CLIClass from "./cli"
+import Progress from "./web/structures/entities/Progress";
+import firebaseAdmin from "./lib/firebaseAdmin";
 
 config()
 
@@ -14,8 +16,47 @@ class ServerIO extends socketIo.Server {
 }
 
 const web: Web = new Web(process.env.PORT || 3333)
-const http: Server = require("http").Server(web.app);
-const io: socketIo.Server = require("socket.io")(http);
+
+const http: Server = require("http").Server(web.app)
+const io: socketIo.Server = require("socket.io")(http, {
+  cors: {
+    origin: '*',
+  }
+});
+
+const socketsProgress: Map<string, Progress> = new Map()
+
+io.on('connection', (socket) => {
+	socket.on('disconnect', async () => {
+		const progress = socketsProgress.get(socket.id)
+		if (progress) {
+			const { firestore } = firebaseAdmin()
+      const watchProgress = await firestore
+        .collection('watch')
+        .where('videoId', '==', progress.videoId)
+        .where('userId', '==', progress.userId)
+        .limit(1)
+        .get()
+
+      if (watchProgress.empty) {
+        await firestore
+					.collection('watch')
+					.add(progress)
+      } else {
+        await firestore
+          .collection('watch')
+          .doc(watchProgress.docs[0].id)
+          .update(progress)
+      }
+			socketsProgress.delete(socket.id)
+		}
+  });
+
+	socket.on('progress', (data: Progress) => {
+		socketsProgress.set(socket.id, data)
+	})
+});
+
 customizeConsole(io)
 
 const bot: Bot = new Bot()

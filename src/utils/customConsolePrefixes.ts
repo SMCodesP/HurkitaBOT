@@ -18,12 +18,12 @@ let logs = []
 const originalConsoleLog = console.log
 
 export function customizeConsole(io: socketIo.Server) {
-  io.on("connection", (socket: any) => {
-    socket.emit('logs', logs)
-  })
-
   console.original = (...thisArguments: string[]) => {
     originalConsoleLog.apply(console, thisArguments)
+    
+    if (cli) {
+      cli.commandHandler.question()
+    }
   }
 
   console.bot = (...thisArguments: string[]) => {

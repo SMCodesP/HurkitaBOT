@@ -42,8 +42,6 @@ class Routes {
 
         client.app.use(this.router)
     }
-
-
 }
 
 export default Routes
