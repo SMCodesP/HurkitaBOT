@@ -19,9 +19,10 @@ const web: Web = new Web(process.env.PORT || 3333)
 
 const http: Server = require("http").Server(web.app)
 const io: socketIo.Server = require("socket.io")(http, {
-  cors: {
-    origin: '*',
-  }
+	transport: ['websocket'],
+	cors: {
+		origin: "https://otakutube.vercel.app"
+	}
 });
 
 const socketsProgress: Map<string, Progress> = new Map()
