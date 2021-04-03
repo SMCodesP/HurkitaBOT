@@ -97,13 +97,6 @@ class MalUserCommand extends Command {
               true
             )
             .addField(
-              'Sobre »',
-              `\`\`\`yaml\n${
-                response.about || 'Nenhuma descrição sobre o usuário.'
-              }\`\`\``,
-              false
-            )
-            .addField(
               'Animes completados »',
               `\`\`\`yaml\n${response.anime_stats.completed}\`\`\``,
               true
@@ -120,18 +113,18 @@ class MalUserCommand extends Command {
             )
             .addField(
               'Total de episódios assistidos »',
-              `\`\`\`yaml\n${response.anime_stats.episodes_watched}\`\`\``,
+              `\`\`\`ini\n[${response.anime_stats.episodes_watched}]\`\`\``,
               true
             )
-            .setImage(response.image_url)
+            .setThumbnail(response.image_url)
         },
         2: async () => {
           const response = await JikanTS.User.profile(malUser)
           const description = `Fonte **[MyAnimeList](https://myanimelist.net)**.\n\n${
             response.favorites.anime.length > 0
-              ? response.favorites.anime.map(
-                  (anime) => `${anime.mal_id} - \`${anime.name}\`\n`
-                )
+              ? response.favorites.anime
+                  .map((anime) => `**-** \`${anime.name}\``)
+                  .join('\n')
               : 'Nenhum anime favoritado.'
           }`
           return simpleEmbedTemplate
@@ -141,6 +134,25 @@ class MalUserCommand extends Command {
                 ? description
                 : description.substring(0, 2020) + '\n...'
             )
+            .setThumbnail(response.image_url)
+        },
+        3: async () => {
+          const response = await JikanTS.User.profile(malUser)
+          const description = `Fonte **[MyAnimeList](https://myanimelist.net)**.\n\n${
+            response.favorites.manga.length > 0
+              ? response.favorites.manga
+                  .map((manga) => `**-** \`${manga.name}\``)
+                  .join('\n')
+              : 'Nenhum mangá favoritado.'
+          }`
+          return simpleEmbedTemplate
+            .setTitle(`Mangás favoritos de __${malUser}__`)
+            .setDescription(
+              description.length < 2020
+                ? description
+                : description.substring(0, 2020) + '\n...'
+            )
+            .setThumbnail(response.image_url)
         },
       }
 
@@ -177,7 +189,7 @@ class MalUserCommand extends Command {
     } catch (error) {
       console.bot(error)
       await message.util.reply(
-        'Houve um erro ao buscar o anime, tente novamente mais tarde.'
+        'Houve um erro ao buscar o perfil do usuário, tente novamente mais tarde.'
       )
     }
   }
