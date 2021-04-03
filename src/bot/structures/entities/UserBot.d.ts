@@ -1,6 +1,6 @@
-import { RoleBot } from "./RoleBot";
+import { RoleBot } from './RoleBot'
 
 export interface UserBot {
-    id: number;
-    roles: Array<RoleBot>;
+  id: number
+  roles: Array<RoleBot>
 }

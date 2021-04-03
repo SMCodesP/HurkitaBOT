@@ -1,9 +1,9 @@
-import getNowTime from "./getNowTime";
-import { cli, web } from "../index";
-import CommandHandler from "../cli/structures/entities/CommandHandler";
-import { resolve } from "path";
-import { cyan, green, white } from "colors/safe";
-import * as socketIo from "socket.io";
+import getNowTime from './getNowTime'
+import { cli, web } from '../index'
+import CommandHandler from '../cli/structures/entities/CommandHandler'
+import { resolve } from 'path'
+import { cyan, green, white } from 'colors/safe'
+import * as socketIo from 'socket.io'
 
 declare global {
   interface Console {
@@ -20,24 +20,28 @@ const originalConsoleLog = console.log
 export function customizeConsole(io: socketIo.Server) {
   console.original = (...thisArguments: string[]) => {
     originalConsoleLog.apply(console, thisArguments)
-    
+
     if (cli) {
       cli.commandHandler.question()
     }
   }
 
   console.bot = (...thisArguments: string[]) => {
-    const args = [];
+    const args = []
     args.push(getNowTime())
-    args.push(green(`[Bot]`) + " -")
+    args.push(green(`[Bot]`) + ' -')
 
-    for (var countArgumentsOfRegisterArgs = 0; countArgumentsOfRegisterArgs < thisArguments.length; countArgumentsOfRegisterArgs++) {
+    for (
+      var countArgumentsOfRegisterArgs = 0;
+      countArgumentsOfRegisterArgs < thisArguments.length;
+      countArgumentsOfRegisterArgs++
+    ) {
       args.push(thisArguments[countArgumentsOfRegisterArgs])
     }
 
     if (cli) {
       cli.commandHandler = new CommandHandler({
-        directory: resolve(__dirname, '..', 'cli', 'commands')
+        directory: resolve(__dirname, '..', 'cli', 'commands'),
       })
       cli.commandHandler.loadAll(cli)
     }
@@ -52,17 +56,21 @@ export function customizeConsole(io: socketIo.Server) {
   }
 
   console.web = (...thisArguments: string[]) => {
-    const args = [];
+    const args = []
     args.push(getNowTime())
-    args.push(white(`[Web]`) + " -")
+    args.push(white(`[Web]`) + ' -')
 
-    for (var countArgumentsOfRegisterArgs = 0; countArgumentsOfRegisterArgs < thisArguments.length; countArgumentsOfRegisterArgs++) {
+    for (
+      var countArgumentsOfRegisterArgs = 0;
+      countArgumentsOfRegisterArgs < thisArguments.length;
+      countArgumentsOfRegisterArgs++
+    ) {
       args.push(thisArguments[countArgumentsOfRegisterArgs])
     }
 
     if (cli) {
       cli.commandHandler = new CommandHandler({
-        directory: resolve(__dirname, '..', 'cli', 'commands')
+        directory: resolve(__dirname, '..', 'cli', 'commands'),
       })
       cli.commandHandler.loadAll(cli)
     }
@@ -77,17 +85,21 @@ export function customizeConsole(io: socketIo.Server) {
   }
 
   console.cli = (...thisArguments: string[]) => {
-    const args = [];
+    const args = []
     args.push(getNowTime())
-    args.push(cyan(`[CLI]`) + " -")
+    args.push(cyan(`[CLI]`) + ' -')
 
-    for (var countArgumentsOfRegisterArgs = 0; countArgumentsOfRegisterArgs < thisArguments.length; countArgumentsOfRegisterArgs++) {
+    for (
+      var countArgumentsOfRegisterArgs = 0;
+      countArgumentsOfRegisterArgs < thisArguments.length;
+      countArgumentsOfRegisterArgs++
+    ) {
       args.push(thisArguments[countArgumentsOfRegisterArgs])
     }
 
     if (cli) {
       cli.commandHandler = new CommandHandler({
-        directory: resolve(__dirname, '..', 'cli', 'commands')
+        directory: resolve(__dirname, '..', 'cli', 'commands'),
       })
       cli.commandHandler.loadAll(cli)
     }
@@ -102,16 +114,20 @@ export function customizeConsole(io: socketIo.Server) {
   }
 
   console.log = (...thisArguments: string[]) => {
-    const args = [];
-    args.push(getNowTime() + " -")
+    const args = []
+    args.push(getNowTime() + ' -')
 
-    for (var countArgumentsOfRegisterArgs = 0; countArgumentsOfRegisterArgs < thisArguments.length; countArgumentsOfRegisterArgs++) {
+    for (
+      var countArgumentsOfRegisterArgs = 0;
+      countArgumentsOfRegisterArgs < thisArguments.length;
+      countArgumentsOfRegisterArgs++
+    ) {
       args.push(thisArguments[countArgumentsOfRegisterArgs])
     }
 
     if (cli) {
       cli.commandHandler = new CommandHandler({
-        directory: resolve(__dirname, '..', 'cli', 'commands')
+        directory: resolve(__dirname, '..', 'cli', 'commands'),
       })
       cli.commandHandler.loadAll(cli)
     }

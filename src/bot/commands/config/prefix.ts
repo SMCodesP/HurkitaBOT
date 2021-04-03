@@ -1,46 +1,50 @@
 import * as db from 'quick.db'
-import { Command } from "discord-akairo"
-import { Message } from "discord.js"
-import { BotClientTypes } from "../../index";
+import { Command } from 'discord-akairo'
+import { Message } from 'discord.js'
+import { BotClientTypes } from '../../index'
 
 class PrefixCommand extends Command {
-    client: BotClientTypes
+  client: BotClientTypes
 
-    constructor() {
-        super('prefix', {
-            aliases: ['prefix'],
-            category: "🔧 Configurações | config",
-            description: {
-                content: "Com esse comando você pode trocar o prefixo em um servidor específico.",
-                metadata: "Comando para setar prefixo; prefix; tag; trocar de prefixo; trocar prefix; change prefix;",
-                usage: "[command] {Novo prefixo}",
-                examples: [
-                    "[command] %",
-                    "[command] &",
-                ],
-            },
-            args: [
-                {
-                    id: "prefix",
-                    default: process.env.PREFIX
-                }
-            ]
-        })
-    }
+  constructor() {
+    super('prefix', {
+      aliases: ['prefix'],
+      category: '🔧 Configurações | config',
+      description: {
+        content:
+          'Com esse comando você pode trocar o prefixo em um servidor específico.',
+        metadata:
+          'Comando para setar prefixo; prefix; tag; trocar de prefixo; trocar prefix; change prefix;',
+        usage: '[command] {Novo prefixo}',
+        examples: ['[command] %', '[command] &'],
+      },
+      args: [
+        {
+          id: 'prefix',
+          default: process.env.PREFIX,
+        },
+      ],
+    })
+  }
 
-    async exec(message: Message, { prefix }) {
-        if (!message.member.hasPermission("MANAGE_MESSAGES"))
-            return message.util.reply("Você não tem permissão para usar esse comando.")
+  async exec(message: Message, { prefix }) {
+    if (!message.member.hasPermission('MANAGE_MESSAGES'))
+      return message.util.reply(
+        'Você não tem permissão para usar esse comando.'
+      )
 
-        const oldPrefix = db.get(`${message.guild.id}.prefix`)
+    const oldPrefix = db.get(`${message.guild.id}.prefix`)
 
-        if (oldPrefix === prefix)
-            return message.reply("O prefixo especificado é o mesmo do atual.")
+    if (oldPrefix === prefix)
+      return message.reply('O prefixo especificado é o mesmo do atual.')
 
-        db.set(`${message.guild.id}.prefix`, prefix)
-        return message.reply(`Prefixo trocado de \`${oldPrefix || process.env.PREFIX}\` para \`${prefix}\``);
-    }
-
+    db.set(`${message.guild.id}.prefix`, prefix)
+    return message.reply(
+      `Prefixo trocado de \`${
+        oldPrefix || process.env.PREFIX
+      }\` para \`${prefix}\``
+    )
+  }
 }
 
 export default PrefixCommand

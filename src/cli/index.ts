@@ -1,61 +1,81 @@
-import { bgWhite, black, green } from "colors/safe";
-import CommandHandler from "./structures/entities/CommandHandler";
-import * as readline from "readline";
-import { resolve } from "path";
-import { io, web } from "..";
-import * as jwt from "jsonwebtoken";
+import { bgWhite, black, green } from 'colors/safe'
+import CommandHandler from './structures/entities/CommandHandler'
+import * as readline from 'readline'
+import { resolve } from 'path'
+import { io, web } from '..'
+import * as jwt from 'jsonwebtoken'
 
 class CLI {
-    rl: readline.Interface;
-    commandHandler: CommandHandler;
+  rl: readline.Interface
+  commandHandler: CommandHandler
 
-    constructor() {
-        this.rl = readline.createInterface({
-            input: process.stdin,
-            output: process.stdout,
-        })
-    }
+  constructor() {
+    this.rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+    })
+  }
 
-    registerCommandHandler() {
-        this.commandHandler = new CommandHandler({
-            directory: resolve(__dirname, 'commands')
-        })
+  registerCommandHandler() {
+    this.commandHandler = new CommandHandler({
+      directory: resolve(__dirname, 'commands'),
+    })
 
-        this.commandHandler.loadAll(this)
-    }
-    
-    init() {
-        console.cli(`${green('[Sucesso]')} Sistema de CLI foi iniciado!`)
-        this.registerCommandHandler()
+    this.commandHandler.loadAll(this)
+  }
 
-        this.ioEvents()
-    }
+  init() {
+    console.cli(`${green('[Sucesso]')} Sistema de CLI foi iniciado!`)
+    this.registerCommandHandler()
 
-    ioEvents() {
-        io.on("connection", (socket: any) => {
-          socket.on('commandHandler', async ({ commandString, token }: { commandString: string, token: string }) => {
-            try {
-                jwt.verify(token, process.env.JWT_SECRET);
-            } catch (error) {
-                return console.cli('Você não pode executar esse comando!')
-            }
+    this.ioEvents()
+  }
 
-            const args = commandString.split(' ')
-            const command = this.commandHandler.commands.get(args[0])
-                || this.commandHandler.commands.get(this.commandHandler.aliases.get(args[0]) || '')
+  ioEvents() {
+    io.on('connection', (socket: any) => {
+      socket.on(
+        'commandHandler',
+        async ({
+          commandString,
+          token,
+        }: {
+          commandString: string
+          token: string
+        }) => {
+          try {
+            jwt.verify(token, process.env.JWT_SECRET)
+          } catch (error) {
+            return console.cli('Você não pode executar esse comando!')
+          }
 
-            args.shift()
+          const args = commandString.split(' ')
+          const command =
+            this.commandHandler.commands.get(args[0]) ||
+            this.commandHandler.commands.get(
+              this.commandHandler.aliases.get(args[0]) || ''
+            )
 
-            if (command) {
-                await command.exec(args, this.commandHandler.client, commandString.split(' ')[0])
-            } else {
-                console.cli(`Comando inexistente, utilize ${black(bgWhite(`help`))} ou ${black(bgWhite(`?`))} para listar comandos.`)
-            }
+          args.shift()
 
-            this.commandHandler.question()   
-          })
-        });
-    }
+          if (command) {
+            await command.exec(
+              args,
+              this.commandHandler.client,
+              commandString.split(' ')[0]
+            )
+          } else {
+            console.cli(
+              `Comando inexistente, utilize ${black(
+                bgWhite(`help`)
+              )} ou ${black(bgWhite(`?`))} para listar comandos.`
+            )
+          }
+
+          this.commandHandler.question()
+        }
+      )
+    })
+  }
 }
 
 export default CLI
