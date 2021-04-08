@@ -70,7 +70,7 @@ class MalUserCommand extends Command {
       const embeds = {
         1: async () => {
           const response = await JikanTS.User.profile(malUser)
-          console.log(response.image_url)
+          
           return simpleEmbedTemplate
             .setTitle(`Perfil de __${response.username}__`)
             .setDescription(
@@ -187,7 +187,7 @@ class MalUserCommand extends Command {
         })
       }
     } catch (error) {
-      console.bot(error)
+      
       await message.util.reply(
         'Houve um erro ao buscar o perfil do usuário, tente novamente mais tarde.'
       )

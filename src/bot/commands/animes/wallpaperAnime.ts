@@ -68,7 +68,7 @@ class WallpaperAnimeCommand extends Command {
         throw new Error('Nenhum wallpaper foi encontrado.')
       }
 
-      console.log(response.data.sort((a, b) => b.favorites - a.favorites))
+      
       const thumbs = response.data.sort((a, b) => b.favorites - a.favorites)
 
       let item = 0

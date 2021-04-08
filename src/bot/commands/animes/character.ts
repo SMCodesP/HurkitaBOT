@@ -60,7 +60,6 @@ class CharacterCommand extends Command {
       } = await axios.get(
         `https://api.jikan.moe/v3/search/character?q=${name}&page=1`
       )
-      console.log(request)
       const result = await JikanTS.Character.pictures(request.results[0].mal_id)
 
       const sendCharacter = async (page: number) => {
@@ -98,8 +97,6 @@ class CharacterCommand extends Command {
       }
       sendCharacter(0)
     } catch (error) {
-      console.original(error)
-      console.original(error.message)
       message.util.reply(
         'Houve um erro ao buscar o anime, tente novamente mais tarde.'
       )

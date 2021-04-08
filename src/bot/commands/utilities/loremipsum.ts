@@ -71,7 +71,7 @@ class LoremIpsumCommand extends Command {
 
       message.util.reply(embedLoremIpsum)
     } catch (error) {
-      console.log(error)
+      
       message.util.reply(
         'Houve um erro ao gerar o Lorem Ipsum, por favor tente novamente mais tarde.'
       )

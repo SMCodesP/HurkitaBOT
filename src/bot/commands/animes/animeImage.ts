@@ -118,7 +118,7 @@ class AnimeCommand extends Command {
 
       message.util.reply(embed)
     } catch (error) {
-      console.bot(error)
+      
       message.util.reply(
         'Houve um erro ao buscar uma imagem, tente novamente mais tarde.'
       )

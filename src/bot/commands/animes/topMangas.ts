@@ -122,7 +122,7 @@ class TopMangasCommand extends Command {
       } else {
         pageManga[0].image_url && embed.setImage(pageManga[0].image_url)
         pageManga.forEach((manga, index) => {
-          console.log(manga)
+          
           embed.addField(
             `> ${manga.title} __#${manga.rank}__`,
             `Acesse a página do mangá [aqui](${manga.url})`,
@@ -168,7 +168,7 @@ class TopMangasCommand extends Command {
         })
       }
     } catch (error) {
-      console.bot(error)
+      
       message.util.reply('Houve um erro ao buscar o top de mangás.')
     }
   }

@@ -36,7 +36,7 @@ class HelpCommand extends Command {
   }
 
   async helpCommand(message: Message, name: string) {
-    console.log(process.env)
+    
 
     let nameCommadSelected = this.handler.aliases.get(name)
 

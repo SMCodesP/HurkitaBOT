@@ -75,7 +75,7 @@ class TopAnimesCommand extends Command {
     }
 
     try {
-      console.log(typeAnimeSelected)
+      
       if (
         !Object.values(types).includes(typeAnimeSelected as typeOfTypes) &&
         typeAnimeSelected !== undefined
@@ -117,7 +117,7 @@ class TopAnimesCommand extends Command {
       } else {
         pageAnime[0].image_url && embed.setImage(pageAnime[0].image_url)
         pageAnime.forEach((anime, index) => {
-          console.log(anime)
+          
           embed.addField(
             `> ${anime.title} __#${anime.rank}__`,
             `Acesse a página do anime [aqui](${anime.url})`,
@@ -163,7 +163,7 @@ class TopAnimesCommand extends Command {
         })
       }
     } catch (error) {
-      console.bot(error)
+      
       message.util.reply('Houve um erro ao buscar o top de animes.')
     }
   }

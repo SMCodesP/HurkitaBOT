@@ -79,7 +79,7 @@ class McServerCommand extends Command {
 
       await message.util.reply({ embed })
     } catch (error) {
-      console.log(error.message)
+      
       const embed = new MessageEmbed()
         .setTitle('**MC-Status**')
         .setColor('RANDOM')

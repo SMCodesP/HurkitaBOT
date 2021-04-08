@@ -9,7 +9,7 @@ export default async () => {
   try {
     const cpu = await si.cpu()
 
-    console.log(cpu)
+    
   } catch (error) {
     console.error(error)
   }

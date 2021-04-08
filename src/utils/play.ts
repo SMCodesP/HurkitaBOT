@@ -30,7 +30,7 @@ export default function play(
         'Houve um erro ao tocar a música, então ela foi pulada.'
       )
       serverQueue.songs.shift()
-      console.log(guild, serverQueue.songs[0], client, user)
+      
       play(guild, serverQueue.songs[0], client, user)
     })
 

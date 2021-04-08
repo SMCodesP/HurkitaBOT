@@ -67,7 +67,6 @@ class AvatarCommand extends Command {
 
       await message.util.reply(embedAvatar)
     } catch (error) {
-      console.original(error)
       await message.util.reply('Houve um erro ao enviar o avatar do usuário')
     }
   }

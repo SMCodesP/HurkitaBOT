@@ -125,7 +125,7 @@ class AnimeInfoCommand extends Command {
 
       message.util.reply(embedAnime)
     } catch (error) {
-      console.bot(error)
+      
       message.util.reply(
         'Houve um erro ao buscar o anime, tente novamente mais tarde.'
       )

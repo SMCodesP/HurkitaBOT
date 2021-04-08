@@ -39,7 +39,7 @@ class Routes {
           { expiresIn: '7d' }
         )
 
-        io.sockets.sockets.get(req.body.socket).join('logging')
+        ;(io as any).sockets.sockets.get(req.body.socket).join('logging')
 
         return res.send(jwtToken)
       }

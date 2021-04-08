@@ -121,7 +121,7 @@ class Mp3Play extends Command {
             message.author
           )
         } catch (err) {
-          console.bot(err)
+          
           this.client.queueSongs.delete(message.guild.id)
           return message.channel.send(err)
         }

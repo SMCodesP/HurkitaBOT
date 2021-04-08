@@ -23,12 +23,6 @@ class Web {
   async init(http: Server, port: string | number) {
     this.http = http
     http.listen(port)
-
-    console.web(
-      `${green('[Sucesso]')} Servidor web iniciado na porta ${red(
-        String(port)
-      )}!`
-    )
   }
 
   listenWeb(port: string | number) {

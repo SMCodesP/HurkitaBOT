@@ -135,12 +135,9 @@ class BotClient extends AkairoClient implements BotClientTypes {
       auth: process.env.SONIC_PASSWORD,
     }).connect({
       connected: () => {
-        console.bot(
-          `${green('[Sucesso]')} O bot se conectou com o sonic search!`
-        )
       },
       disconnected: () => {
-        console.bot(`${gray('[Info]')} O bot se desconectou do sonic search!`)
+
       },
     })
   }
@@ -152,12 +149,8 @@ class BotClient extends AkairoClient implements BotClientTypes {
       auth: process.env.SONIC_PASSWORD,
     }).connect({
       connected: () => {
-        console.bot(
-          `${green('[Sucesso]')} O bot se conectou com o sonic ingest!`
-        )
       },
       disconnected: () => {
-        console.bot(`${gray('[Info]')} O bot se desconectou do sonic ingest!`)
       },
     })
   }
@@ -170,11 +163,9 @@ class BotClient extends AkairoClient implements BotClientTypes {
   async init(token: string) {
     try {
       await super.login(token)
-      console.bot(`${green('[Sucesso]')} O bot foi iniciado!`)
+
       return token
     } catch (err) {
-      console.bot(`${red('[Error]')} Houve um erro ao iniciar o bot.`)
-      console.bot(err)
       return err
     }
   }

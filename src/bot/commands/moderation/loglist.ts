@@ -43,7 +43,7 @@ class LogCommand extends Command {
       )
 
     types_log.forEach((log: string) => {
-      console.bot(log)
+      
     })
   }
 }

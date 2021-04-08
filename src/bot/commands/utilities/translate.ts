@@ -66,7 +66,7 @@ class TranslategCommand extends Command {
 
       await message.util.reply(embedTranslated)
     } catch (error) {
-      console.log(error)
+      
       await message.util.reply(
         'Houve um erro ao traduzir o texto digitado, tente novamente mais tarde.'
       )
