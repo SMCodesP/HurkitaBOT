@@ -5,7 +5,6 @@ import { Server } from 'http'
 import Bot from './bot'
 import Web from './web'
 import CLIClass from './cli'
-import Progress from './web/structures/entities/Progress'
 import Socket from './sockets'
 
 config()
@@ -14,23 +13,6 @@ const web: Web = new Web(process.env.PORT || 3333)
 
 const http: Server = require('http').Server(web.app)
 const { io } = new Socket(http)
-// const io: socketIo.Server = require('socket.io')(http, {
-//   transport: ['websocket'],
-//   cors: {
-//     origin: ['https://otakutube.vercel.app', 'http://localhost:3000'],
-//   },
-// })
-
-const socketsProgress: Map<string, Progress> = new Map()
-
-// io.on('connection', (socket) => {
-//   socket.on('disconnect', async () => {
-//   })
-
-//   socket.on('progress', (data: Progress) => {
-//     socketsProgress.set(socket.id, data)
-//   })
-// })
 
 customizeConsole(io)
 

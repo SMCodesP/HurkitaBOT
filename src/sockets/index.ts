@@ -18,7 +18,6 @@ class Socket {
   }
 
   register() {
-    
     registerEvents(path.resolve(__dirname, 'events'), this.io)
   }
 }
