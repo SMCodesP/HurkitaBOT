@@ -6,8 +6,7 @@ export default function registerEvents(path, call) {
     includeSubdirectories: false,
   })
 
-  
-
+  console.log('Registrou os events: ', Object.values(events))
   Object.values(events).forEach((file: any) => {
     const event = new file.default()
     call.on(event.name, (...args) => event.run(call, ...args))

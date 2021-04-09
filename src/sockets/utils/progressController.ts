@@ -21,6 +21,7 @@ class ProgressController {
   async remove(socket_id: string) {
     const user_progress = this.progress.get(socket_id)
     if (user_progress) {
+      console.log(`Socket ${socket_id} saving progress.`)
       const { firestore } = firebaseAdmin()
       const watchProgress = await firestore
         .collection('watch')
