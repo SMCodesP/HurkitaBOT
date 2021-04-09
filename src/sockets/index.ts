@@ -9,7 +9,6 @@ class Socket {
 
   constructor(http: Server) {
     this.io = require('socket.io')(http, {
-      transport: ['websocket'],
       cors: {
         origin: ['https://otakutube.vercel.app', 'http://localhost:3000'],
       },
