@@ -10,7 +10,7 @@ class Socket {
   constructor(http: Server) {
     this.io = require('socket.io')(http, {
       cors: {
-        origin: ['https://otakutube.vercel.app', 'http://localhost:3000', 'https://3333-black-shrimp-bp9d7t8g.ws-us03.gitpod.io'],
+        origin: ['https://otakutube.tk', 'https://otakutube.vercel.app', 'http://localhost:3000', 'https://3333-black-shrimp-bp9d7t8g.ws-us03.gitpod.io'],
       },
     })
     this.register()
