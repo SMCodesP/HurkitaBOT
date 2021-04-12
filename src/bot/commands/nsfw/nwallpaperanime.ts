@@ -122,7 +122,7 @@ class NSFWWallpaperAnimeCommand extends Command {
 
         const newPage = reactionsOptions[reaction.first().emoji.name]
 
-        if (newPage) {
+        if (newPage !== null && newPage !== undefined) {
           await messageWallpaper.reactions.removeAll()
           sendWallPaper(newPage)
         }

@@ -17,6 +17,8 @@ export default function play(
     client.queueSongs.delete(guild.id)
     return
   }
+  console.log(song.url)
+  console.log(ytdl(song.url))
 
   const dispatcher = serverQueue.connection
     .play(ytdl(song.url))
@@ -30,7 +32,7 @@ export default function play(
         'Houve um erro ao tocar a música, então ela foi pulada.'
       )
       serverQueue.songs.shift()
-      
+
       play(guild, serverQueue.songs[0], client, user)
     })
 
@@ -67,7 +69,11 @@ export default function play(
     )
     .addField(
       `📰 Descrição »`,
-      `\`\`\`yaml\n${item.snippet.description}\`\`\`\n \u200B`,
+      `\`\`\`yaml\n${
+        item.snippet.description.length > 1020
+          ? item.snippet.description.substring(0, 1020)
+          : item.snippet.description
+      }\`\`\`\n \u200B`,
       false
     )
     .setThumbnail(item.snippet.thumbnails.high.url)

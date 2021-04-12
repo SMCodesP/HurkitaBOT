@@ -13,7 +13,7 @@ class Mp3Play extends Command {
 
   constructor() {
     super('mp3play', {
-      aliases: ['mp3play'],
+      aliases: ['mp3play', 'mp3tocar'],
       category: '📻 Mp3 rádio | mp3',
       channel: 'guild',
       description: {
@@ -121,7 +121,6 @@ class Mp3Play extends Command {
             message.author
           )
         } catch (err) {
-          
           this.client.queueSongs.delete(message.guild.id)
           return message.channel.send(err)
         }
