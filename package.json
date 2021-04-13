@@ -59,6 +59,7 @@
     "jsonwebtoken": "^8.5.1",
     "lorem-ipsum": "^2.0.3",
     "malapi": "^0.0.3",
+    "node-http-ping": "^0.3.1",
     "prettier": "^2.2.1",
     "prettier-eslint": "^12.0.0",
     "quick.db": "^7.1.3",
