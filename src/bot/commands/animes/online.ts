@@ -61,6 +61,7 @@ class AnimeInfoCommand extends Command {
 
       message.util.reply(embedAnime)
     } catch (error) {
+      console.error(error)
       message.util.reply(
         'Houve um erro ao buscar o status do player de animes.'
       )
