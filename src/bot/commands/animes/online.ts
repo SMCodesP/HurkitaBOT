@@ -1,7 +1,7 @@
-import axios from 'axios'
 import { Command } from 'discord-akairo'
 import { Message, MessageEmbed } from 'discord.js'
 import ping from 'node-http-ping'
+import fetch from 'node-fetch'
 
 import progressController from '../../../sockets/utils/progressController'
 import { BotClientTypes } from '../../index'
@@ -26,9 +26,11 @@ class AnimeInfoCommand extends Command {
     try {
       const progress = progressController.get()
       const time = await ping(process.env.FRONTEND)
-      const { data: animes } = await axios.get(
+      const response = await fetch(
         'https://appanimeplus.tk/api-animesbr-10.php'
       )
+      const animes = await response.json()
+
       const animesAvailable = animes.filter(
         (item) => !item.category_name.toLowerCase().includes('animetv')
       )
