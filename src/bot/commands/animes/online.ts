@@ -27,7 +27,7 @@ class AnimeInfoCommand extends Command {
       const progress = progressController.get()
       const time = await ping(process.env.FRONTEND)
       const response = await fetch(
-        'https://appanimeplus.tk/api-animesbr-10.php'
+        'https://www.otakutube.tk/api/search?query='
       )
       const animes = await response.json()
 
