@@ -26,7 +26,7 @@ class AnimeInfoCommand extends Command {
     try {
       const progress = progressController.get()
       const time = await ping(process.env.FRONTEND)
-      const {data: animesAvailable} = await axios.get('https://otakutube.tk/api/count')
+      const {data: animesAvailable} = await axios.get(`https://${process.env.FRONTEND}/api/count`)
 
       const embedAnime = new MessageEmbed()
         .setColor('RANDOM')
@@ -45,7 +45,7 @@ class AnimeInfoCommand extends Command {
         )
         .addField(
           '\u200B',
-          '**Assista já seus animes em: https://example.com**'
+          `**Assista já seus animes em: https://${process.env.FRONTEND}**`
         )
         .setThumbnail(message.guild.iconURL())
         .setTimestamp()
