@@ -56,7 +56,7 @@ export default class CommandHandler {
       if (command) {
         await command.exec(args, this.client, answer.split(' ')[0])
       } else {
-        console.cli(
+        console.log(
           `Comando inexistente, utilize ${black(bgWhite(`help`))} ou ${black(
             bgWhite(`?`)
           )} para listar comandos.`

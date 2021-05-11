@@ -27,16 +27,16 @@ class CommandHelp extends CommandCLI {
     if (command) {
       const aliases = command.options.aliases || []
 
-      console.cli(
+      console.log(
         bold(yellow(`---- `)) +
           bold(red(`Help: ${command.id}`)) +
           bold(yellow(` ----`))
       )
-      console.cli(
+      console.log(
         bold(yellow(`Descrição: `)) +
           bold(white(`${command.options.description.content}`))
       )
-      console.cli(
+      console.log(
         bold(yellow(`Usável: `)) +
           bold(
             white(
@@ -47,7 +47,7 @@ class CommandHelp extends CommandCLI {
             )
           )
       )
-      console.cli(
+      console.log(
         bold(yellow(`Aliases: `)) + `[${bold(white(`${aliases.join(', ')}`))}]`
       )
       return
@@ -58,26 +58,26 @@ class CommandHelp extends CommandCLI {
       5
     )
 
-    console.cli(
+    console.log(
       black(
         bgGreen(`Lista de comandos disponíveis | ${page}/${commands.length}`)
       )
     )
-    console.cli('')
-    console.cli(
+    console.log('')
+    console.log(
       `Use ${black(
         bgWhite(`${commandUsage} {page/comando}`)
       )} para alterar a página ou para obter mais detalhes de um comando.`
     )
-    console.cli('')
+    console.log('')
 
     if (!commands[page - 1] || commands[page - 1].length === 0) {
-      console.cli(`Nenhum comando encontrado na página especificada.`)
+      console.log(`Nenhum comando encontrado na página especificada.`)
       return
     }
 
     commands[page - 1].forEach((command: CommandCLI) => {
-      console.cli(
+      console.log(
         yellow(`${command.id}: `) +
           white(bold(command.options.description.content))
       )

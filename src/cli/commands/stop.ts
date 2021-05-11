@@ -15,20 +15,18 @@ class CommandStop extends CommandCLI {
   }
 
   async exec(args: string[], cli: CLI, commandUsage: string) {
-    console.cli('')
+    console.log('')
 
     cli.rl.close()
 
-    console.cli(yellow('[Sucesso] Você fechou o app ') + red('CLI'))
+    console.log(yellow('[Sucesso] Você fechou o app ') + red('CLI'))
 
     bot.destroy()
 
+    console.log(yellow('[Sucesso] Você fechou o app ') + red('Web'))
+    console.log('')
 
-
-    console.cli(yellow('[Sucesso] Você fechou o app ') + red('Web'))
-    console.cli('')
-
-    console.cli(red('[Sucesso] Você fechou todos os apps inicializados.'))
+    console.log(red('[Sucesso] Você fechou todos os apps inicializados.'))
 
     setTimeout(() => {
       web.http.close()

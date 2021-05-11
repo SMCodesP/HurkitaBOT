@@ -1,5 +1,4 @@
 import { config } from 'dotenv'
-import { customizeConsole } from './utils/customConsolePrefixes'
 import { Server } from 'http'
 
 import Bot from './bot'
@@ -13,8 +12,6 @@ const web: Web = new Web(process.env.PORT || 3333)
 
 const http: Server = require('http').Server(web.app)
 const { io } = new Socket(http)
-
-customizeConsole(io)
 
 const bot: Bot = new Bot()
 const cli: CLIClass = new CLIClass()

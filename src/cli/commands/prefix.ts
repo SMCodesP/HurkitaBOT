@@ -16,7 +16,7 @@ class CommandPrefix extends CommandCLI {
 
   async exec(args: string[], _cli: CLI, _commandUsage: string) {
     const prefix = db.get(`${args[0]}.prefix`) || process.env.PREFIX
-    console.cli(`${green('O prefixo do servidor é:')} ${red(prefix)}`)
+    console.log(`${green('O prefixo do servidor é:')} ${red(prefix)}`)
   }
 }
 

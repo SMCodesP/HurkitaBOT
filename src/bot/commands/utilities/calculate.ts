@@ -1,20 +1,16 @@
+import { Message, MessageEmbed } from 'discord.js'
 import { Command } from 'discord-akairo'
-import { MessageEmbed } from 'discord.js'
-import { Message } from 'discord.js'
-import { BotClientTypes } from '../../index'
+import formatNumber from '../../../utils/formatNumber'
+import revertFormatNumber from '../../../utils/revertFormatNumber'
 
 class CalculateCommand extends Command {
-  client: BotClientTypes
-
   constructor() {
     super('calculate', {
-      aliases: ['calculate', 'calc'],
-      category: '🛠️ Utilitários | utils',
+      aliases: ['calculate', 'calc', 'calcular'],
       description: {
-        content: 'Com esse comando você pode calcular uma operação aritmética.',
-        metadata: 'Comando para calcular operações aritmética; contas; conta',
+        content: 'Calcular números longos e abreviados.',
         usage: '[command] [Operação aritmética]',
-        examples: ['[command] 14 + 2', '[command] 32 * 2'],
+        examples: ['[command] 7 * 6', '[command] 25K + 10K'],
       },
       args: [
         {
@@ -27,43 +23,59 @@ class CalculateCommand extends Command {
   }
 
   async exec(message: Message, { operation }: { operation: string }) {
-    if (!operation)
-      return message.util.reply(
-        'Você não digitou uma operação para ser calculada.'
-      )
+    const expressions = ['-', '+', '*', '/', '%']
+
+    let args = operation
+      .split(' ')
+      .join('&split;')
+      .split('-')
+      .join('&split;-&split;')
+      .split('+')
+      .join('&split;+&split;')
+      .split('/')
+      .join('&split;/&split;')
+      .split('*')
+      .join('&split;*&split;')
+      .split('%')
+      .join('&split;%&split;')
+      .split('&split;')
+      .filter((arg) => arg.length !== 0)
+    const regex = new RegExp(/[.]+/g)
 
     try {
-      const result = eval(operation)
+      const numbersCalc = args.map((arg) => {
+        // eslint-disable-next-line no-restricted-globals
+        if (!isNaN(Number(arg.replace(regex, '')))) return Number(arg)
+        if (!expressions.includes(arg)) {
+          const number = revertFormatNumber(arg)
+          if (typeof number === 'number') return number
+          return null
+        }
+        return arg
+      })
 
+      // eslint-disable-next-line no-eval
+      const calc = eval(numbersCalc.join(' '))
       const embedOperation = new MessageEmbed()
         .setColor('RANDOM')
         .setThumbnail(
           message.author.displayAvatarURL({ size: 4096, dynamic: true })
         )
         .setTitle('Resultado da operação:')
-        .setDescription(`\`\`\`yaml\n${result}\`\`\``)
+        .setDescription(`\`\`\`yaml\n${formatNumber(calc)}\`\`\``)
         .setTimestamp()
         .setFooter(
           `Copyright © 2020 - ${this.client.user.username}`,
           this.client.user.displayAvatarURL()
         )
 
-      await message.util.reply(embedOperation)
+      await message.channel.send(embedOperation)
+
+      return
     } catch (error) {
-      const embedOperation = new MessageEmbed()
-        .setColor('RANDOM')
-        .setThumbnail(
-          message.author.displayAvatarURL({ size: 4096, dynamic: true })
-        )
-        .setTitle('Resultado da operação:')
-        .setDescription('Operação inválida.')
-        .setTimestamp()
-        .setFooter(
-          `Copyright © 2020 - ${this.client.user.username}`,
-          this.client.user.displayAvatarURL()
-        )
-
-      await message.util.reply(embedOperation)
+      console.error(error)
+      await message.channel.send(`${message.author}, operação inválida.`)
+      return
     }
   }
 }

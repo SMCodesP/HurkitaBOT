@@ -25,7 +25,7 @@ class CLI {
   }
 
   init() {
-    console.cli(`${green('[Sucesso]')} Sistema de CLI foi iniciado!`)
+    console.log(`${green('[Sucesso]')} Sistema de CLI foi iniciado!`)
     this.registerCommandHandler()
 
     this.ioEvents()
@@ -45,7 +45,7 @@ class CLI {
           try {
             jwt.verify(token, process.env.JWT_SECRET)
           } catch (error) {
-            return console.cli('Você não pode executar esse comando!')
+            return console.log('Você não pode executar esse comando!')
           }
 
           const args = commandString.split(' ')
@@ -64,7 +64,7 @@ class CLI {
               commandString.split(' ')[0]
             )
           } else {
-            console.cli(
+            console.log(
               `Comando inexistente, utilize ${black(
                 bgWhite(`help`)
               )} ou ${black(bgWhite(`?`))} para listar comandos.`

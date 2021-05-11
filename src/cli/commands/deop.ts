@@ -22,7 +22,7 @@ class CommandDeOp extends CommandCLI {
     const userID = args[0]
 
     if (!userID)
-      return console.cli(
+      return console.log(
         `Syntax incorreta, utilize o comando dessa forma: ${black(
           bgWhite(`${commandUsage} [userID]`)
         )}`
@@ -32,7 +32,7 @@ class CommandDeOp extends CommandCLI {
       const user = await bot.users.fetch(userID)
 
       if (!user)
-        return console.cli(
+        return console.log(
           'O usuário digitado é inválido, por favor digite um id válido.'
         )
 
@@ -42,7 +42,7 @@ class CommandDeOp extends CommandCLI {
         !userBot ||
         !userBot.roles.find((role) => role.name === 'masterBot')
       ) {
-        return console.cli('O usuário não tem cargo global.')
+        return console.log('O usuário não tem cargo global.')
       }
 
       db.set(
@@ -50,12 +50,12 @@ class CommandDeOp extends CommandCLI {
         userBot.roles.filter((role) => role.name !== 'masterBot')
       )
 
-      console.cli(
+      console.log(
         `Você retirou o cargo global do usuário ${black(bgWhite(args[0]))}`
       )
     } catch (error) {
       console.error(error)
-      console.cli(
+      console.log(
         'O usuário digitado é inválido, por favor digite um id válido.'
       )
     }

@@ -22,7 +22,7 @@ class CommandOp extends CommandCLI {
     const userID = args[0]
 
     if (!userID)
-      return console.cli(
+      return console.log(
         `Syntax incorreta, utilize o comando dessa forma: ${black(
           bgWhite(`${commandUsage} [userID]`)
         )}`
@@ -32,7 +32,7 @@ class CommandOp extends CommandCLI {
       const user = await bot.users.fetch(userID)
 
       if (!user)
-        return console.cli(
+        return console.log(
           'O usuário digitado é inválido, por favor digite um id válido.'
         )
 
@@ -47,17 +47,17 @@ class CommandOp extends CommandCLI {
         })
       } else {
         if (userBot.roles.find((role) => role.name === 'masterBot'))
-          return console.cli(`O usuário já tem cargo global.`)
+          return console.log(`O usuário já tem cargo global.`)
 
         db.set(`users.${userID}.roles`, [...userBot.roles, role])
       }
 
-      console.cli(
+      console.log(
         `Você deu cargo global para o usuário ${black(bgWhite(args[0]))}`
       )
     } catch (error) {
       console.error(error)
-      console.cli(
+      console.log(
         'O usuário digitado é inválido, por favor digite um id válido.'
       )
     }
