@@ -12,12 +12,18 @@ const api = axios.create({
 export default {
   ...api,
   getCategory: async (category: string) => {
-    const { data } = await api.get<Category[]>(`/api-animesbr-10.php`, {
-      params: {
-        categoria: category,
-      },
-    })
-    return data
+    try {
+      const { data } = await api.get<Category[]>(`/api-animesbr-10.php`, {
+        params: {
+          categoria: category,
+        },
+      })
+      return data
+    } catch (error) {
+      console.log(`Houve um erro ao buscar a categoria ${category} na api animesbr`)
+      console.error(error)
+      return []
+    }
   },
   getEpisode: async (episode: string) => {
     const { data } = await axios.get<Episode[]>(

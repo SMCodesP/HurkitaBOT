@@ -50,13 +50,14 @@ class Routes {
       if (!animes[category] && !requesting[category]) {
         if (category !== 'completely') {
           const items = await api.getCategory(String(category))
+          console.log(items)
           res.json(
             items.filter(
               (item) =>
-                item.category_name
-                  .toUpperCase()
-                  .indexOf(String(query).toUpperCase()) > -1 &&
-                !item.category_name.toLowerCase().includes('animetv')
+                !anime.category_name.toLowerCase().includes('animetv') &&
+                anime.category_name
+                  .toLowerCase()
+                  .includes(String(query).toLowerCase())
             )
           )
         } else {
@@ -78,8 +79,10 @@ class Routes {
       const addAnimes = async () => {
         requesting[category] = true
         console.time(category)
-        animes[category] = [...new Map(db.get(`animes.${category}`).map(item => [item['id'], item])).values()]
-        db.set(`animes.${category}`, animes[category])
+        if (animes[category]) {
+          animes[category] = [...new Map(db.get(`animes.${category}`).map(item => [item['id'], item])).values()]
+          db.set(`animes.${category}`, animes[category])
+        }
         for (const [idx, animeCategory] of (category === 'completely'
           ? await api.directSearchAnime('')
           : await api.getCategory(category)
