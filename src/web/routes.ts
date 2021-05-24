@@ -47,7 +47,7 @@ class Routes {
         category: string
       } = req.query as any
 
-      if (!animes[category] && !requesting[category]) {
+      if (!animes[category] || requesting[category]) {
         if (category !== 'completely') {
           const items = await api.getCategory(String(category))
           console.log(items)
