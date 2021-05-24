@@ -7,7 +7,7 @@ import Web from '.'
 import { io } from '..'
 import api from '../services/api'
 
-let animes = db.get('animes')
+let animes = db.get('animes') || {}
 let requesting = {}
 
 function timeout(ms: number) {
@@ -47,7 +47,7 @@ class Routes {
         category: string
       } = req.query as any
 
-      if (!animes[category] || requesting[category]) {
+      if (!animes[category] && !requesting[category]) {
         if (category !== 'completely') {
           const items = await api.getCategory(String(category))
           res.json(
@@ -82,9 +82,13 @@ class Routes {
           ? await api.directSearchAnime('')
           : await api.getCategory(category)
         )
-          .filter(
-            ({ category_name }) =>
-              !db.get(`animes.${category}`).contains(category_name)
+          .filter((categoryFiltered) =>
+            animes[category]
+              ? !animes[category].some(
+                  (category) =>
+                    category.id === categoryFiltered.id || !!category.image_alt
+                )
+              : true
           )
           .entries()) {
           try {
@@ -97,9 +101,8 @@ class Routes {
                 },
               }
             )
-            if (!anime || anime.results.lenngth === 0)
+            if (!anime || anime.results.length === 0)
               throw new Error('não existe')
-            await timeout(4000)
             console.timeLog(category)
             console.log(`${idx + 1} - ${animeCategory.category_name}`)
             db.push(`animes.${category}`, {
@@ -108,9 +111,10 @@ class Routes {
             })
           } catch (error) {
             console.error(error)
-            console.error(`${idx + 1} - Error`)
-            db.push(`animes.${category}`, category)
+            console.error(`${idx + 1} - Error ${animeCategory.category_name}`)
+            db.push(`animes.${category}`, animeCategory)
           }
+          await timeout(1000)
         }
         console.timeEnd(category)
         requesting[category] = false
