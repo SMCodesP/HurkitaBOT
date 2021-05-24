@@ -54,8 +54,8 @@ class Routes {
           res.json(
             items.filter(
               (item) =>
-                !anime.category_name.toLowerCase().includes('animetv') &&
-                anime.category_name
+                !item.category_name.toLowerCase().includes('animetv') &&
+                item.category_name
                   .toLowerCase()
                   .includes(String(query).toLowerCase())
             )
