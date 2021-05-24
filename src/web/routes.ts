@@ -79,6 +79,8 @@ class Routes {
       const addAnimes = async () => {
         requesting[category] = true
         console.time(category)
+        animes[category] = [...new Map(db.get(`animes.${category}`).map(item => [item['id'], item])).values()]
+        db.set(`animes.${category}`, animes[category])
         for (const [idx, animeCategory] of (category === 'completely'
           ? await api.directSearchAnime('')
           : await api.getCategory(category)
@@ -87,7 +89,7 @@ class Routes {
             animes[category]
               ? !animes[category].some(
                   (category) =>
-                    category.id === categoryFiltered.id || !!category.image_alt
+                    category.id === categoryFiltered.id
                 )
               : true
           )

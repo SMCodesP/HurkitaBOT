@@ -1,6 +1,7 @@
 import * as express from 'express'
 import { red, green } from 'colors/safe'
 import Routes from './routes'
+import * as cors from 'cors'
 import { Server } from 'http'
 
 class Web {
@@ -12,6 +13,10 @@ class Web {
     this.app = express()
 
     this.app.set('port', process.env.PORT || 3333)
+
+    this.app.use(cors({
+      origin: ['https://www.animetempest.net', 'https://animetempest.net'],
+    }))
 
     this.routes()
   }
