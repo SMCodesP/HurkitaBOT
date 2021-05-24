@@ -64,8 +64,7 @@ class Routes {
           res.json(searched)
         }
       } else {
-        const searched = db
-          .get(`animes.${category}`)
+        const searched = animes[category]
           .filter(
             (anime) =>
               !anime.category_name.toLowerCase().includes('animetv') &&
