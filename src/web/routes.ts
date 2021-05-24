@@ -78,6 +78,7 @@ class Routes {
 
       const addAnimes = async () => {
         requesting[category] = true
+        console.time(category)
         for (const [idx, animeCategory] of (category === 'completely'
           ? await api.directSearchAnime('')
           : await api.getCategory(category)
