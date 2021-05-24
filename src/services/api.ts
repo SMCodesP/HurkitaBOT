@@ -21,7 +21,6 @@ export default {
       return data
     } catch (error) {
       console.log(`Houve um erro ao buscar a categoria ${category} na api animesbr`)
-      console.error(error)
       return []
     }
   },
