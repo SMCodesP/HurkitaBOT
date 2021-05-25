@@ -20,7 +20,9 @@ export default {
       })
       return data
     } catch (error) {
-      console.log(`Houve um erro ao buscar a categoria ${category} na api animesbr`)
+      console.log(
+        `Houve um erro ao buscar a categoria ${category} na api animesbr`
+      )
       return []
     }
   },
@@ -62,9 +64,50 @@ export default {
     return data && data[0]
   },
   searchAnime: async (query: string, category?: string) => {
-    const { data } = await axios.get<Category[]>(
-      `/api/search?query=${query}${category ? `&category=${category}` : ''}`
-    )
+    var queryRequest = `
+    query ($page: Int, $perPage: Int, $search: String) {
+      Page (page: $page, perPage: $perPage) {
+        pageInfo {
+          total
+          currentPage
+          lastPage
+          hasNextPage
+          perPage
+        }
+        media (search: $search, type: ANIME) {
+          id,
+          title {
+            romaji
+            english
+            native
+            userPreferred
+          },
+          type,
+          format,
+          genres,
+          bannerImage,
+          coverImage {
+            extraLarge
+            large
+            medium
+            color
+          }
+        }
+      }
+    }
+    `
+
+    var variables = {
+      search: query,
+      page: 1,
+      perPage: 1,
+    }
+
+    const { data } = await axios.post(`https://graphql.anilist.co`, {
+      query: queryRequest,
+      variables,
+    })
+
     return data
   },
   directSearchAnime: async (query: any) => {

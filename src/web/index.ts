@@ -8,21 +8,28 @@ class Web {
   app: express.Express
   server: import('http').Server
   http: Server
+  routes: Routes
 
   constructor(port: string | number) {
     this.app = express()
 
     this.app.set('port', process.env.PORT || 3333)
 
-    this.app.use(cors({
-      origin: ['https://www.animetempest.net', 'https://animetempest.net'],
-    }))
+    this.app.use(
+      cors({
+        origin: [
+          'https://www.animetempest.net',
+          'https://animetempest.net',
+          'http://localhost:3000',
+        ],
+      })
+    )
 
-    this.routes()
+    this.registerRoutes()
   }
 
-  routes() {
-    new Routes(this)
+  registerRoutes() {
+    this.routes = new Routes(this)
   }
 
   async init(http: Server, port: string | number) {
