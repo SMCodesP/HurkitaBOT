@@ -22,6 +22,11 @@ class Routes {
       res.sendFile(resolve(__dirname, '..', '..', 'views', 'index.html'))
     )
 
+    this.router.get('/download', function (req, res) {
+      const file = resolve(__dirname, '..', '..', 'json.sqlite')
+      res.download(file) // Set disposition and send it.
+    })
+
     this.router.get('/mask', async (req, res) => {
       const { query } = req.query
 
