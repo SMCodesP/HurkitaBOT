@@ -72,7 +72,8 @@ class AnimesController extends Controller {
       .filter(
         (anime) =>
           !anime.category_name.toLowerCase().includes('animetv') &&
-          !anime.category_name.toLowerCase().includes('rede series')
+          !anime.category_name.toLowerCase().includes('rede series') &&
+          !anime.category_name.toLowerCase().includes('live otakuland')
       )
 
     searched =
