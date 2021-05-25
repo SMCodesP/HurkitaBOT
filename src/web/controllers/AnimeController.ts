@@ -16,11 +16,10 @@ class AnimeController extends Controller {
   put(req: Request, res: Response) {
     const { anime } = req.body
     const { id } = req.params
-    console.log(anime)
 
     db.set(`anime.${id}`, anime)
 
-    return res.json(db.get(`anime.${id}`))
+    return res.status(202).end()
   }
 }
 
