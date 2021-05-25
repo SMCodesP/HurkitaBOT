@@ -21,6 +21,7 @@ class Web {
           'https://www.animetempest.net',
           'https://animetempest.net',
           'http://localhost:3000',
+          'https://animetempest-admin.vercel.app',
         ],
       })
     )
