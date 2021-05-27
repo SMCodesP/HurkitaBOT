@@ -1,4 +1,4 @@
-export interface Anime {
+export interface AnimeType {
   id: number
   category_name: string
   category_image: string

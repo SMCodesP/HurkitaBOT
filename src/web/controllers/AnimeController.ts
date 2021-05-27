@@ -1,5 +1,8 @@
 import { Request, Response } from 'express'
 import * as db from 'quick.db'
+import { getConnection } from 'typeorm'
+import { AnimeType } from '../../entities/Anime'
+import { Anime } from '../../entity/Anime'
 import { Controller } from '../structures/entities/Controller'
 
 class AnimeController extends Controller {
@@ -7,19 +10,53 @@ class AnimeController extends Controller {
     super(register, '/api/anime/:id', {})
   }
 
-  get(req: Request, res: Response) {
+  async get(req: Request, res: Response) {
     const { id } = req.params
 
-    return res.json(db.get(`anime.${id}`))
+    try {
+      const anime = await getConnection().getRepository(Anime).findOne(id)
+
+      return res.json(anime)
+    } catch (error) {
+      console.log(error)
+      return res.status(400).json(error)
+    }
   }
 
-  put(req: Request, res: Response) {
-    const { anime } = req.body
+  async put(req: Request, res: Response) {
+    const {
+      anime: animeUpdate,
+    }: {
+      anime: AnimeType
+    } = req.body
     const { id } = req.params
+    const animeRepository = getConnection().getRepository(Anime)
 
-    db.set(`anime.${id}`, anime)
+    try {
+      const anime = await animeRepository.findOne(id)
+      animeRepository.update(anime, {
+        type: animeUpdate.anilist.type,
+        format: animeUpdate.anilist.format,
+        bannerImage: animeUpdate.anilist.bannerImage,
+        category_image: animeUpdate.category_image,
+        anilist_id: animeUpdate.anilist.id,
+        category_name: animeUpdate.category_name,
+        error: animeUpdate.error,
+        title_english: animeUpdate.anilist.title.english,
+        title_romaji: animeUpdate.anilist.title.romaji,
+        title_native: animeUpdate.anilist.title.native,
+        title_userPreferred: animeUpdate.anilist.title.userPreferred,
+        coverImage_color: animeUpdate.anilist.coverImage.color,
+        coverImage_medium: animeUpdate.anilist.coverImage.medium,
+        coverImage_large: animeUpdate.anilist.coverImage.large,
+        coverImage_extraLarge: animeUpdate.anilist.coverImage.extraLarge,
+      })
 
-    return res.status(202).end()
+      return res.json(await animeRepository.save(anime))
+    } catch (error) {
+      console.log(error)
+      return res.status(400).json(error)
+    }
   }
 }
 

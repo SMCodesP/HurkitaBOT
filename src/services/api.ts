@@ -51,6 +51,26 @@ export default {
     )
     return data[0]
   },
+  getAnimeAnilist: async (anime_id: number) => {
+    var queryRequest = `
+    query ($id: Int) {
+      Media (id: $id) {
+        genres
+      }
+    }
+    `
+
+    var variables = {
+      id: anime_id,
+    }
+
+    const { data } = await axios.post(`https://graphql.anilist.co`, {
+      query: queryRequest,
+      variables,
+    })
+
+    return data
+  },
   nextEpisode: async (episode_id: string, anime_id: string) => {
     const { data } = await api.get<Episode[] | null>(
       `/api-animesbr-10.php?episodios=${episode_id}&catid=${anime_id}&next`

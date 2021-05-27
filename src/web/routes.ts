@@ -3,8 +3,9 @@ import { resolve } from 'path'
 import * as jwt from 'jsonwebtoken'
 import axios from 'axios'
 import Web from '.'
-import { io } from '..'
+import { connection, io } from '..'
 import requireDir = require('require-dir')
+import { Anime } from '../entity/Anime'
 
 class Routes {
   router: express.Router
@@ -17,6 +18,11 @@ class Routes {
     )
 
     this.router = express.Router()
+
+    // this.router.use(async (req, res, next) => {
+    //   ;(req as any).genres = await connection.getRepository(Anime).find()
+    //   next()
+    // })
 
     this.router.get('/', async (req, res) =>
       res.sendFile(resolve(__dirname, '..', '..', 'views', 'index.html'))
@@ -60,7 +66,6 @@ class Routes {
       route: string,
       exec: any
     ) => {
-      console.log(type)
       this.router[type](route, exec)
     }
 
