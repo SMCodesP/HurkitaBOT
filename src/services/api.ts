@@ -55,7 +55,23 @@ export default {
     var queryRequest = `
     query ($id: Int) {
       Media (id: $id) {
-        genres
+        id,
+        title {
+          romaji
+          english
+          native
+          userPreferred
+        },
+        type,
+        format,
+        genres,
+        bannerImage,
+        coverImage {
+          extraLarge
+          large
+          medium
+          color
+        }
       }
     }
     `
@@ -120,7 +136,7 @@ export default {
     var variables = {
       search: query,
       page: 1,
-      perPage: 1,
+      perPage: 50,
     }
 
     const { data } = await axios.post(`https://graphql.anilist.co`, {

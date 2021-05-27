@@ -57,7 +57,7 @@ class Anime {
   })
   format?: string
 
-  @Column('varchar', { array: true, nullable: true })
+  @Column('text', { array: true, nullable: true })
   genres: string[]
 
   @Column({

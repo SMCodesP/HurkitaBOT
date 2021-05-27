@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { Controller } from '../structures/entities/Controller'
 import { getConnection } from 'typeorm'
 import { Anime } from '../../entity/Anime'
+import api from '../../services/api'
 
 class AnimesController extends Controller {
   constructor(register: any) {
@@ -19,7 +20,7 @@ class AnimesController extends Controller {
     }: {
       query: string
       category: string
-      error: boolean
+      error: string
       limit: number
       page: number
       animeId: number
@@ -61,31 +62,35 @@ class AnimesController extends Controller {
     }
 
     try {
-      let searched = await connection
-        .createQueryBuilder(Anime, 'anime')
-        .select()
-        .where(`COALESCE(category_name, '') ILIKE :searchQuery`, {
-          searchQuery: `%${query}%`,
-        })
-        .orWhere(`COALESCE(title_romaji, '') ILIKE :searchQuery`, {
-          searchQuery: `%${query}%`,
-        })
-        .orWhere(`COALESCE(title_english, '') ILIKE :searchQuery`, {
-          searchQuery: `%${query}%`,
-        })
-        .orWhere(`COALESCE(title_native, '') ILIKE :searchQuery`, {
-          searchQuery: `%${query}%`,
-        })
-        .orWhere(`COALESCE(sinopse, '') ILIKE :searchQuery`, {
-          searchQuery: `%${query}%`,
-        })
-        .orderBy('anime.id', 'ASC')
-        .limit(limit > 50 ? 50 : limit)
-        .offset((page - 1) * limit)
-        .cache(true)
-        .getMany()
+      let querySelector = connection.createQueryBuilder(Anime, 'anime').select()
+      const querySearch =
+        `(COALESCE(category_name, '') ILIKE :searchQuery OR COALESCE(title_romaji, '') ILIKE :searchQuery OR COALESCE(title_english, '') ILIKE :searchQuery OR COALESCE(title_native, '') ILIKE :searchQuery OR COALESCE(sinopse, '') ILIKE :searchQuery)` +
+        (error !== undefined ? ' AND error = :error' : '')
 
-      return res.json(searched.sort((a, b) => a.id - b.id))
+      if (category) {
+        querySelector = querySelector
+          .where('genres && ARRAY[:genres]', {
+            genres: category,
+          })
+          .andWhere(querySearch, {
+            searchQuery: `%${query}%`,
+            ...(error !== undefined ? { error: error.toLowerCase() } : {}),
+          })
+      } else {
+        querySelector = querySelector.where(querySearch, {
+          searchQuery: `%${query}%`,
+          ...(error !== undefined ? { error: error.toLowerCase() } : {}),
+        })
+      }
+
+      return res.json(
+        await querySelector
+          .orderBy('anime.id', 'ASC')
+          .limit(limit > 50 ? 50 : limit)
+          .offset((page - 1) * limit)
+          .cache(true)
+          .getMany()
+      )
     } catch (error) {
       console.error(error)
       return res.status(400).send('Error')
@@ -93,26 +98,22 @@ class AnimesController extends Controller {
 
     // const animeRepository = connection.getRepository(Anime)
 
-    // const genres = await connection.manager.find(Genre, {
-    //   cache: true,
-    // })
     // const animes = await animeRepository.find()
+
     // console.log(animes.length)
-    // console.log(
-    //   animes.filter((anime) => !anime.genres || !anime.sinopse).length
-    // )
+    // console.log(animes.filter((anime) => !anime.genres).length)
     // animes
-    //   .filter((anime) => !anime.genres || !anime.sinopse)
+    //   .filter((anime) => !anime.genres)
     //   .forEach(async (anime) => {
-    //     const { category_genres, category_description } = await api.getAnime(
-    //       String(anime.id)
-    //     )
+    //     const { category_genres } = await api.getAnime(String(anime.id))
     //     console.log(`${anime.id} requisitado!`)
     //     // console.log(category_description)
     //     await animeRepository.update(anime, {
     //       ...anime,
-    //       genres: category_genres.split(',').map((genre) => genre.trim()),
-    //       sinopse: category_description,
+    //       genres: category_genres
+    //         .split(',')
+    //         .map((genre) => genre.trim().toLowerCase()),
+    //       // sinopse: category_description,
     //     })
     //     console.log(`${anime.id} atualizado!`)
     //   })
@@ -197,7 +198,7 @@ class AnimesController extends Controller {
     // }
 
     // if (!requesting) {
-    //   // addAnimes()
+    //   addAnimes()
     // }
   }
 }
