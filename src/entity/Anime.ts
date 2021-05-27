@@ -1,7 +1,7 @@
 const { Entity, Column, PrimaryColumn, Index } = require('typeorm')
 
 @Entity()
-export class Anime {
+class Anime {
   @PrimaryColumn()
   id: number
 
@@ -88,3 +88,5 @@ export class Anime {
   @Column()
   error: boolean
 }
+
+export { Anime }

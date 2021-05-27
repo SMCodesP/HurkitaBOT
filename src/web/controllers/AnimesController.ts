@@ -1,8 +1,6 @@
 import { Request, Response } from 'express'
 import { Controller } from '../structures/entities/Controller'
 import { getConnection } from 'typeorm'
-import api from '../../services/api'
-import { Genre } from '../../entity/Genre'
 import { Anime } from '../../entity/Anime'
 
 class AnimesController extends Controller {
