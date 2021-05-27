@@ -1,9 +1,10 @@
 import { Request, Response } from 'express'
 import { Controller } from '../structures/entities/Controller'
-import { Anime } from '../../entity/Anime'
 import { getConnection } from 'typeorm'
 import api from '../../services/api'
 import { Genre } from '../../entity/Genre'
+import { Anime } from '../../entity/Anime'
+
 class AnimesController extends Controller {
   constructor(register: any) {
     super(register, '/api/animes', {})

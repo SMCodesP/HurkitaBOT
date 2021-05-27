@@ -1,9 +1,8 @@
 import { Request, Response } from 'express'
-import * as db from 'quick.db'
 import { getConnection } from 'typeorm'
 import { AnimeType } from '../../entities/Anime'
-import { Anime } from '../../entity/Anime'
 import { Controller } from '../structures/entities/Controller'
+import { Anime } from '../../entity/Anime'
 
 class AnimeController extends Controller {
   constructor(register) {
@@ -34,23 +33,24 @@ class AnimeController extends Controller {
 
     try {
       const anime = await animeRepository.findOne(id)
-      animeRepository.update(anime, {
-        type: animeUpdate.anilist.type,
-        format: animeUpdate.anilist.format,
-        bannerImage: animeUpdate.anilist.bannerImage,
-        category_image: animeUpdate.category_image,
-        anilist_id: animeUpdate.anilist.id,
-        category_name: animeUpdate.category_name,
-        error: animeUpdate.error,
-        title_english: animeUpdate.anilist.title.english,
-        title_romaji: animeUpdate.anilist.title.romaji,
-        title_native: animeUpdate.anilist.title.native,
-        title_userPreferred: animeUpdate.anilist.title.userPreferred,
-        coverImage_color: animeUpdate.anilist.coverImage.color,
-        coverImage_medium: animeUpdate.anilist.coverImage.medium,
-        coverImage_large: animeUpdate.anilist.coverImage.large,
-        coverImage_extraLarge: animeUpdate.anilist.coverImage.extraLarge,
-      })
+      animeRepository.update(anime, animeUpdate)
+      //   animeUpdate,
+      //   type: animeUpdate.anilist.type,
+      //   format: animeUpdate.anilist.format,
+      //   bannerImage: animeUpdate.anilist.bannerImage,
+      //   category_image: animeUpdate.category_image,
+      //   anilist_id: animeUpdate.anilist.id,
+      //   category_name: animeUpdate.category_name,
+      //   error: animeUpdate.error,
+      //   title_english: animeUpdate.anilist.title.english,
+      //   title_romaji: animeUpdate.anilist.title.romaji,
+      //   title_native: animeUpdate.anilist.title.native,
+      //   title_userPreferred: animeUpdate.anilist.title.userPreferred,
+      //   coverImage_color: animeUpdate.anilist.coverImage.color,
+      //   coverImage_medium: animeUpdate.anilist.coverImage.medium,
+      //   coverImage_large: animeUpdate.anilist.coverImage.large,
+      //   coverImage_extraLarge: animeUpdate.anilist.coverImage.extraLarge,
+      // })
 
       return res.json(await animeRepository.save(anime))
     } catch (error) {

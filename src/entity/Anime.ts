@@ -1,13 +1,4 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToMany,
-  JoinTable,
-  PrimaryColumn,
-  Index,
-} from 'typeorm'
-import { Genre } from './Genre'
+const { Entity, Column, PrimaryColumn, Index } = require('typeorm')
 
 @Entity()
 export class Anime {
