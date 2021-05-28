@@ -33,7 +33,6 @@ class AnimeController extends Controller {
 
     try {
       const anime = await animeRepository.findOne(id)
-      animeRepository.update(anime, animeUpdate)
       //   animeUpdate,
       //   type: animeUpdate.anilist.type,
       //   format: animeUpdate.anilist.format,
@@ -52,7 +51,7 @@ class AnimeController extends Controller {
       //   coverImage_extraLarge: animeUpdate.anilist.coverImage.extraLarge,
       // })
 
-      return res.json(await animeRepository.save(anime))
+      return res.json(await animeRepository.update(anime, animeUpdate))
     } catch (error) {
       console.log(error)
       return res.status(400).json(error)
