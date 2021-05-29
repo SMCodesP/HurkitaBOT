@@ -17,10 +17,12 @@ class AnimesController extends Controller {
       page = 1,
       limit = 50,
       animeId = null,
+      key = '',
     }: {
       query: string
       category: string
       error: string
+      key: string
       limit: number
       page: number
       animeId: number
@@ -86,7 +88,7 @@ class AnimesController extends Controller {
       return res.json(
         await querySelector
           .orderBy('anime.id', 'ASC')
-          .limit(limit > 50 ? 50 : limit)
+          .limit(limit > 50 && key !== process.env.API_KEY ? 50 : limit)
           .offset((page - 1) * limit)
           .cache(true)
           .getMany()
