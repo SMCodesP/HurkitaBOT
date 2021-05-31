@@ -35,6 +35,7 @@ class AnimesController extends Controller {
         .createQueryBuilder(Anime, 'anime')
         .select(['anime.id'])
         .where('error = :error', { error })
+        .orderBy('anime.id', 'ASC')
         .cache(false)
         .getMany()
 
