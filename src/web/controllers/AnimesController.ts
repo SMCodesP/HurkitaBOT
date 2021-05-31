@@ -40,27 +40,22 @@ class AnimesController extends Controller {
         .getMany()
 
       return res.json(
-        await connection.getRepository(Anime).findByIds(
-          animes
-            .slice(
-              animes.findIndex(
-                (anime) => Number(anime.id) === Number(animeId)
-              ) -
-                5 <
-                0
-                ? 0
-                : animes.findIndex(
-                    (anime) => Number(anime.id) === Number(animeId)
-                  ) - 5,
-              animes.findIndex(
-                (anime) => Number(anime.id) === Number(animeId)
-              ) + 6
-            )
-            .map((anime) => anime.id),
-          {
-            cache: true,
-          }
-        )
+        animes
+          .slice(
+            animes.findIndex(
+              (anime) => Number(anime.id) === Number(animeId)
+            ) -
+              5 <
+              0
+              ? 0
+              : animes.findIndex(
+                  (anime) => Number(anime.id) === Number(animeId)
+                ) - 5,
+            animes.findIndex(
+              (anime) => Number(anime.id) === Number(animeId)
+            ) + 6
+          )
+          .map((anime) => anime)
       )
     }
 
