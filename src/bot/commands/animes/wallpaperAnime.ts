@@ -61,7 +61,7 @@ class WallpaperAnimeCommand extends Command {
           }
         }[]
       }>(
-        `https://wallhaven.cc/api/v1/search?categories=010&sorting=favorites&q=${query}`
+        `https://wallhaven.cc/api/v1/search?categories=010&sorting=relevance&q=${query}`
       )
 
       if (response.data.length === 0) {
