@@ -13,7 +13,14 @@ class AnimeController extends Controller {
     const { id } = req.params
 
     try {
-      const anime = await getConnection().getRepository(Anime).findOne(id)
+      let anime: Anime | Anime[]
+      if (id.split(',').length === 1) {
+        anime = await getConnection().getRepository(Anime).findOne(id)
+      } else {
+        anime = await getConnection()
+          .getRepository(Anime)
+          .findByIds(id.split(','))
+      }
 
       return res.json(anime)
     } catch (error) {
