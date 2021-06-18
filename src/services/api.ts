@@ -13,7 +13,7 @@ export default {
   ...api,
   getCategory: async (category: string) => {
     try {
-      const { data } = await api.get<Category[]>(`/api-animesbr-10.php`, {
+      const { data } = await api.get<Category[]>(`/meuanimetv-40.php`, {
         params: {
           categoria: category,
         },
@@ -28,7 +28,7 @@ export default {
   },
   getEpisode: async (episode: string) => {
     const { data } = await axios.get<Episode[]>(
-      `https://appanimeplus.tk/api-animesbr-10.php?episodios=${episode}`,
+      `https://appanimeplus.tk/meuanimetv-40.php?episodios=${episode}`,
       {
         headers: {
           'proxy-type': 'brazil',
@@ -41,13 +41,13 @@ export default {
   },
   getEpisodesFromAnime: async (anime_id: string) => {
     const { data } = await api.get<Episode[]>(
-      `/api-animesbr-10.php?cat_id=${anime_id}`
+      `/meuanimetv-40.php?cat_id=${anime_id}`
     )
     return data
   },
   getAnime: async (anime_id: string) => {
     const { data } = await api.get<Category[]>(
-      `/api-animesbr-10.php?info=${anime_id}`
+      `/meuanimetv-40.php?info=${anime_id}`
     )
     return data[0]
   },
@@ -89,13 +89,13 @@ export default {
   },
   nextEpisode: async (episode_id: string, anime_id: string) => {
     const { data } = await api.get<Episode[] | null>(
-      `/api-animesbr-10.php?episodios=${episode_id}&catid=${anime_id}&next`
+      `/meuanimetv-40.php?episodios=${episode_id}&catid=${anime_id}&next`
     )
     return data && data[0]
   },
   previousEpisode: async (episode_id: string, anime_id: string) => {
     const { data } = await api.get<Episode[] | null>(
-      `/api-animesbr-10.php?episodios=${episode_id}&catid=${anime_id}&previous`
+      `/meuanimetv-40.php?episodios=${episode_id}&catid=${anime_id}&previous`
     )
     return data && data[0]
   },
@@ -136,7 +136,7 @@ export default {
     var variables = {
       search: query,
       page: 1,
-      perPage: 50,
+      perPage: 1,
     }
 
     const { data } = await axios.post(`https://graphql.anilist.co`, {
@@ -148,7 +148,7 @@ export default {
   },
   directSearchAnime: async (query: any) => {
     const { data } = await api.get<Category[]>(
-      `https://appanimeplus.tk/api-animesbr-10.php?search=${query || ''}`
+      `https://appanimeplus.tk/meuanimetv-40.php?search=${query || ''}`
     )
     return data
   },
