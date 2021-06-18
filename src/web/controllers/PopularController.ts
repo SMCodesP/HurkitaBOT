@@ -10,19 +10,29 @@ class PopularController extends Controller {
     super(register, '/api/popular', {})
   }
 
-  async get(_req: Request, res: Response) {
+  async get(req: Request, res: Response) {
+    const {
+      limit = 15,
+    }: {
+      limit: number
+    } = req.query as any
+
     let { data: animesPopular } = await api.get<Category[]>(
       '/api-animesbr-10.php?populares'
     )
     const connection = getConnection()
 
     return res.json(
-      await connection.getRepository(Anime).findByIds(
-        animesPopular.map((anime) => anime.id),
-        {
-          cache: true,
-        }
-      )
+      await connection
+        .getRepository(Anime)
+        .findByIds(
+          animesPopular
+            .slice(0, limit)
+            .map((anime) => anime.id),
+          {
+            cache: true,
+          }
+        )
     )
   }
 }
