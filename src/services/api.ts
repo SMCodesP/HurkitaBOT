@@ -6,6 +6,7 @@ const api = axios.create({
   baseURL: 'https://appanimeplus.tk',
   headers: {
     'Content-type': 'application/json',
+    'User-Agent': 'node-fetch/1.0',
   },
 })
 
