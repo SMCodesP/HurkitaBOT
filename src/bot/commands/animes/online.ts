@@ -26,7 +26,9 @@ class AnimeInfoCommand extends Command {
     try {
       const progress = progressController.get()
       const time = await ping(process.env.FRONTEND)
-      const {data: animesAvailable} = await axios.get(`https://${process.env.FRONTEND}/api/count`)
+      const { data: animesAvailable } = await axios.get(
+        `https://${process.env.FRONTEND}/api/count`
+      )
 
       const embedAnime = new MessageEmbed()
         .setColor('RANDOM')
