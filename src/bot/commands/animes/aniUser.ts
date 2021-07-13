@@ -55,7 +55,7 @@ class AniUserCommand extends Command {
       .setTitle('Carregando...')
       .setTimestamp()
       .setFooter(
-        `Copyright © 2020 - ${this.client.user.username}`,
+        `Copyright © 2021 - ${this.client.user.username}`,
         this.client.user.displayAvatarURL()
       )
 
@@ -66,7 +66,7 @@ class AniUserCommand extends Command {
         .setColor('RANDOM')
         .setTimestamp()
         .setFooter(
-          `Copyright © 2020 - ${this.client.user.username}`,
+          `Copyright © 2021 - ${this.client.user.username}`,
           this.client.user.displayAvatarURL()
         )
 

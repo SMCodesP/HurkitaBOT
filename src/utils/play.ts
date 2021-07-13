@@ -79,7 +79,7 @@ export default function play(
     .setThumbnail(item.snippet.thumbnails.high.url)
     .setTimestamp()
     .setFooter(
-      `Copyright © 2020 - ${client.user.username}`,
+      `Copyright © 2021 - ${client.user.username}`,
       client.user.displayAvatarURL()
     )
 

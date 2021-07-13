@@ -41,7 +41,7 @@ class TranslategCommand extends Command {
       .setTitle('Carregando...')
       .setTimestamp()
       .setFooter(
-        `Copyright © 2020 - ${this.client.user.username}`,
+        `Copyright © 2021 - ${this.client.user.username}`,
         this.client.user.displayAvatarURL()
       )
 
@@ -60,13 +60,13 @@ class TranslategCommand extends Command {
         .setDescription(textTranslated.text)
         .setTimestamp()
         .setFooter(
-          `Copyright © 2020 - ${this.client.user.username}`,
+          `Copyright © 2021 - ${this.client.user.username}`,
           this.client.user.displayAvatarURL()
         )
 
       await message.util.reply(embedTranslated)
     } catch (error) {
-      
+
       await message.util.reply(
         'Houve um erro ao traduzir o texto digitado, tente novamente mais tarde.'
       )

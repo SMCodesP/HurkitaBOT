@@ -58,7 +58,7 @@ class TopAnimesCommand extends Command {
         .setTitle("Lista de top's de animes")
         .setTimestamp()
         .setFooter(
-          `Copyright © 2020 - ${this.client.user.username}`,
+          `Copyright © 2021 - ${this.client.user.username}`,
           this.client.user.displayAvatarURL()
         )
 
@@ -105,7 +105,7 @@ class TopAnimesCommand extends Command {
         .setTitle(`**TOP 10 animes ${type || 'tv'}**`)
         .setTimestamp()
         .setFooter(
-          `Copyright © 2020 - ${this.client.user.username}`,
+          `Copyright © 2021 - ${this.client.user.username}`,
           this.client.user.displayAvatarURL()
         )
 

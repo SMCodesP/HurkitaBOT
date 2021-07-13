@@ -84,7 +84,7 @@ class WallpaperAnimeCommand extends Command {
             .setImage(thumbs[page].thumbs.original)
             .setTimestamp()
             .setFooter(
-              `Copyright © 2020 - ${this.client.user.username}`,
+              `Copyright © 2021 - ${this.client.user.username}`,
               this.client.user.displayAvatarURL()
             )
         )
@@ -125,7 +125,7 @@ class WallpaperAnimeCommand extends Command {
           .setDescription(`\n${error.message}`)
           .setTimestamp()
           .setFooter(
-            `Copyright © 2020 - ${this.client.user.username}`,
+            `Copyright © 2021 - ${this.client.user.username}`,
             this.client.user.displayAvatarURL()
           )
       )

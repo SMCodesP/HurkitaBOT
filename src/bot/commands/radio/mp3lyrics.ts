@@ -43,7 +43,7 @@ class Mp3Lyrics extends Command {
           .setTitle('Carregando...')
           .setTimestamp()
           .setFooter(
-            `Copyright © 2020 - ${this.client.user.username}`,
+            `Copyright © 2021 - ${this.client.user.username}`,
             this.client.user.displayAvatarURL()
           )
       )
@@ -87,7 +87,7 @@ class Mp3Lyrics extends Command {
           )
           .setTimestamp()
           .setFooter(
-            `Copyright © 2020 - ${this.client.user.username}`,
+            `Copyright © 2021 - ${this.client.user.username}`,
             this.client.user.displayAvatarURL()
           )
 
@@ -131,7 +131,7 @@ class Mp3Lyrics extends Command {
             .setDescription(`\n${error.message}`)
             .setTimestamp()
             .setFooter(
-              `Copyright © 2020 - ${this.client.user.username}`,
+              `Copyright © 2021 - ${this.client.user.username}`,
               this.client.user.displayAvatarURL()
             )
         )

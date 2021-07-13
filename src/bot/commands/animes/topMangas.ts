@@ -64,7 +64,7 @@ class TopMangasCommand extends Command {
         .setTitle("Lista de top's de mangás")
         .setTimestamp()
         .setFooter(
-          `Copyright © 2020 - ${this.client.user.username}`,
+          `Copyright © 2021 - ${this.client.user.username}`,
           this.client.user.displayAvatarURL()
         )
 
@@ -110,7 +110,7 @@ class TopMangasCommand extends Command {
         .setTitle(`**TOP 10 mangás ${type || 'manga'}**`)
         .setTimestamp()
         .setFooter(
-          `Copyright © 2020 - ${this.client.user.username}`,
+          `Copyright © 2021 - ${this.client.user.username}`,
           this.client.user.displayAvatarURL()
         )
 

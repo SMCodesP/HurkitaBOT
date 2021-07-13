@@ -75,7 +75,7 @@ class AnimeCommand extends Command {
         .setTitle('Lista de tipos de imagens')
         .setTimestamp()
         .setFooter(
-          `Copyright © 2020 - ${this.client.user.username}`,
+          `Copyright © 2021 - ${this.client.user.username}`,
           this.client.user.displayAvatarURL()
         )
 
@@ -112,7 +112,7 @@ class AnimeCommand extends Command {
         .setImage(image.data.url)
         .setTimestamp()
         .setFooter(
-          `Copyright © 2020 - ${this.client.user.username}`,
+          `Copyright © 2021 - ${this.client.user.username}`,
           this.client.user.displayAvatarURL()
         )
 

@@ -61,7 +61,7 @@ class AvatarCommand extends Command {
         .setImage(urlAvatar)
         .setTimestamp()
         .setFooter(
-          `Copyright © 2020 - ${this.client.user.username}`,
+          `Copyright © 2021 - ${this.client.user.username}`,
           this.client.user.displayAvatarURL()
         )
 

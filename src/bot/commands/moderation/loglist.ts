@@ -38,12 +38,12 @@ class LogCommand extends Command {
       .setTitle('Listagem de tipos de logs disponíveis')
       .setTimestamp()
       .setFooter(
-        `Copyright © 2020 - ${this.client.user.username}`,
+        `Copyright © 2021 - ${this.client.user.username}`,
         this.client.user.displayAvatarURL()
       )
 
     types_log.forEach((log: string) => {
-      
+
     })
   }
 }

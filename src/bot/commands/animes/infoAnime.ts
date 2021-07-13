@@ -45,7 +45,7 @@ class AnimeInfoCommand extends Command {
       .setTitle('Carregando...')
       .setTimestamp()
       .setFooter(
-        `Copyright © 2020 - ${this.client.user.username}`,
+        `Copyright © 2021 - ${this.client.user.username}`,
         this.client.user.displayAvatarURL()
       )
 
@@ -119,7 +119,7 @@ class AnimeInfoCommand extends Command {
         .setImage(response.image_url)
         .setTimestamp()
         .setFooter(
-          `Copyright © 2020 - ${this.client.user.username}`,
+          `Copyright © 2021 - ${this.client.user.username}`,
           this.client.user.displayAvatarURL()
         )
 

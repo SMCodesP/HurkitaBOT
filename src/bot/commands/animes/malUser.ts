@@ -52,7 +52,7 @@ class MalUserCommand extends Command {
       .setTitle('Carregando...')
       .setTimestamp()
       .setFooter(
-        `Copyright © 2020 - ${this.client.user.username}`,
+        `Copyright © 2021 - ${this.client.user.username}`,
         this.client.user.displayAvatarURL()
       )
 
@@ -63,14 +63,14 @@ class MalUserCommand extends Command {
         .setColor('RANDOM')
         .setTimestamp()
         .setFooter(
-          `Copyright © 2020 - ${this.client.user.username}`,
+          `Copyright © 2021 - ${this.client.user.username}`,
           this.client.user.displayAvatarURL()
         )
 
       const embeds = {
         1: async () => {
           const response = await JikanTS.User.profile(malUser)
-          
+
           return simpleEmbedTemplate
             .setTitle(`Perfil de __${response.username}__`)
             .setDescription(
@@ -187,7 +187,7 @@ class MalUserCommand extends Command {
         })
       }
     } catch (error) {
-      
+
       await message.util.reply(
         'Houve um erro ao buscar o perfil do usuário, tente novamente mais tarde.'
       )
